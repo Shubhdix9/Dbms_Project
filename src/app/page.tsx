@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, Eye, ShieldCheck, GraduationCap, Building, Shield, CheckCircle2 } from 'lucide-react';
-import Image from 'next/image';
+import { Mail, Lock, Eye, ShieldCheck, GraduationCap, Building, Shield } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
@@ -29,109 +28,106 @@ export default function Home() {
       emailLabel: 'University Student Email',
       emailPlaceholder: 'student@jklu.edu.in',
       buttonText: 'SIGN IN TO STUDENT PORTAL',
-      demoEmail: 'demo.student@jklu.edu.in'
     },
     landlord: {
       emailLabel: 'Landlord Email',
       emailPlaceholder: 'landlord@example.com',
       buttonText: 'SIGN IN TO LANDLORD PORTAL',
-      demoEmail: 'demo.landlord@example.com'
     },
     admin: {
       emailLabel: 'Admin ID / Email',
       emailPlaceholder: 'admin@jklu.edu.in',
       buttonText: 'SIGN IN TO ADMIN PORTAL',
-      demoEmail: 'demo.admin@jklu.edu.in'
     }
   };
 
   const currentConfig = roleConfig[role];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center relative overflow-hidden font-sans text-gray-900">
-      {/* Subtle dotted background pattern */}
-      <div 
-        className="absolute inset-0 opacity-[0.4] pointer-events-none" 
-        style={{ 
-          backgroundImage: 'radial-gradient(#CBD5E1 1px, transparent 1px)', 
-          backgroundSize: '24px 24px' 
-        }}
-      ></div>
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden font-sans">
+      
+      {/* Background Orbs (Premium aesthetic) */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-blue/5 rounded-full blur-3xl -mr-40 -mt-40 pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary-orange/5 rounded-full blur-3xl -ml-40 -mb-40 pointer-events-none"></div>
 
       <div className="z-10 w-full max-w-md px-4 flex flex-col items-center">
+        
         {/* Logo and Header */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-20 h-20 bg-white rounded-full shadow-sm flex items-center justify-center mb-4 border border-gray-200 p-1 overflow-hidden">
-            <Image src="/image.png" alt="JKLU Logo" width={64} height={64} className="object-contain w-full h-full" priority />
+          <div className="w-20 h-20 bg-primary-blue rounded-3xl shadow-sm flex items-center justify-center mb-4 border-2 border-primary-blue/20 p-1 overflow-hidden transform rotate-3">
+             <div className="w-full h-full bg-white rounded-2xl flex items-center justify-center text-3xl font-black text-primary-orange">
+               U
+             </div>
           </div>
           
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-3xl font-extrabold text-blue-900 tracking-tight uppercase">UNINEST</h1>
-            <span className="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-orange-200">
-              AUTH
+            <h1 className="text-4xl font-black text-primary-blue tracking-tight uppercase">UNINEST</h1>
+            <span className="bg-light-orange text-primary-orange text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-primary-orange/20 uppercase tracking-widest">
+              Auth
             </span>
           </div>
-          <p className="text-sm font-medium text-gray-500 text-center">
+          <p className="text-sm font-bold text-text-secondary text-center">
             University Housing & Intelligent Roommate Matching
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white w-full rounded-2xl shadow-xl shadow-gray-200/50 p-8 border border-gray-200">
+        <div className="bg-white w-full rounded-[2rem] shadow-xl shadow-primary-blue/5 p-8 border-2 border-border relative">
+          
           <div className="mb-6 text-center">
-            <h2 className="text-[11px] font-bold tracking-widest text-gray-500 uppercase">Select Your Portal Role</h2>
+            <h2 className="text-[11px] font-extrabold tracking-widest text-text-secondary uppercase">Select Your Portal Role</h2>
           </div>
 
           {/* Role Segmented Control */}
-          <div className="bg-gray-100 p-1 rounded-xl flex items-center justify-between mb-8">
+          <div className="bg-surface-light p-1.5 rounded-2xl flex items-center justify-between mb-8 border border-border">
             <button
               type="button"
               onClick={() => setRole('landlord')}
-              className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-xs font-bold transition-all ${
                 role === 'landlord' 
-                  ? 'bg-blue-900 text-white shadow-sm' 
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-primary-blue shadow-sm border border-border' 
+                  : 'text-text-secondary hover:text-foreground'
               }`}
             >
-              <Building size={14} className="mr-2" /> Landlord
+              <Building size={14} className="mr-1.5" /> Landlord
             </button>
             <button
               type="button"
               onClick={() => setRole('student')}
-              className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-xs font-bold transition-all ${
                 role === 'student' 
-                  ? 'bg-blue-900 text-white shadow-sm' 
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-primary-blue shadow-sm border border-border' 
+                  : 'text-text-secondary hover:text-foreground'
               }`}
             >
-              <GraduationCap size={14} className="mr-2" /> Student
+              <GraduationCap size={14} className="mr-1.5" /> Student
             </button>
             <button
               type="button"
               onClick={() => setRole('admin')}
-              className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-xs font-bold transition-all ${
                 role === 'admin' 
-                  ? 'bg-blue-900 text-white shadow-sm' 
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-primary-blue shadow-sm border border-border' 
+                  : 'text-text-secondary hover:text-foreground'
               }`}
             >
-              <Shield size={14} className="mr-2" /> Admin
+              <Shield size={14} className="mr-1.5" /> Admin
             </button>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1.5 ml-1">{currentConfig.emailLabel}</label>
+              <label className="block text-xs font-extrabold text-foreground mb-2 ml-1">{currentConfig.emailLabel}</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-text-secondary">
                   <Mail size={16} />
                 </div>
                 <input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 transition-all"
+                  className="w-full pl-11 pr-4 py-3.5 bg-surface-light border-2 border-border rounded-xl text-sm font-bold text-foreground focus:outline-none focus:border-primary-orange transition-all"
                   placeholder={currentConfig.emailPlaceholder}
                   required
                 />
@@ -139,20 +135,20 @@ export default function Home() {
             </div>
             
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1.5 ml-1">Password</label>
+              <label className="block text-xs font-extrabold text-foreground mb-2 ml-1">Password</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-text-secondary">
                   <Lock size={16} />
                 </div>
                 <input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 transition-all"
+                  className="w-full pl-11 pr-11 py-3.5 bg-surface-light border-2 border-border rounded-xl text-sm font-bold text-foreground focus:outline-none focus:border-primary-orange transition-all"
                   placeholder="••••••••"
                   required
                 />
-                <button type="button" className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors">
+                <button type="button" className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-secondary hover:text-primary-orange transition-colors">
                   <Eye size={16} />
                 </button>
               </div>
@@ -160,16 +156,17 @@ export default function Home() {
 
             <button 
               type="submit" 
-              className="w-full bg-blue-900 hover:bg-blue-800 text-white text-sm font-semibold py-3.5 rounded-xl transition-all shadow-md flex justify-center items-center mt-2"
+              className="w-full bg-primary-blue hover:bg-blue-900 text-white text-sm font-extrabold py-4 rounded-xl transition-all shadow-md flex justify-center items-center mt-4"
             >
-              {currentConfig.buttonText} <span className="ml-2 font-normal">→</span>
+              {currentConfig.buttonText}
             </button>
           </form>
         </div>
 
-        {/* Footer */}
-        <div className="mt-8 text-center space-y-1">
-          {/* Footer removed as requested */}
+        {/* Secure badge */}
+        <div className="mt-8 flex items-center justify-center gap-2 text-text-secondary opacity-70">
+           <ShieldCheck size={16} />
+           <span className="text-xs font-bold uppercase tracking-widest">End-to-End Encrypted</span>
         </div>
       </div>
     </div>

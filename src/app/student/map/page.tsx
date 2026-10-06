@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { MapPin, Navigation2, Search, Filter, Home, CheckCircle } from 'lucide-react';
 import { PROPERTIES, calculateKnownMonthlyCost } from '@/lib/data';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
-// Simulate JKLU coordinates
-const JKLU_COORDS = { lat: 26.836, lng: 75.658 };
-
-// Map scaling factors for fake rendering (just a visual representation)
-const LAT_SCALE = 15000;
-const LNG_SCALE = 15000;
+// Dynamically import the Map component to prevent SSR 'window' errors
+const RealMap = dynamic(() => import('@/components/Map'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 font-bold">Loading Interactive Map...</div>
+});
 
 export default function MapExperience() {
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
@@ -75,52 +75,13 @@ export default function MapExperience() {
       </div>
 
       {/* Map Area */}
-      <div className="w-full h-full bg-[#f4f6f8] rounded-[2rem] border-4 border-white shadow-2xl relative overflow-hidden" 
-           style={{ backgroundImage: 'radial-gradient(#0f172a 1px, transparent 1px)', backgroundSize: '30px 30px', opacity: 0.9 }}>
-        
-        {/* Map UI Overlay */}
-        <div className="absolute top-6 left-6 flex gap-2 z-30">
-          <div className="bg-white px-4 py-2 rounded-xl shadow-lg border border-border text-xs font-extrabold text-primary-blue flex items-center">
-            <Navigation2 size={16} className="mr-2 text-primary-orange" />
-            Ajmer Road, Jaipur
-          </div>
-        </div>
-
-        {/* Fake Map Markers Container */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          
-          {/* JKLU Center Marker */}
-          <div className="absolute z-10 flex flex-col items-center">
-            <div className="bg-primary-blue text-white px-4 py-1.5 rounded-full shadow-xl border-2 border-white text-xs font-extrabold whitespace-nowrap flex items-center transform -translate-y-full tracking-wide">
-              <CheckCircle size={14} className="mr-1.5 text-primary-orange" /> JKLU Campus
-            </div>
-            <div className="w-5 h-5 bg-primary-blue border-4 border-white rounded-full shadow-xl"></div>
-          </div>
-
-          {/* Property Markers */}
-          {PROPERTIES.map(p => {
-            const yOffset = (JKLU_COORDS.lat - p.coordinates.lat) * LAT_SCALE;
-            const xOffset = (p.coordinates.lng - JKLU_COORDS.lng) * LNG_SCALE;
-            const isSelected = selectedProperty?.id === p.id;
-            
-            return (
-              <div 
-                key={p.id}
-                className="absolute flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform z-20"
-                style={{ transform: `translate(${xOffset}px, ${yOffset}px)` }}
-                onClick={() => setSelectedProperty(p)}
-              >
-                <div className={`
-                  px-3 py-1.5 rounded-full shadow-xl border-2 text-xs font-extrabold whitespace-nowrap mb-1.5 transition-colors
-                  ${isSelected ? 'bg-primary-orange text-white border-white scale-110' : 'bg-white text-primary-blue border-border'}
-                `}>
-                  ₹{(p.rent / 1000).toFixed(1)}k
-                </div>
-                <div className={`w-4 h-4 rounded-full border-[3px] border-white shadow-xl transition-all ${isSelected ? 'bg-primary-orange scale-125' : 'bg-primary-blue'}`}></div>
-              </div>
-            );
-          })}
-        </div>
+      <div className="w-full h-full bg-[#f4f6f8] rounded-[2rem] border-4 border-white shadow-2xl relative overflow-hidden">
+        <RealMap 
+          properties={PROPERTIES} 
+          selectedProperty={selectedProperty} 
+          onSelectProperty={setSelectedProperty} 
+          calculateCost={calculateKnownMonthlyCost} 
+        />
       </div>
     </div>
   );

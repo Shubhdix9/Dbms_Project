@@ -1,9 +1,10 @@
 'use client';
 
-import { PROPERTIES } from '@/lib/data';
-import { MapPin, CheckCircle, IndianRupee, Home, Ruler, Calendar, Shield, Phone, MessageSquare, Bed, Bath, Wind, Car, Zap, Wifi } from 'lucide-react';
+import { PROPERTIES, STUDENTS } from '@/lib/data';
+import { MapPin, CheckCircle, IndianRupee, Home, Ruler, Calendar, Shield, Phone, MessageSquare, Bed, Bath, Wind, Car, Zap, Wifi, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import SavingsCalculator from '@/components/SavingsCalculator';
 
 import { use } from 'react';
 
@@ -120,11 +121,15 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
               </div>
             </div>
           </div>
+          
+          {/* Rent Savings Calculator */}
+          <SavingsCalculator monthlyCost={cost} />
+
         </div>
 
-        {/* Right Column: Sticky Pricing & Contact */}
+        {/* Right Column: Pricing & Contact */}
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl p-6 border-2 border-primary-blue/20 shadow-sm sticky top-24">
+          <div className="bg-white rounded-2xl p-6 border-2 border-primary-blue/20 shadow-sm">
             <h2 className="text-lg font-extrabold text-foreground mb-4">Cost Breakdown</h2>
             
             <div className="space-y-4 mb-6">
@@ -158,6 +163,40 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
                 <MessageSquare size={18} className="mr-2" /> Contact Landlord
               </button>
             </div>
+          </div>
+
+          {/* Roommate Matching Box */}
+          <div className="bg-white rounded-2xl p-6 border-2 border-border shadow-sm">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-extrabold text-foreground flex items-center">
+                <Users size={18} className="mr-2 text-primary-orange" /> Looking for Roommates
+              </h2>
+              <span className="bg-light-orange text-primary-orange text-[10px] font-extrabold px-2 py-1 rounded-full">2 Matches</span>
+            </div>
+            <p className="text-xs text-text-secondary mb-4">These verified JKLU students want to book this property and need a roommate to split rent.</p>
+            
+            <div className="space-y-3">
+              {[STUDENTS[0], STUDENTS[2]].map((student, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-surface-light rounded-xl border border-border">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary-blue text-white flex items-center justify-center font-bold shadow-sm">
+                      {student.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-extrabold text-primary-blue line-clamp-1">{student.name}</h4>
+                      <p className="text-[10px] font-bold text-text-secondary uppercase">{student.course} • Year {student.year}</p>
+                    </div>
+                  </div>
+                  <Link href={`/student/profile/${student.id}`} className="px-3 py-1.5 bg-white border border-border text-xs font-bold text-text-secondary hover:text-primary-blue hover:border-primary-blue rounded-lg transition-colors">
+                    View
+                  </Link>
+                </div>
+              ))}
+            </div>
+            
+            <button className="w-full mt-4 bg-surface text-primary-blue font-extrabold py-2.5 text-xs uppercase tracking-wider rounded-xl border-2 border-border hover:bg-surface-light transition-colors">
+              Add Myself to List
+            </button>
           </div>
         </div>
       </div>

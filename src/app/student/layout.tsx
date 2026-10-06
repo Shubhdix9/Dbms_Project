@@ -33,13 +33,10 @@ const drawerItems = [
   { name: 'Rooms', href: '/student/explore', icon: Search },
   { name: 'Roommates', href: '/student/roommates', icon: Users },
   { name: 'Overview', href: '/student/overview', icon: Home },
-  { name: 'Map View', href: '/student/map', icon: Map },
   { name: 'My Preferences', href: '/student/preferences', icon: Settings },
   { name: 'Saved Properties', href: '/student/saved', icon: Heart },
   { name: 'Bookings', href: '/student/bookings', icon: Calendar },
   { name: 'My Lease', href: '/student/lease', icon: FileText },
-  { name: 'Reviews', href: '/student/reviews', icon: Star },
-  { name: 'Profile', href: '/student/profile', icon: User },
 ];
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {

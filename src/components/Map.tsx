@@ -53,6 +53,7 @@ const distanceLabelIcon = (distance: string, duration: number) => {
 const TILE_LAYERS = {
   map: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
   satellite: 'https://mt1.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',
+  terrain: 'https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
 };
 
 // OSRM routing: fetches actual road path between two points
@@ -154,7 +155,7 @@ function ZoomControls() {
 
 export default function Map({ properties, selectedProperty, onSelectProperty, calculateCost }: any) {
   const [mounted, setMounted] = useState(false);
-  const [mapType, setMapType] = useState<'map' | 'satellite'>('map');
+  const [mapType, setMapType] = useState<'map' | 'satellite' | 'terrain'>('map');
 
   useEffect(() => {
     setMounted(true);
@@ -220,6 +221,16 @@ export default function Map({ properties, selectedProperty, onSelectProperty, ca
           }`}
         >
           Satellite
+        </button>
+        <button
+          onClick={() => setMapType('terrain')}
+          className={`px-4 py-2 text-xs font-bold transition-all border-l border-gray-200 ${
+            mapType === 'terrain'
+              ? 'bg-gray-900 text-white'
+              : 'bg-white text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          3D Terrain
         </button>
       </div>
     </div>
