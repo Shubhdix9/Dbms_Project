@@ -13,10 +13,10 @@ const JKLU_COORDS: [number, number] = [26.8379, 75.6495];
 const jkluIcon = L.divIcon({
   className: 'custom-div-icon',
   html: `<div style="display: flex; flex-direction: column; align-items: center;">
-          <div style="background-color: #1e3250; color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 10px; font-size: 13px; font-weight: 900; white-space: nowrap; margin-bottom: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); letter-spacing: 0.5px;">
+          <div style="background-color: #3b5c9b; color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 10px; font-size: 13px; font-weight: 900; white-space: nowrap; margin-bottom: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); letter-spacing: 0.5px;">
             JKLU CAMPUS
           </div>
-          <div style="background-color: #1e3250; border: 4px solid white; border-radius: 50%; width: 24px; height: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+          <div style="background-color: #3b5c9b; border: 4px solid white; border-radius: 50%; width: 24px; height: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
             <div style="width: 8px; height: 8px; background-color: white; border-radius: 50%;"></div>
           </div>
          </div>`,
@@ -27,10 +27,10 @@ const jkluIcon = L.divIcon({
 const propertyIcon = (isSelected: boolean, price: number) => L.divIcon({
   className: 'custom-div-icon',
   html: `<div style="display: flex; flex-direction: column; align-items: center; z-index: ${isSelected ? 1000 : 1}; position: relative;">
-          <div style="background-color: ${isSelected ? '#22c55e' : 'white'}; color: ${isSelected ? 'white' : '#1f2937'}; border: 2px solid ${isSelected ? 'white' : '#e5e7eb'}; border-radius: 9999px; padding: 2px 8px; font-size: 11px; font-weight: 800; white-space: nowrap; margin-bottom: 4px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);">
+          <div style="background-color: ${isSelected ? '#f97316' : 'white'}; color: ${isSelected ? 'white' : '#1f2937'}; border: 2px solid ${isSelected ? 'white' : '#e5e7eb'}; border-radius: 9999px; padding: 2px 8px; font-size: 11px; font-weight: 800; white-space: nowrap; margin-bottom: 4px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);">
             ₹${(price / 1000).toFixed(1)}k
           </div>
-          <div style="width: 14px; height: 14px; background-color: ${isSelected ? '#22c55e' : '#3b82f6'}; border: 2px solid white; border-radius: 50%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);"></div>
+          <div style="width: 14px; height: 14px; background-color: ${isSelected ? '#f97316' : '#cbd5e1'}; border: 2px solid white; border-radius: 50%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);"></div>
          </div>`,
   iconSize: [60, 40],
   iconAnchor: [30, 40]
@@ -107,8 +107,8 @@ function RoutingLayer({ selectedProperty }: { selectedProperty: any }) {
 
   return (
     <>
-      <Polyline positions={routeCoords} pathOptions={{ color: '#1e40af', weight: 8, opacity: 0.3 }} />
-      <Polyline positions={routeCoords} pathOptions={{ color: '#2563eb', weight: 5, opacity: 0.9 }} />
+      <Polyline positions={routeCoords} pathOptions={{ color: '#ea580c', weight: 8, opacity: 0.3 }} />
+      <Polyline positions={routeCoords} pathOptions={{ color: '#f97316', weight: 5, opacity: 1 }} />
       <Marker position={midPoint} icon={distanceLabelIcon(distKm, routeInfo.duration)} interactive={false} />
     </>
   );

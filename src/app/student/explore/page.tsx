@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { PROPERTIES, calculateKnownMonthlyCost } from '@/lib/data';
 import { MapPin, Navigation2, Search, Filter, Home, CheckCircle, ExternalLink, IndianRupee } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
 const Map = dynamic(() => import('@/components/Map'), { ssr: false });
@@ -35,17 +36,16 @@ export default function ExploreRooms() {
   });
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] p-4 md:p-8 max-w-[1600px] mx-auto">
+    <div className="flex flex-col h-[calc(100vh-6rem)] p-4 max-w-[1800px] mx-auto overflow-hidden">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-extrabold text-foreground tracking-tight">{greeting}, Student.</h1>
-        <p className="text-text-secondary mt-1">Find the perfect property and compare true monthly costs around JKLU.</p>
+      <div className="mb-6 flex flex-col items-center justify-center text-center">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">{greeting}, <span className="text-primary-blue">Rahul.</span></h1>
       </div>
 
-      <div className="flex flex-col gap-8 pb-8">
+      <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
         
-        {/* Top Section: Filters & Map */}
-        <div className="w-full flex flex-col gap-4">
+        {/* Left Column: Filters & Map */}
+        <div className="w-full lg:w-2/3 xl:w-8/12 flex flex-col gap-4 min-h-0">
           
           {/* Filters Card */}
           <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row gap-4 items-center">
@@ -93,7 +93,7 @@ export default function ExploreRooms() {
           </div>
 
           {/* Map Area */}
-          <div className="w-full h-[55vh] min-h-[400px] bg-surface-light rounded-2xl border border-border relative overflow-hidden shadow-sm z-0">
+          <div className="flex-1 w-full bg-surface-light rounded-2xl border border-border relative overflow-hidden shadow-sm z-0">
             
             <Map 
               properties={filteredProperties} 
@@ -117,19 +117,19 @@ export default function ExploreRooms() {
           </div>
         </div>
 
-        {/* Bottom Section: Properties Grid */}
-        <div className="w-full flex flex-col bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-border bg-surface-light/50 flex justify-between items-center">
+        {/* Right Column: Properties List */}
+        <div className="w-full lg:w-1/3 xl:w-4/12 flex flex-col min-h-0 bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
+          <div className="p-5 border-b border-border flex justify-between items-center bg-white z-10 shadow-sm relative">
             <div>
-              <h2 className="font-bold text-foreground">NEARBY PROPERTIES</h2>
-              <p className="text-[10px] text-text-secondary tracking-widest uppercase">Sorted by distance</p>
+              <h2 className="font-extrabold text-foreground text-lg uppercase tracking-wide">NEARBY PROPERTIES</h2>
+              <p className="text-[10px] text-text-secondary tracking-widest uppercase mt-0.5">Sorted by distance</p>
             </div>
-            <span className="bg-primary-green/10 text-primary-green text-[10px] font-bold px-2 py-1 rounded-full">
+            <span className="bg-success-light text-success border border-success/20 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
               {filteredProperties.length} LISTINGS
             </span>
           </div>
 
-          <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-surface-light/30">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-background/50">
             {filteredProperties.sort((a, b) => parseFloat(a.distanceKm) - parseFloat(b.distanceKm)).map((property, idx) => {
               const isSelected = selectedProperty?.id === property.id;
               
@@ -137,8 +137,8 @@ export default function ExploreRooms() {
                 <div 
                   key={property.id} 
                   onClick={() => setSelectedProperty(property)}
-                  className={`border rounded-xl p-3 cursor-pointer transition-all duration-200
-                    ${isSelected ? 'border-primary-green bg-light-green shadow-sm ring-1 ring-primary-green/20' : 'border-border hover:border-text-secondary bg-surface'}
+                  className={`bg-white border rounded-2xl p-4 cursor-pointer transition-all duration-200
+                    ${isSelected ? 'border-primary-orange shadow-md ring-1 ring-primary-orange' : 'border-border hover:border-primary-orange hover:shadow-sm'}
                   `}
                 >
                   <div className="flex gap-3 h-20 mb-3">
@@ -156,15 +156,15 @@ export default function ExploreRooms() {
                         </div>
                       )}
                       {property.verifiedByUniNest && (
-                        <div className="absolute top-1 right-1 bg-white rounded-full p-0.5 shadow">
-                          <CheckCircle size={10} className="text-primary-green" />
+                        <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                          <CheckCircle size={12} className="text-success" />
                         </div>
                       )}
                     </div>
                     
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
                       <div className="flex items-center gap-1.5 mb-1">
-                        <span className="text-[10px] font-bold text-text-secondary bg-surface-light px-1.5 py-0.5 rounded border border-border">
+                        <span className="text-[10px] font-bold text-primary-orange bg-light-orange px-2 py-0.5 rounded-full border border-primary-orange/20 mr-2">
                           {String(idx + 1).padStart(2, '0')}
                         </span>
                         <h3 className="text-sm font-bold text-foreground truncate">{property.title}</h3>
@@ -187,6 +187,18 @@ export default function ExploreRooms() {
                       </span>
                     </div>
                   </div>
+                  
+                  {isSelected && (
+                    <div className="mt-4 pt-4 border-t border-border animate-in fade-in slide-in-from-top-2 duration-200">
+                      <Link 
+                        href={`/student/property/${property.id}`}
+                        className="w-full bg-primary-blue text-white font-bold py-2.5 rounded-xl hover:bg-blue-700 transition-colors shadow-sm flex items-center justify-center text-sm"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        View Property Details →
+                      </Link>
+                    </div>
+                  )}
                 </div>
               );
             })}

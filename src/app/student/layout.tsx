@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   Home, 
-  Search, 
   Map, 
   Users, 
   Settings, 
@@ -12,23 +11,32 @@ import {
   CalendarCheck, 
   FileText, 
   Star, 
-  User,
-  Bell,
-  CheckCircle2,
   LogOut,
   Menu,
-  X
+  X,
+  Search,
+  User,
+  CheckCircle,
+  Calendar
 } from 'lucide-react';
 import { useState } from 'react';
+import Image from 'next/image';
 
 const navItems = [
+  { name: '1. Explore & Map', href: '/student/explore' },
+  { name: '2. Roommate', href: '/student/roommates' },
+  { name: '3. My Bookings', href: '/student/bookings' },
+  { name: '4. My Lease', href: '/student/lease' },
+];
+
+const drawerItems = [
   { name: 'Rooms', href: '/student/explore', icon: Search },
   { name: 'Roommates', href: '/student/roommates', icon: Users },
-  { name: 'Overview', href: '/student', icon: Home },
+  { name: 'Overview', href: '/student/overview', icon: Home },
   { name: 'Map View', href: '/student/map', icon: Map },
   { name: 'My Preferences', href: '/student/preferences', icon: Settings },
   { name: 'Saved Properties', href: '/student/saved', icon: Heart },
-  { name: 'Bookings', href: '/student/bookings', icon: CalendarCheck },
+  { name: 'Bookings', href: '/student/bookings', icon: Calendar },
   { name: 'My Lease', href: '/student/lease', icon: FileText },
   { name: 'Reviews', href: '/student/reviews', icon: Star },
   { name: 'Profile', href: '/student/profile', icon: User },
@@ -37,137 +45,128 @@ const navItems = [
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row">
-      {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-surface border-b border-border">
-        <div className="flex items-center">
-          <div className="w-8 h-1 bg-primary-green rounded mr-3"></div>
-          <span className="font-bold text-xl text-foreground tracking-tight">UniNest</span>
-        </div>
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-text-secondary">
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Sidebar */}
-      <div className={`
-        fixed inset-y-0 left-0 z-50 bg-surface border-r border-border transform transition-all duration-300 ease-in-out flex flex-col
-        md:static md:translate-x-0
-        ${mobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64'}
-        ${desktopSidebarOpen ? 'md:w-64 md:opacity-100' : 'md:w-0 md:opacity-0 md:overflow-hidden'}
-      `}>
-        <div className="p-6 pb-2 min-w-[16rem]">
-          <div className="flex items-center mb-8">
-            <div className="w-8 h-1 bg-primary-green rounded mr-3"></div>
-            <div>
-              <h1 className="font-bold text-xl text-foreground tracking-tight">UniNest</h1>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-text-secondary">Student Portal</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-background flex flex-col font-sans">
+      {/* Top Header Navigation (Shuttle Style) */}
+      <header className="bg-primary-blue h-16 flex items-center justify-between px-4 md:px-8 sticky top-0 z-[1000] shadow-sm">
+        
+        {/* Left: Menu Button */}
+        <div className="flex items-center w-32">
+          <button 
+            onClick={() => setMobileMenuOpen(true)}
+            className="text-white hover:bg-white/10 p-2 rounded-lg transition-colors flex items-center gap-2"
+          >
+            <Menu size={24} />
+            <span className="font-bold text-sm hidden sm:inline-block tracking-widest uppercase">Menu</span>
+          </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-2 space-y-1">
+        {/* Center: Desktop Navigation Pills */}
+        <nav className="hidden md:flex items-center bg-white/10 p-1 rounded-xl backdrop-blur-sm border border-white/10">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
+            const isActive = pathname === item.href || (pathname === '/student' && item.href === '/student/explore');
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
                 className={`
-                  flex items-center px-4 py-3 rounded-xl transition-all
+                  px-5 py-2 rounded-lg text-sm font-bold transition-all whitespace-nowrap
                   ${isActive 
-                    ? 'bg-light-green text-primary-green font-medium' 
-                    : 'text-text-secondary hover:bg-surface-light hover:text-foreground'}
+                    ? 'bg-white text-primary-blue shadow-md' 
+                    : 'text-white/80 hover:bg-white/10 hover:text-white'}
                 `}
               >
-                <Icon size={18} className="mr-3" />
-                <span className="text-sm">{item.name}</span>
+                {item.name}
               </Link>
             );
           })}
-        </div>
+        </nav>
 
-        <div className="p-4 border-t border-border mt-auto">
-          <div className="flex items-center p-3 mb-4 rounded-xl bg-surface-light border border-border">
-            <CheckCircle2 size={16} className="text-primary-green mr-2" />
-            <span className="text-xs font-semibold text-foreground">JKLU Verified Student</span>
-          </div>
-          
-          <Link href="/" className="flex items-center px-4 py-3 text-text-secondary hover:text-danger transition-colors rounded-xl hover:bg-red-50">
-            <LogOut size={18} className="mr-3" />
-            <span className="text-sm">Log Out</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Navigation */}
-        <header className="h-16 bg-surface border-b border-border hidden md:flex items-center justify-between px-8 relative shrink-0">
-          <div className="flex items-center w-1/3">
-            <button 
-              onClick={() => setDesktopSidebarOpen(!desktopSidebarOpen)} 
-              className="mr-4 p-2 -ml-2 text-text-secondary hover:text-foreground rounded-lg hover:bg-surface-light transition-colors"
-            >
-              <Menu size={20} />
-            </button>
-            <span className="text-sm font-medium text-text-secondary flex items-center">
-              <span className="w-2 h-2 rounded-full bg-primary-green mr-2"></span>
-              JKLU · Mahapura
-            </span>
-          </div>
-
-          {/* Center Toggle: Rooms / Roommates */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex bg-surface-light p-1 rounded-xl border border-border">
-            <Link 
-              href="/student/explore"
-              className={`px-6 py-1.5 rounded-lg text-sm font-medium transition-all ${pathname === '/student/explore' ? 'bg-white text-primary-green shadow-sm' : 'text-text-secondary hover:text-foreground'}`}
-            >
-              Rooms
-            </Link>
-            <Link 
-              href="/student/roommates"
-              className={`px-6 py-1.5 rounded-lg text-sm font-medium transition-all ${pathname === '/student/roommates' ? 'bg-white text-primary-green shadow-sm' : 'text-text-secondary hover:text-foreground'}`}
-            >
-              Roommates
-            </Link>
-          </div>
-          
-          <div className="flex items-center space-x-6 w-1/3 justify-end">
-            <div className="relative hidden lg:block">
-              <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary" />
-              <input 
-                type="text" 
-                placeholder="Search properties, areas... (⌘K)" 
-                className="pl-10 pr-4 py-1.5 bg-surface-light border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary-green transition-colors w-64"
-              />
-            </div>
-            
-            <button className="relative text-text-secondary hover:text-foreground transition-colors">
-              <Bell size={20} />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary-green rounded-full flex items-center justify-center text-[10px] text-white font-bold border-2 border-surface">
-                3
-              </span>
-            </button>
-            
-            <div className="h-8 w-8 rounded-full bg-light-green flex items-center justify-center text-primary-green font-bold text-sm border border-border">
+        {/* Right: Profile & Mobile Menu */}
+        <div className="flex items-center gap-4">
+          <Link href="/student/profile" className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-all px-3 py-1.5 rounded-full border border-white/20 backdrop-blur-sm cursor-pointer">
+            <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white text-[10px] font-bold">
               RM
             </div>
-          </div>
-        </header>
+            <span className="text-white text-sm font-medium pr-1">Rahul <span className="hidden lg:inline">Mehta</span></span>
+          </Link>
+          
+          <Link href="/" className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all hidden md:block" title="Logout">
+            <LogOut size={18} />
+          </Link>
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto">
-          <div className="p-4 md:p-8 max-w-7xl mx-auto">
-            {children}
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white p-2">
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </header>
+
+      {/* Side Menu Drawer (Works on both desktop & mobile) */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[9999] flex">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setMobileMenuOpen(false)}
+          ></div>
+          
+          {/* Drawer */}
+          <div className="relative w-72 bg-primary-blue shadow-2xl flex flex-col h-full animate-in slide-in-from-left duration-300">
+            <div className="p-6 pb-4 flex items-center justify-between">
+              <span className="text-white/60 font-extrabold tracking-widest text-xs uppercase">STUDENT PORTAL</span>
+              <button onClick={() => setMobileMenuOpen(false)} className="text-white/60 hover:text-white p-1 transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="flex flex-col p-4 pt-2 space-y-1 overflow-y-auto flex-1">
+              {drawerItems.map((item) => {
+                const isActive = pathname === item.href;
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`
+                      px-4 py-3 rounded-2xl text-sm font-bold transition-all flex items-center
+                      ${isActive 
+                        ? 'bg-primary-orange text-white shadow-sm' 
+                        : 'text-white/70 hover:bg-white/10 hover:text-white'}
+                    `}
+                  >
+                    <Icon size={18} className={`mr-4 ${isActive ? 'text-white' : 'text-white/70'}`} />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+            
+            {/* Bottom Account Section */}
+            <div className="p-6 border-t border-white/10 mt-auto bg-black/20 space-y-4">
+              <div className="flex items-center bg-white/10 border border-white/20 p-3 rounded-2xl shadow-sm">
+                 <div className="w-6 h-6 rounded-full bg-primary-orange flex items-center justify-center mr-3 shrink-0">
+                    <CheckCircle size={14} className="text-white" />
+                 </div>
+                 <span className="text-xs font-extrabold text-white tracking-wide">JKLU Verified Student</span>
+              </div>
+              
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center px-2 py-2 text-white/70 hover:text-white transition-colors group">
+                <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mr-3 shrink-0 shadow-md group-hover:bg-white/20 transition-colors">
+                   <span className="text-white font-extrabold text-xs">N</span>
+                </div>
+                <span className="text-sm font-bold text-red-400">Log Out</span>
+              </Link>
+            </div>
           </div>
-        </main>
-      </div>
+        </div>
+      )}
+
+      {/* Main Content Area */}
+      <main className="flex-1 w-full max-w-[1800px] mx-auto p-4 md:p-6 lg:p-8">
+        {children}
+      </main>
     </div>
   );
 }
