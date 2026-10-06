@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { PROPERTIES, calculateKnownMonthlyCost } from '@/lib/data';
 import { MapPin, Navigation2, Search, Filter, Home, CheckCircle, ExternalLink, IndianRupee } from 'lucide-react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const Map = dynamic(() => import('@/components/Map'), { ssr: false });
 
 const JKLU_COORDS = { lat: 26.836, lng: 75.658 };
 const LAT_SCALE = 15000;
@@ -90,32 +93,16 @@ export default function ExploreRooms() {
           </div>
 
           {/* Map Area */}
-          <div className="flex-1 bg-surface-light rounded-2xl border border-border relative overflow-hidden shadow-sm">
-            {selectedProperty ? (
-              <iframe 
-                width="100%" 
-                height="100%" 
-                frameBorder="0" 
-                scrolling="no" 
-                marginHeight={0} 
-                marginWidth={0} 
-                src={`https://maps.google.com/maps?saddr=JK+Lakshmipat+University,+Jaipur&daddr=${encodeURIComponent(selectedProperty.project + ', ' + selectedProperty.location)}&output=embed`}
-                className="absolute inset-0 w-full h-full"
-              ></iframe>
-            ) : (
-              <iframe 
-                width="100%" 
-                height="100%" 
-                frameBorder="0" 
-                scrolling="no" 
-                marginHeight={0} 
-                marginWidth={0} 
-                src="https://maps.google.com/maps?q=JK+Lakshmipat+University,+Jaipur&t=&z=14&ie=UTF8&iwloc=&output=embed"
-                className="absolute inset-0 w-full h-full"
-              ></iframe>
-            )}
+          <div className="flex-1 bg-surface-light rounded-2xl border border-border relative overflow-hidden shadow-sm z-0">
             
-            <div className="absolute top-4 left-4 flex gap-2 z-30 pointer-events-none">
+            <Map 
+              properties={filteredProperties} 
+              selectedProperty={selectedProperty} 
+              onSelectProperty={setSelectedProperty}
+              calculateCost={calculateKnownMonthlyCost}
+            />
+            
+            <div className="absolute top-4 left-4 flex gap-2 z-[400] pointer-events-none">
               <div className="bg-white px-3 py-1.5 rounded-lg shadow-md border border-gray-200 text-xs font-bold text-gray-700 flex items-center">
                 <Navigation2 size={14} className="mr-1.5 text-primary-green" />
                 REAL-TIME ROUTING
@@ -123,7 +110,7 @@ export default function ExploreRooms() {
             </div>
             
             {!selectedProperty && (
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-xs font-medium shadow-xl pointer-events-none whitespace-nowrap">
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-xs font-medium shadow-xl pointer-events-none whitespace-nowrap z-[400]">
                 Select a property from the list to view the real route and distance
               </div>
             )}
