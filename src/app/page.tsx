@@ -1,69 +1,113 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { GraduationCap, Building, ShieldCheck } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+      {/* Left Side: Branding */}
+      <div className="w-full md:w-1/2 p-10 flex flex-col justify-center bg-surface relative overflow-hidden">
+        <div className="z-10 max-w-lg mx-auto">
+          <div className="mb-4">
+            <h2 className="text-sm font-semibold tracking-widest text-text-secondary uppercase">JK Lakshmipat University</h2>
+            <div className="w-12 h-1 bg-primary-green mt-2 rounded"></div>
+          </div>
+          
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
+            UniNest
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <h3 className="text-2xl font-medium text-text-secondary mb-4">
+            University Housing & <br />Intelligent Roommate Matching
+          </h3>
+          <p className="text-xl text-foreground font-medium mb-2">
+            Find your place. Find your people.
+          </p>
+          <p className="text-text-secondary">
+            Discover verified housing near JKLU and find roommates who actually match your lifestyle.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        
+        {/* Subtle Background Accent */}
+        <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-light-green rounded-full opacity-50 blur-3xl"></div>
+      </div>
+
+      {/* Right Side: Role Selection */}
+      <div className="w-full md:w-1/2 p-10 flex flex-col justify-center bg-surface-light border-l border-border">
+        <div className="max-w-md w-full mx-auto">
+          <div className="mb-10">
+            <h2 className="text-3xl font-bold text-foreground mb-2">Welcome to UniNest</h2>
+            <p className="text-text-secondary">Choose how you want to continue</p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Student Role */}
+            <Link href="/login?role=student" className="block group">
+              <div className="bg-surface p-6 rounded-2xl border border-border hover:border-primary-green shadow-sm hover:shadow-md transition-all duration-300 transform group-hover:-translate-y-1">
+                <div className="flex items-start">
+                  <div className="p-3 bg-light-green text-primary-green rounded-xl mr-4 group-hover:scale-110 transition-transform">
+                    <GraduationCap size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-1 group-hover:text-primary-green transition-colors">01 — STUDENT</h3>
+                    <p className="text-sm text-text-secondary mb-4">
+                      Find housing, compare true costs and discover compatible roommates.
+                    </p>
+                    <span className="text-sm font-medium text-primary-green flex items-center">
+                      Continue as Student 
+                      <span className="ml-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Landlord Role */}
+            <Link href="/login?role=landlord" className="block group">
+              <div className="bg-surface p-6 rounded-2xl border border-border hover:border-primary-green shadow-sm hover:shadow-md transition-all duration-300 transform group-hover:-translate-y-1">
+                <div className="flex items-start">
+                  <div className="p-3 bg-light-green text-primary-green rounded-xl mr-4 group-hover:scale-110 transition-transform">
+                    <Building size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-1 group-hover:text-primary-green transition-colors">02 — LANDLORD</h3>
+                    <p className="text-sm text-text-secondary mb-4">
+                      List properties, manage availability and handle student booking requests.
+                    </p>
+                    <span className="text-sm font-medium text-primary-green flex items-center">
+                      Continue as Landlord
+                      <span className="ml-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Admin Role */}
+            <Link href="/login?role=admin" className="block group">
+              <div className="bg-surface p-6 rounded-2xl border border-border hover:border-primary-green shadow-sm hover:shadow-md transition-all duration-300 transform group-hover:-translate-y-1">
+                <div className="flex items-start">
+                  <div className="p-3 bg-light-green text-primary-green rounded-xl mr-4 group-hover:scale-110 transition-transform">
+                    <ShieldCheck size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-1 group-hover:text-primary-green transition-colors">03 — ADMIN</h3>
+                    <p className="text-sm text-text-secondary mb-4">
+                      Manage verification, properties, students, bookings and platform analytics.
+                    </p>
+                    <span className="text-sm font-medium text-primary-green flex items-center">
+                      Continue as Admin
+                      <span className="ml-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+          
+          <div className="mt-8 text-center">
+            <span className="text-xs text-text-secondary">Frontend Demo · Mock Data</span>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
