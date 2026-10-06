@@ -43,7 +43,7 @@ export default function Map({ properties, selectedProperty, onSelectProperty, ca
     <MapContainer center={JKLU_COORDS} zoom={14} className="w-full h-full z-0" zoomControl={false}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       
       {/* JKLU Marker */}
