@@ -22,10 +22,10 @@ import {
 import { useState } from 'react';
 
 const navItems = [
+  { name: 'Rooms', href: '/student/explore', icon: Search },
+  { name: 'Roommates', href: '/student/roommates', icon: Users },
   { name: 'Overview', href: '/student', icon: Home },
-  { name: 'Explore Housing', href: '/student/explore', icon: Search },
   { name: 'Map View', href: '/student/map', icon: Map },
-  { name: 'Roommate Match', href: '/student/roommates', icon: Users },
   { name: 'My Preferences', href: '/student/preferences', icon: Settings },
   { name: 'Saved Properties', href: '/student/saved', icon: Heart },
   { name: 'Bookings', href: '/student/bookings', icon: CalendarCheck },
@@ -106,16 +106,32 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Navigation */}
-        <header className="h-16 bg-surface border-b border-border hidden md:flex items-center justify-between px-8">
-          <div className="flex items-center">
+        <header className="h-16 bg-surface border-b border-border hidden md:flex items-center justify-between px-8 relative">
+          <div className="flex items-center w-1/3">
             <span className="text-sm font-medium text-text-secondary flex items-center">
               <span className="w-2 h-2 rounded-full bg-primary-green mr-2"></span>
               JKLU · Mahapura
             </span>
           </div>
+
+          {/* Center Toggle: Rooms / Roommates */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex bg-surface-light p-1 rounded-xl border border-border">
+            <Link 
+              href="/student/explore"
+              className={`px-6 py-1.5 rounded-lg text-sm font-medium transition-all ${pathname === '/student/explore' ? 'bg-white text-primary-green shadow-sm' : 'text-text-secondary hover:text-foreground'}`}
+            >
+              Rooms
+            </Link>
+            <Link 
+              href="/student/roommates"
+              className={`px-6 py-1.5 rounded-lg text-sm font-medium transition-all ${pathname === '/student/roommates' ? 'bg-white text-primary-green shadow-sm' : 'text-text-secondary hover:text-foreground'}`}
+            >
+              Roommates
+            </Link>
+          </div>
           
-          <div className="flex items-center space-x-6">
-            <div className="relative">
+          <div className="flex items-center space-x-6 w-1/3 justify-end">
+            <div className="relative hidden lg:block">
               <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary" />
               <input 
                 type="text" 

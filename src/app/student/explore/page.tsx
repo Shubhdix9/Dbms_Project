@@ -1,15 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Filter, MapPin, CheckCircle, Heart, Info, IndianRupee } from 'lucide-react';
-import { PROPERTIES, AMENITIES, calculateTrueCost } from '@/lib/data';
-import Link from 'next/link';
+import { Search, Filter, MapPin, CheckCircle, Heart, Info, Users, ExternalLink } from 'lucide-react';
+import { PROPERTIES, AMENITIES, calculateKnownMonthlyCost, hasUndisclosedCosts } from '@/lib/data';
 
 export default function ExploreHousing() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeSort, setActiveSort] = useState('Recommended');
 
-  // Filter properties based on search term
   const filteredProperties = PROPERTIES.filter(p => 
     p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     p.location.toLowerCase().includes(searchTerm.toLowerCase())
@@ -17,11 +15,10 @@ export default function ExploreHousing() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Header & Search */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-1">Explore homes near JKLU</h1>
-          <p className="text-text-secondary">Discover 24+ verified properties around campus.</p>
+          <p className="text-text-secondary">Discover real public property listings around campus.</p>
         </div>
         
         <div className="flex gap-3">
@@ -29,7 +26,7 @@ export default function ExploreHousing() {
             <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary" />
             <input 
               type="text" 
-              placeholder="Search Mahapura, 2 BHK, Wi-Fi..." 
+              placeholder="Search Mahapura, 1 BHK, Vardhman..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-surface border border-border rounded-xl text-foreground focus:outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green transition-all"
@@ -41,9 +38,8 @@ export default function ExploreHousing() {
         </div>
       </div>
 
-      {/* Filters Area (simplified for demo) */}
       <div className="flex overflow-x-auto pb-4 gap-2 no-scrollbar">
-        {['Recommended', 'Lowest true cost', 'Closest to JKLU', 'Highest rated', 'Highest match'].map((sort) => (
+        {['Recommended', 'Lowest rent', 'Closest to JKLU', 'Largest area', 'Recently checked', 'Best roommate-sharing value'].map((sort) => (
           <button 
             key={sort}
             onClick={() => setActiveSort(sort)}
@@ -56,100 +52,92 @@ export default function ExploreHousing() {
             {sort}
           </button>
         ))}
-        
-        <div className="w-px h-8 bg-border mx-2"></div>
-        
-        {['Under ₹10k', 'Private Room', 'Furnished', 'AC', 'Male', 'Female'].map((filter) => (
-          <button 
-            key={filter}
-            className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-surface border border-border text-text-secondary hover:text-foreground transition-colors"
-          >
-            {filter}
-          </button>
-        ))}
       </div>
 
-      {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProperties.map((property) => (
-          <div key={property.id} className="bg-surface border border-border rounded-2xl overflow-hidden group hover:shadow-md transition-all duration-300 flex flex-col">
-            {/* Image Placeholder */}
-            <div className="h-48 bg-surface-light relative">
-              <div className="absolute top-3 left-3 flex gap-2">
-                {property.verified && (
-                  <span className="bg-white/90 text-primary-green px-2 py-1 rounded text-xs font-semibold flex items-center shadow-sm backdrop-blur-sm">
-                    <CheckCircle size={12} className="mr-1" /> Verified
-                  </span>
-                )}
-                <span className="bg-white/90 text-text-secondary px-2 py-1 rounded text-xs font-semibold shadow-sm backdrop-blur-sm">
-                  {property.rating} ★
-                </span>
-              </div>
-              <button className="absolute top-3 right-3 p-1.5 bg-white/90 rounded-full text-text-secondary hover:text-danger hover:bg-white shadow-sm backdrop-blur-sm transition-colors">
-                <Heart size={16} />
-              </button>
-              
-              <div className="absolute bottom-3 left-3 bg-white/90 text-foreground px-2 py-1 rounded text-xs font-semibold shadow-sm backdrop-blur-sm flex items-center">
-                <MapPin size={12} className="mr-1 text-primary-green" /> {property.distance} km from JKLU
-              </div>
-            </div>
-            
-            {/* Content */}
-            <div className="p-5 flex-1 flex flex-col">
-              <div className="flex justify-between items-start mb-1">
-                <h3 className="text-lg font-bold text-foreground line-clamp-1">{property.title}</h3>
-              </div>
-              <p className="text-sm text-text-secondary mb-3">{property.type} • {property.location}</p>
-              
-              <div className="flex flex-wrap gap-1.5 mb-5">
-                {property.amenities.slice(0, 3).map((amenityId) => {
-                  const amenity = AMENITIES.find(a => a.id === amenityId);
-                  return (
-                    <span key={amenityId} className="text-xs bg-surface-light text-text-secondary px-2 py-1 rounded border border-border/50">
-                      {amenity?.name}
+        {filteredProperties.map((property) => {
+          const knownCost = calculateKnownMonthlyCost(property);
+          const undisclosed = hasUndisclosedCosts(property);
+          
+          return (
+            <div key={property.id} className="bg-surface border border-border rounded-2xl overflow-hidden group hover:shadow-md transition-all duration-300 flex flex-col">
+              <div className="h-48 bg-surface-light relative border-b border-border flex items-center justify-center text-text-secondary">
+                <span className="text-xs uppercase tracking-widest opacity-50">Image from listing source</span>
+                <div className="absolute top-3 left-3 flex gap-2 flex-col items-start">
+                  {property.verifiedByUniNest ? (
+                    <span className="bg-white/95 text-primary-green px-2 py-1 rounded text-xs font-semibold flex items-center shadow-sm">
+                      <CheckCircle size={12} className="mr-1" /> University Verified
                     </span>
-                  );
-                })}
-                {property.amenities.length > 3 && (
-                  <span className="text-xs bg-surface-light text-text-secondary px-2 py-1 rounded border border-border/50">
-                    +{property.amenities.length - 3} more
+                  ) : (
+                    <span className="bg-white/95 text-text-secondary px-2 py-1 rounded text-xs font-semibold shadow-sm flex items-center">
+                      <ExternalLink size={12} className="mr-1" /> Public Listing
+                    </span>
+                  )}
+                  <span className="bg-white/95 text-text-secondary px-2 py-1 rounded text-[10px] font-semibold shadow-sm uppercase tracking-wide">
+                    {property.source}
                   </span>
-                )}
-              </div>
-              
-              <div className="mt-auto pt-4 border-t border-border">
-                <div className="flex justify-between items-end mb-4">
-                  <div>
-                    <div className="text-xs text-text-secondary mb-0.5 flex items-center">
-                      True Monthly Cost 
-                      <div className="ml-1 text-primary-green relative group/tooltip cursor-help">
-                        <Info size={12} />
-                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-foreground text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none z-10">
-                          Rent: ₹{property.rent} <br/>
-                          Utilities: ₹{property.electricity + property.internet + property.maintenance}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-2xl font-bold text-foreground flex items-center">
-                      ₹{calculateTrueCost(property).toLocaleString()} 
-                      <span className="text-sm font-normal text-text-secondary ml-1">/mo</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs text-text-secondary mb-0.5">Housing Match</div>
-                    <div className="text-lg font-bold text-primary-green">91%</div>
-                  </div>
                 </div>
                 
-                <div className="flex gap-2">
-                  <button className="flex-1 bg-primary-green text-white py-2.5 rounded-xl text-sm font-medium hover:bg-opacity-90 transition-colors">
+                <button className="absolute top-3 right-3 p-1.5 bg-white/95 rounded-full text-text-secondary hover:text-danger hover:bg-white shadow-sm transition-colors">
+                  <Heart size={16} />
+                </button>
+              </div>
+              
+              <div className="p-5 flex-1 flex flex-col">
+                <div className="mb-2">
+                  <h3 className="text-lg font-bold text-foreground line-clamp-1">{property.title}</h3>
+                  <p className="text-xs text-text-secondary flex items-center mt-1">
+                    <MapPin size={12} className="mr-1" /> Approx. {property.distanceKm} km from JKLU
+                  </p>
+                </div>
+                
+                <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-text-secondary mb-4">
+                  <span className="font-medium text-foreground">{property.configuration}</span>
+                  <span>•</span>
+                  <span>{property.furnishing}</span>
+                  <span>•</span>
+                  <span>{property.areaSqFt} sq.ft</span>
+                </div>
+                
+                <div className="bg-surface-light rounded-xl p-3 border border-border mb-4">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs text-text-secondary">Base Rent</span>
+                    <span className="font-bold text-foreground">₹{property.rent.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs text-text-secondary">Maintenance</span>
+                    <span className="font-semibold text-text-secondary">
+                      {typeof property.maintenance === 'number' ? `₹${property.maintenance}` : 'Not disclosed'}
+                    </span>
+                  </div>
+                  
+                  <div className="border-t border-border mt-2 pt-2 flex justify-between items-end">
+                    <div>
+                      <div className="text-[10px] uppercase font-bold tracking-wider text-text-secondary mb-0.5">Known Monthly Cost</div>
+                      <div className="text-xl font-bold text-foreground flex items-center">
+                        ₹{knownCost.toLocaleString()} {undisclosed && '+'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-auto pt-4 border-t border-border flex justify-between items-center">
+                  <div className="text-xs text-text-secondary">
+                    <span className="block mb-0.5">Last checked:</span>
+                    <span className="font-medium">{property.checkedAt}</span>
+                  </div>
+                  <button className="bg-surface border border-border text-foreground px-4 py-2 rounded-lg text-sm font-medium hover:border-primary-green hover:text-primary-green transition-colors">
                     View Details
                   </button>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
+      </div>
+      
+      <div className="text-center p-6 text-xs text-text-secondary border-t border-border mt-8">
+        Public listing information can change. Rent, availability, deposits and amenities should be confirmed directly with the listing source/owner before making any decision.
       </div>
     </div>
   );
