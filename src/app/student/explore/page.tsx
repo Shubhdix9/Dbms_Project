@@ -90,84 +90,43 @@ export default function ExploreRooms() {
           </div>
 
           {/* Map Area */}
-          <div className="flex-1 bg-[#e0e5ec] rounded-2xl border border-border relative overflow-hidden shadow-sm">
+          <div className="flex-1 bg-surface-light rounded-2xl border border-border relative overflow-hidden shadow-sm">
+            {selectedProperty ? (
+              <iframe 
+                width="100%" 
+                height="100%" 
+                frameBorder="0" 
+                scrolling="no" 
+                marginHeight={0} 
+                marginWidth={0} 
+                src={`https://maps.google.com/maps?saddr=JK+Lakshmipat+University,+Jaipur&daddr=${encodeURIComponent(selectedProperty.project + ', ' + selectedProperty.location)}&output=embed`}
+                className="absolute inset-0 w-full h-full"
+              ></iframe>
+            ) : (
+              <iframe 
+                width="100%" 
+                height="100%" 
+                frameBorder="0" 
+                scrolling="no" 
+                marginHeight={0} 
+                marginWidth={0} 
+                src="https://maps.google.com/maps?q=JK+Lakshmipat+University,+Jaipur&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                className="absolute inset-0 w-full h-full"
+              ></iframe>
+            )}
             
-            {/* Realistic Map Background Image */}
-            <div 
-              className="absolute inset-0 opacity-40 mix-blend-multiply"
-              style={{ 
-                backgroundImage: 'url("https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1600&q=80")', 
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'grayscale(100%) contrast(1.2)'
-              }}
-            ></div>
-
-            {/* Grid overlay for exact coordinates */}
-            <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
-            
-            <div className="absolute top-4 left-4 flex gap-2 z-30">
-              <div className="bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-200 text-xs font-bold text-gray-700 flex items-center">
+            <div className="absolute top-4 left-4 flex gap-2 z-30 pointer-events-none">
+              <div className="bg-white px-3 py-1.5 rounded-lg shadow-md border border-gray-200 text-xs font-bold text-gray-700 flex items-center">
                 <Navigation2 size={14} className="mr-1.5 text-primary-green" />
-                GPS ACTIVE • JKLU REGION
+                REAL-TIME ROUTING
               </div>
             </div>
-
-            {/* SVG Lines */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{ minWidth: '100%', minHeight: '100%' }}>
-              {selectedProperty && filteredProperties.find(p => p.id === selectedProperty.id) && (
-                <line 
-                  x1="50%" 
-                  y1="50%" 
-                  x2={`calc(50% + ${(selectedProperty.coordinates.lng - JKLU_COORDS.lng) * LNG_SCALE}px)`}
-                  y2={`calc(50% + ${(JKLU_COORDS.lat - selectedProperty.coordinates.lat) * LAT_SCALE}px)`}
-                  stroke="#22c55e" 
-                  strokeWidth="3"
-                  strokeDasharray="6,6"
-                  className="animate-[dash_1s_linear_infinite]"
-                />
-              )}
-            </svg>
-
-            {/* Fake Map Markers Container */}
-            <div className="absolute inset-0 flex items-center justify-center z-20">
-              {/* JKLU Center Marker */}
-              <div className="absolute flex flex-col items-center">
-                <div className="bg-primary-green text-white px-3 py-1 rounded-full shadow-lg border-2 border-white text-[10px] font-bold whitespace-nowrap flex items-center transform -translate-y-full mb-1">
-                  <CheckCircle size={12} className="mr-1" /> JKLU CAMPUS
-                </div>
-                <div className="w-4 h-4 bg-primary-green border-2 border-white rounded-full shadow-lg"></div>
+            
+            {!selectedProperty && (
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-xs font-medium shadow-xl pointer-events-none whitespace-nowrap">
+                Select a property from the list to view the real route and distance
               </div>
-
-              {/* Property Markers */}
-              {filteredProperties.map(p => {
-                const yOffset = (JKLU_COORDS.lat - p.coordinates.lat) * LAT_SCALE;
-                const xOffset = (p.coordinates.lng - JKLU_COORDS.lng) * LNG_SCALE;
-                const isSelected = selectedProperty?.id === p.id;
-                
-                return (
-                  <div 
-                    key={p.id}
-                    className="absolute flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform"
-                    style={{ transform: `translate(${xOffset}px, ${yOffset}px)` }}
-                    onClick={() => setSelectedProperty(p)}
-                  >
-                    <div className={`
-                      px-2 py-1 rounded-full shadow-lg border-2 text-[10px] font-bold whitespace-nowrap mb-1
-                      ${isSelected ? 'bg-primary-green text-white border-white scale-110' : 'bg-white text-gray-800 border-gray-200'}
-                    `}>
-                      ₹{(calculateKnownMonthlyCost(p) / 1000).toFixed(1)}k
-                    </div>
-                    <div className={`w-3 h-3 rounded-full shadow-lg border border-white ${isSelected ? 'bg-primary-green' : p.verifiedByUniNest ? 'bg-emerald-500' : 'bg-blue-500'}`}></div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="absolute bottom-4 left-4 right-4 text-[10px] font-mono text-gray-700 font-medium flex justify-between z-30">
-              <span className="bg-white/80 px-2 py-1 rounded">Tap a property pin to view route & distance</span>
-              {selectedProperty && <span className="bg-white/80 px-2 py-1 rounded text-primary-green font-bold">Showing route to: {selectedProperty.title}</span>}
-            </div>
+            )}
           </div>
         </div>
 
