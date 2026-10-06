@@ -275,3 +275,8 @@ export const calculateKnownMonthlyCost = (property: any) => {
 export const hasUndisclosedCosts = (property: any) => {
   return property.maintenance === 'Not disclosed' || property.electricity === 'Not disclosed' || property.internet === 'Not disclosed';
 };
+
+export const LEASES = [
+  { id: 'lease1', propertyId: 'p3', studentIds: ['s1', 's2'], landlordId: 'l1', startDate: '2026-08-01', endDate: '2027-07-31', rent: 30000, status: 'Active' },
+  { id: 'lease2', propertyId: 'p6', studentIds: ['s4', 's6'], landlordId: 'l2', startDate: '2026-09-01', endDate: '2027-08-31', rent: 22000, status: 'Active' }
+];
