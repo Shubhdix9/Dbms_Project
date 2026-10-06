@@ -169,13 +169,7 @@ export default function Home() {
 
         {/* Footer */}
         <div className="mt-8 text-center space-y-1">
-          <div className="flex items-center justify-center text-xs font-medium text-emerald-600 mb-2">
-            <CheckCircle2 size={14} className="mr-1.5" />
-            Encrypted Campus SSO Handshake • JKLU Net
-          </div>
-          <p className="text-[10px] text-gray-400 font-mono">
-            JK Lakshmipat University • Ajmer Road, Jaipur, Rajasthan 302026
-          </p>
+          {/* Footer removed as requested */}
         </div>
       </div>
     </div>
