@@ -61,8 +61,12 @@ export default function ExploreHousing() {
           
           return (
             <div key={property.id} className="bg-surface border border-border rounded-2xl overflow-hidden group hover:shadow-md transition-all duration-300 flex flex-col">
-              <div className="h-48 bg-surface-light relative border-b border-border flex items-center justify-center text-text-secondary">
-                <span className="text-xs uppercase tracking-widest opacity-50">Image from listing source</span>
+              <div className="h-48 bg-surface-light relative border-b border-border flex items-center justify-center text-text-secondary overflow-hidden">
+                {property.imageUrl ? (
+                  <img src={property.imageUrl} alt={property.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                ) : (
+                  <span className="text-xs uppercase tracking-widest opacity-50">Image from listing source</span>
+                )}
                 <div className="absolute top-3 left-3 flex gap-2 flex-col items-start">
                   {property.verifiedByUniNest ? (
                     <span className="bg-white/95 text-primary-green px-2 py-1 rounded text-xs font-semibold flex items-center shadow-sm">
