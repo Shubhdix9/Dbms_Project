@@ -62,7 +62,7 @@ export default function Home() {
         {/* Logo and Header */}
         <div className="flex flex-col items-center mb-8">
           <div className="w-20 h-20 bg-white rounded-full shadow-sm flex items-center justify-center mb-4 border border-gray-200 p-1 overflow-hidden">
-            <Image src="/jklu-logo.png" alt="JKLU Logo" width={64} height={64} className="object-contain w-full h-full" priority />
+            <Image src="/image.png" alt="JKLU Logo" width={64} height={64} className="object-contain w-full h-full" priority />
           </div>
           
           <div className="flex items-center gap-2 mb-1">

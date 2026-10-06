@@ -35,17 +35,17 @@ export default function ExploreRooms() {
   });
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] p-4 md:p-8 overflow-hidden max-w-[1600px] mx-auto">
+    <div className="flex flex-col min-h-[calc(100vh-4rem)] p-4 md:p-8 max-w-[1600px] mx-auto">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-extrabold text-foreground tracking-tight">{greeting}, Student.</h1>
         <p className="text-text-secondary mt-1">Find the perfect property and compare true monthly costs around JKLU.</p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
+      <div className="flex flex-col gap-8 pb-8">
         
-        {/* Left Column: Filters & Map */}
-        <div className="w-full md:w-7/12 lg:w-2/3 flex flex-col gap-4 min-h-0">
+        {/* Top Section: Filters & Map */}
+        <div className="w-full flex flex-col gap-4">
           
           {/* Filters Card */}
           <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row gap-4 items-center">
@@ -93,7 +93,7 @@ export default function ExploreRooms() {
           </div>
 
           {/* Map Area */}
-          <div className="flex-1 bg-surface-light rounded-2xl border border-border relative overflow-hidden shadow-sm z-0">
+          <div className="w-full h-[55vh] min-h-[400px] bg-surface-light rounded-2xl border border-border relative overflow-hidden shadow-sm z-0">
             
             <Map 
               properties={filteredProperties} 
@@ -117,8 +117,8 @@ export default function ExploreRooms() {
           </div>
         </div>
 
-        {/* Right Column: Properties List */}
-        <div className="w-full md:w-5/12 lg:w-1/3 flex flex-col min-h-0 bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
+        {/* Bottom Section: Properties Grid */}
+        <div className="w-full flex flex-col bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
           <div className="p-4 border-b border-border bg-surface-light/50 flex justify-between items-center">
             <div>
               <h2 className="font-bold text-foreground">NEARBY PROPERTIES</h2>
@@ -129,7 +129,7 @@ export default function ExploreRooms() {
             </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-3 space-y-3">
+          <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-surface-light/30">
             {filteredProperties.sort((a, b) => parseFloat(a.distanceKm) - parseFloat(b.distanceKm)).map((property, idx) => {
               const isSelected = selectedProperty?.id === property.id;
               
