@@ -37,6 +37,7 @@ const navItems = [
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
 
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row">
@@ -53,11 +54,12 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
       {/* Sidebar */}
       <div className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-surface border-r border-border transform transition-transform duration-300 ease-in-out flex flex-col
-        md:translate-x-0 md:static md:w-64
-        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+        fixed inset-y-0 left-0 z-50 bg-surface border-r border-border transform transition-all duration-300 ease-in-out flex flex-col
+        md:static md:translate-x-0
+        ${mobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64'}
+        ${desktopSidebarOpen ? 'md:w-64 md:opacity-100' : 'md:w-0 md:opacity-0 md:overflow-hidden'}
       `}>
-        <div className="p-6 pb-2">
+        <div className="p-6 pb-2 min-w-[16rem]">
           <div className="flex items-center mb-8">
             <div className="w-8 h-1 bg-primary-green rounded mr-3"></div>
             <div>
@@ -106,8 +108,14 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Navigation */}
-        <header className="h-16 bg-surface border-b border-border hidden md:flex items-center justify-between px-8 relative">
+        <header className="h-16 bg-surface border-b border-border hidden md:flex items-center justify-between px-8 relative shrink-0">
           <div className="flex items-center w-1/3">
+            <button 
+              onClick={() => setDesktopSidebarOpen(!desktopSidebarOpen)} 
+              className="mr-4 p-2 -ml-2 text-text-secondary hover:text-foreground rounded-lg hover:bg-surface-light transition-colors"
+            >
+              <Menu size={20} />
+            </button>
             <span className="text-sm font-medium text-text-secondary flex items-center">
               <span className="w-2 h-2 rounded-full bg-primary-green mr-2"></span>
               JKLU · Mahapura
