@@ -5,9 +5,9 @@ import Link from 'next/link';
 
 export default function Reviews() {
   const reviews = [
-    { id: 1, propertyId: 'p1', propertyName: 'Vardhman Empire Estate', rating: 5, date: 'Oct 2, 2026', author: 'Rahul M.', text: 'Amazing place, very close to campus. Landlord is highly responsive and the included amenities were exactly as described.' },
+    { id: 1, propertyId: 'p1', propertyName: 'Vardhman Empire Estate', rating: 5, date: 'Oct 2, 2026', author: 'shivam k.', text: 'Amazing place, very close to campus. Landlord is highly responsive and the included amenities were exactly as described.' },
     { id: 2, propertyId: 'p3', propertyName: 'Samanvay Aasra', rating: 4, date: 'Sep 15, 2026', author: 'Priya S.', text: 'Good amenities, but the internet can be a bit slow sometimes during peak hours. Otherwise a great community to live in.' },
-    { id: 3, propertyId: 'p5', propertyName: 'Ashiana Umang Phase II', rating: 5, date: 'Aug 22, 2026', author: 'Rahul M.', text: 'Probably the best society around JKLU. Super secure, great gym, and completely peaceful environment for studying.' }
+    { id: 3, propertyId: 'p5', propertyName: 'Ashiana Umang Phase II', rating: 5, date: 'Aug 22, 2026', author: 'shivam k.', text: 'Probably the best society around JKLU. Super secure, great gym, and completely peaceful environment for studying.' }
   ];
 
   return (

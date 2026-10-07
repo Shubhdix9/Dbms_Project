@@ -39,7 +39,7 @@ export default function ExploreRooms() {
     <div className="flex flex-col h-[calc(100vh-6rem)] p-4 max-w-[1800px] mx-auto overflow-hidden">
       {/* Header */}
       <div className="mb-6 flex flex-col items-center justify-center text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">{greeting}, <span className="text-primary-blue">Rahul.</span></h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">{greeting}, <span className="text-primary-blue">shivam.</span></h1>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">

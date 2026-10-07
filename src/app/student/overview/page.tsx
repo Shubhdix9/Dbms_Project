@@ -26,7 +26,7 @@ export default function StudentOverview() {
                 <ShieldCheck size={14} className="mr-1.5 text-green-400" /> Verified
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight">Welcome back, Rahul!</h1>
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight">Welcome back, shivam!</h1>
             <p className="text-white/70 text-lg font-medium max-w-xl">You have <strong className="text-white">1 pending viewing</strong> and your rent is due in <strong className="text-white">12 days</strong>.</p>
           </div>
           

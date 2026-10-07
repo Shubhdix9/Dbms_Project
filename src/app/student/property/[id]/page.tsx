@@ -1,6 +1,6 @@
 'use client';
 
-import { PROPERTIES, STUDENTS } from '@/lib/data';
+import { PROPERTIES, STUDENTS, LANDLORDS } from '@/lib/data';
 import { MapPin, CheckCircle, IndianRupee, Home, Ruler, Calendar, Shield, Phone, MessageSquare, Bed, Bath, Wind, Car, Zap, Wifi, Users, Camera, X, Star, Sparkles, TrendingUp, Minus, ThumbsUp, ChevronRight, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -39,6 +39,10 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [isAdded, setIsAdded] = useState(false);
+  const [isVisitBooked, setIsVisitBooked] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showContact, setShowContact] = useState(false);
   const property = PROPERTIES.find(p => p.id === id);
   
   if (!property) {
@@ -296,12 +300,53 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
             </div>
 
             <div className="space-y-3">
-              <button className="w-full bg-primary-orange text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-colors shadow-sm flex items-center justify-center">
-                <Calendar size={18} className="mr-2" /> Book a Visit
+              <button 
+                onClick={() => {
+                  if (!isVisitBooked) setShowBookingModal(true);
+                }}
+                disabled={isVisitBooked}
+                className={`w-full font-bold py-3 rounded-xl transition-colors shadow-sm flex items-center justify-center ${
+                  isVisitBooked 
+                    ? 'bg-green-100 text-green-700 cursor-not-allowed' 
+                    : 'bg-primary-orange text-white hover:bg-orange-600'
+                }`}
+              >
+                {isVisitBooked ? (
+                  <><CheckCircle size={18} className="mr-2" /> Visit Booked</>
+                ) : (
+                  <><Calendar size={18} className="mr-2" /> Book a Visit</>
+                )}
               </button>
-              <button className="w-full bg-white border border-border text-foreground font-bold py-3 rounded-xl hover:border-primary-blue hover:text-primary-blue transition-colors flex items-center justify-center">
-                <MessageSquare size={18} className="mr-2" /> Contact Landlord
-              </button>
+              
+              {!showContact ? (
+                <button 
+                  onClick={() => setShowContact(true)}
+                  className="w-full bg-white border border-border text-foreground font-bold py-3 rounded-xl hover:border-primary-blue hover:text-primary-blue transition-colors flex items-center justify-center"
+                >
+                  <MessageSquare size={18} className="mr-2" /> Contact Landlord
+                </button>
+              ) : (
+                <div className="w-full bg-surface-light border border-border p-4 rounded-xl flex flex-col gap-2 animate-in fade-in zoom-in duration-200">
+                  {((property as any).landlordId && LANDLORDS.find(l => l.id === (property as any).landlordId)) ? (() => {
+                    const landlord = LANDLORDS.find(l => l.id === (property as any).landlordId)!;
+                    return (
+                      <>
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-8 h-8 rounded-full bg-primary-blue text-white flex items-center justify-center font-bold">{landlord.name.charAt(0)}</div>
+                          <div>
+                            <p className="text-sm font-bold">{landlord.name}</p>
+                            {landlord.verified && <p className="text-[10px] text-green-600 flex items-center"><CheckCircle size={10} className="mr-1" /> Verified</p>}
+                          </div>
+                        </div>
+                        <p className="text-sm flex items-center font-medium"><Phone size={14} className="mr-2 text-text-secondary"/> {landlord.phone}</p>
+                        <p className="text-sm flex items-center font-medium"><MessageSquare size={14} className="mr-2 text-text-secondary"/> {landlord.email}</p>
+                      </>
+                    );
+                  })() : (
+                    <p className="text-sm text-text-secondary font-medium">Landlord details not disclosed for this property.</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -334,12 +379,73 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
               ))}
             </div>
             
-            <button className="w-full mt-4 bg-surface text-primary-blue font-extrabold py-2.5 text-xs uppercase tracking-wider rounded-xl border-2 border-border hover:bg-surface-light transition-colors">
-              Add Myself to List
+            <button 
+              onClick={() => setIsAdded(!isAdded)}
+              className={`w-full mt-4 font-extrabold py-2.5 text-xs uppercase tracking-wider rounded-xl border-2 transition-colors ${
+                isAdded 
+                  ? 'bg-green-50 text-green-600 border-green-200 hover:bg-green-100' 
+                  : 'bg-surface text-primary-blue border-border hover:bg-surface-light'
+              }`}
+            >
+              {isAdded ? 'Added to List' : 'Add Myself to List'}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Booking Modal */}
+      {showBookingModal && (
+        <div className="fixed inset-0 z-[9000] flex items-center justify-center bg-black/60 p-4">
+          <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-border flex justify-between items-center bg-surface-light">
+              <h2 className="text-xl font-extrabold text-primary-blue flex items-center">
+                <Calendar size={20} className="mr-2 text-primary-orange" /> Schedule Visit
+              </h2>
+              <button onClick={() => setShowBookingModal(false)} className="text-text-secondary hover:text-foreground bg-white p-1.5 rounded-full border border-border shadow-sm">
+                <X size={18} />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-5">
+              <div>
+                <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-1.5 block">Select Date</label>
+                <input type="date" className="w-full bg-surface-light border border-border px-4 py-3 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue" />
+              </div>
+              
+              <div>
+                <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-1.5 block">Select Time</label>
+                <select className="w-full bg-surface-light border border-border px-4 py-3 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue appearance-none">
+                  <option>10:00 AM</option>
+                  <option>11:00 AM</option>
+                  <option>01:00 PM</option>
+                  <option>03:00 PM</option>
+                  <option>05:00 PM</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-1.5 block">Message (Optional)</label>
+                <textarea rows={3} placeholder="Any specific requirements?" className="w-full bg-surface-light border border-border px-4 py-3 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue resize-none"></textarea>
+              </div>
+            </div>
+            
+            <div className="p-6 border-t border-border bg-surface-light flex gap-3">
+              <button onClick={() => setShowBookingModal(false)} className="flex-1 py-3 bg-white border border-border text-foreground font-bold rounded-xl hover:bg-gray-50 transition-colors">
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  setIsVisitBooked(true);
+                  setShowBookingModal(false);
+                }} 
+                className="flex-1 py-3 bg-primary-orange text-white font-bold rounded-xl hover:bg-orange-600 transition-colors shadow-sm"
+              >
+                Confirm Booking
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Photo Gallery Modal */}
       {isGalleryOpen && (

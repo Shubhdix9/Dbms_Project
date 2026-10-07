@@ -55,7 +55,8 @@ export const PROPERTIES = [
     sourceUrl: 'https://www.google.com/maps/place/Samanvay+Aasra',
     checkedAt: 'Oct 6, 2026',
     verifiedByUniNest: true,
-    housingScore: 88
+    housingScore: 88,
+    landlordId: 'l1'
   },
   {
     id: 'p8',
@@ -270,8 +271,8 @@ export const MATCHES = [
 ];
 
 export const LANDLORDS = [
-  { id: 'l1', name: 'Ramesh Singh', email: 'ramesh.s@example.com', verified: true, phone: 'Not disclosed' },
-  { id: 'l2', name: 'Sunita Sharma', email: 'sunita.s@example.com', verified: true, phone: 'Not disclosed' }
+  { id: 'l1', name: 'Ramesh Singh', email: 'ramesh.s@example.com', verified: true, phone: '+91 98765 43210' },
+  { id: 'l2', name: 'Sunita Sharma', email: 'sunita.s@example.com', verified: true, phone: '+91 91234 56789' }
 ];
 
 export const calculateKnownMonthlyCost = (property: any) => {

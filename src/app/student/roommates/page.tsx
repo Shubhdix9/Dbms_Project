@@ -1,10 +1,14 @@
 'use client';
+import { useState } from 'react';
 
-import { STUDENTS } from '@/lib/data';
+import { STUDENTS, PROPERTIES } from '@/lib/data';
 import { CheckCircle, Clock, VolumeX, BookOpen, Wind, Heart, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 
 export default function RoommateMatch() {
+  const [hasFilledPreferences, setHasFilledPreferences] = useState(false);
+  const [locationQuery, setLocationQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const currentUser = STUDENTS.find(s => s.id === 's2');
   
   // Fake compute match for demo
@@ -28,6 +32,150 @@ export default function RoommateMatch() {
     ...r,
     overallScore: Math.round(r.match.housingScore * 0.6 + r.match.lifestyleScore * 0.4)
   })).sort((a, b) => b.overallScore - a.overallScore);
+
+  if (!hasFilledPreferences) {
+    return (
+      <div className="max-w-[800px] mx-auto p-4 md:p-8 pb-20">
+        <div className="bg-white rounded-[2rem] p-8 md:p-12 border-2 border-border shadow-xl">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-primary-blue mb-3 tracking-tight">Roommate Preferences</h2>
+            <p className="text-text-secondary text-lg">Tell us about your lifestyle to find your perfect match.</p>
+          </div>
+
+          <form onSubmit={(e) => { e.preventDefault(); setHasFilledPreferences(true); }} className="space-y-8">
+            
+            {/* Academic Information */}
+            <div>
+              <h3 className="text-sm font-extrabold text-foreground mb-4 uppercase tracking-wider border-b border-border pb-2">Academic Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Branch / Course</label>
+                  <select className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue appearance-none">
+                    <option>B.Tech CSE</option>
+                    <option>B.Tech ECE</option>
+                    <option>BBA</option>
+                    <option>B.Des</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Year</label>
+                  <select className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue appearance-none">
+                    <option>1st Year</option>
+                    <option>2nd Year</option>
+                    <option>3rd Year</option>
+                    <option>4th Year</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Semester</label>
+                  <select className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue appearance-none">
+                    <option>Semester 1</option>
+                    <option>Semester 2</option>
+                    <option>Semester 3</option>
+                    <option>Semester 4</option>
+                    <option>Semester 5</option>
+                    <option>Semester 6</option>
+                    <option>Semester 7</option>
+                    <option>Semester 8</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Section</label>
+                  <input type="text" placeholder="e.g. A, B, C" className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue" />
+                </div>
+              </div>
+            </div>
+
+            {/* Lifestyle Preferences */}
+            <div>
+              <h3 className="text-sm font-extrabold text-foreground mb-4 uppercase tracking-wider border-b border-border pb-2">Lifestyle Preferences</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Sleep Time</label>
+                  <select className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue appearance-none">
+                    <option>Before 10 PM</option>
+                    <option>10 PM - 12 AM</option>
+                    <option>After 12 AM</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Wake Time</label>
+                  <select className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue appearance-none">
+                    <option>Before 7 AM</option>
+                    <option>7 AM - 9 AM</option>
+                    <option>After 9 AM</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Noise Tolerance</label>
+                  <select className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue appearance-none">
+                    <option>Low (Quiet study environment)</option>
+                    <option>Medium (Occasional music/guests)</option>
+                    <option>High (Very social)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Cleanliness</label>
+                  <select className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue appearance-none">
+                    <option>High (Always clean)</option>
+                    <option>Medium (Clean once a week)</option>
+                    <option>Low (Messy is fine)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Housing Preferences */}
+            <div>
+              <h3 className="text-sm font-extrabold text-foreground mb-4 uppercase tracking-wider border-b border-border pb-2">Housing Preferences</h3>
+              <div className="relative">
+                <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Preferred Location / Society</label>
+                <input 
+                  type="text" 
+                  value={locationQuery}
+                  onChange={(e) => {
+                    setLocationQuery(e.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                  placeholder="e.g. Samanvay Aasra, Mahapura" 
+                  className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue" 
+                />
+                
+                {showSuggestions && locationQuery.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-border rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    {PROPERTIES.filter(p => p.title.toLowerCase().includes(locationQuery.toLowerCase()) || (p.project && p.project.toLowerCase().includes(locationQuery.toLowerCase())))
+                      .map(p => (
+                        <div 
+                          key={p.id}
+                          className="px-4 py-3 hover:bg-surface-light cursor-pointer border-b border-border last:border-0"
+                          onClick={() => {
+                            setLocationQuery(p.title);
+                            setShowSuggestions(false);
+                          }}
+                        >
+                          <p className="text-sm font-bold text-foreground">{p.title}</p>
+                          <p className="text-xs text-text-secondary">{p.location}</p>
+                        </div>
+                      ))}
+                    {PROPERTIES.filter(p => p.title.toLowerCase().includes(locationQuery.toLowerCase()) || (p.project && p.project.toLowerCase().includes(locationQuery.toLowerCase()))).length === 0 && (
+                      <div className="px-4 py-3 text-sm text-text-secondary">No matching societies found.</div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <button type="submit" className="w-full py-4 bg-primary-orange text-white font-extrabold rounded-xl shadow-lg hover:bg-orange-600 transition-colors mt-8">
+              Find My Perfect Roommate
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 pb-12 max-w-[1400px] mx-auto mt-4 px-4 md:px-8">
