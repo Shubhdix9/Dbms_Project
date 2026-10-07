@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   Home, 
   Map, 
@@ -19,8 +19,9 @@ import {
   CheckCircle,
   Calendar
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { supabase } from '@/lib/supabase';
 
 const navItems = [
   { name: '1. Explore & Map', href: '/student/explore' },
@@ -41,7 +42,37 @@ const drawerItems = [
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [userName, setUserName] = useState('Student');
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/');
+        return;
+      }
+      const role = session.user.user_metadata?.role;
+      if (role !== 'student') {
+        router.push(`/${role || ''}`);
+        return;
+      }
+      setUserName(session.user.user_metadata?.name || 'Student');
+      setLoadingAuth(false);
+    };
+    checkAuth();
+  }, [router]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+  };
+
+  if (loadingAuth) {
+    return <div className="min-h-screen flex items-center justify-center bg-background"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue"></div></div>;
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
@@ -86,12 +117,12 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white text-[10px] font-bold">
               RM
             </div>
-            <span className="text-white text-sm font-medium pr-1">Rahul <span className="hidden lg:inline">Mehta</span></span>
+            <span className="text-white text-sm font-medium pr-1">{userName}</span>
           </Link>
           
-          <Link href="/" className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all hidden md:block" title="Logout">
+          <button onClick={handleLogout} className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all hidden md:block" title="Logout">
             <LogOut size={18} />
-          </Link>
+          </button>
 
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white p-2">
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -149,12 +180,12 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                  <span className="text-xs font-extrabold text-white tracking-wide">JKLU Verified Student</span>
               </div>
               
-              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center px-2 py-2 text-white/70 hover:text-white transition-colors group">
+              <button onClick={handleLogout} className="flex w-full items-center px-2 py-2 text-white/70 hover:text-white transition-colors group text-left">
                 <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mr-3 shrink-0 shadow-md group-hover:bg-white/20 transition-colors">
                    <span className="text-white font-extrabold text-xs">N</span>
                 </div>
                 <span className="text-sm font-bold text-red-400">Log Out</span>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

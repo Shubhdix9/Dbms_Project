@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, Eye, ShieldCheck, GraduationCap, Building, Shield } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function Home() {
   const router = useRouter();
   const [role, setRole] = useState<'landlord' | 'student' | 'admin'>('student');
-  const [email, setEmail] = useState('demo.student@jklu.edu.in');
-  const [password, setPassword] = useState('demo123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  // Update email automatically when role changes
+  // Update email automatically when role changes (demo only)
   useEffect(() => {
     if (role === 'student') setEmail('demo.student@jklu.edu.in');
     if (role === 'landlord') setEmail('demo.landlord@example.com');
@@ -18,9 +21,35 @@ export default function Home() {
     setPassword('demo123');
   }, [role]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push(`/${role}`);
+    setLoading(true);
+    setError('');
+
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError) {
+      setError(signInError.message);
+      setLoading(false);
+      return;
+    }
+
+    if (data.user) {
+      const userRole = data.user.user_metadata?.role;
+      // We check if the chosen role matches their actual registered role,
+      // except admin which needs secure handling in a real app.
+      if (role !== 'admin' && userRole && userRole !== role) {
+        setError(`You are registered as a ${userRole}, not a ${role}.`);
+        await supabase.auth.signOut();
+        setLoading(false);
+        return;
+      }
+      
+      router.push(`/${role}`);
+    }
   };
 
   const roleConfig = {
@@ -115,6 +144,12 @@ export default function Home() {
             </button>
           </div>
 
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl text-xs font-bold text-red-600">
+              {error}
+            </div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
@@ -156,11 +191,24 @@ export default function Home() {
 
             <button 
               type="submit" 
-              className="w-full bg-primary-blue hover:bg-blue-900 text-white text-sm font-extrabold py-4 rounded-xl transition-all shadow-md flex justify-center items-center mt-4"
+              disabled={loading}
+              className="w-full bg-primary-blue hover:bg-blue-900 text-white text-sm font-extrabold py-4 rounded-xl transition-all shadow-md flex justify-center items-center mt-4 disabled:opacity-70"
             >
-              {currentConfig.buttonText}
+              {loading ? 'SIGNING IN...' : currentConfig.buttonText}
             </button>
           </form>
+
+          {/* Links */}
+          <div className="mt-6 text-center space-y-3">
+             <button onClick={() => alert('Password reset flow to be implemented')} className="block w-full text-xs font-bold text-text-secondary hover:text-primary-blue transition-colors">
+               Forgot Password?
+             </button>
+             {role !== 'admin' && (
+               <button onClick={() => router.push('/register')} className="block w-full text-xs font-bold text-text-secondary hover:text-primary-blue transition-colors">
+                 Don't have an account? Create Account →
+               </button>
+             )}
+          </div>
         </div>
 
         {/* Secure badge */}

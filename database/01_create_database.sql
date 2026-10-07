@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS uninest;
+CREATE DATABASE uninest;
+USE uninest;
