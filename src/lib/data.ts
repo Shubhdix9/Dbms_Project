@@ -16,7 +16,20 @@ export const AMENITIES = [
 export const PROPERTIES = [
   {
     id: 'p7',
-    imageUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/room/image.png',
+    images: [
+      '/room/Samanvay%20Aasra/Exterior/unnamed.jpg',
+      '/room/Samanvay%20Aasra/Exterior/4.jpg',
+      '/room/Samanvay%20Aasra/Exterior/5.jpg',
+      '/room/Samanvay%20Aasra/Exterior/2.jpg',
+      '/room/Samanvay%20Aasra/Exterior/3.jpg',
+      '/room/Samanvay%20Aasra/rooms/unnamed.jpg',
+      '/room/Samanvay%20Aasra/rooms/4.jpg',
+      '/room/Samanvay%20Aasra/rooms/5.jpg',
+      '/room/Samanvay%20Aasra/rooms/6.jpg',
+      '/room/Samanvay%20Aasra/rooms/2.jpg',
+      '/room/Samanvay%20Aasra/rooms/3.jpg'
+    ],
     title: 'Samanvay Aasra',
     project: 'Samanvay Aasra',
     location: 'Mahapura, Ajmer Road, Jaipur',

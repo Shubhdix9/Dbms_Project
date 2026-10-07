@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PROPERTIES, calculateKnownMonthlyCost } from '@/lib/data';
+import { PROPERTIES, calculateKnownMonthlyCost, LANDLORDS } from '@/lib/data';
 import { MapPin, Navigation2, Search, Filter, Home, CheckCircle, ExternalLink, IndianRupee } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 
 const Map = dynamic(() => import('@/components/Map'), { ssr: false });
 
-const JKLU_COORDS = { lat: 26.836, lng: 75.658 };
+const JKLU_COORDS = { lat: 26.8358, lng: 75.6504 };
 const LAT_SCALE = 15000;
 const LNG_SCALE = 15000;
 
@@ -181,9 +181,9 @@ export default function ExploreRooms() {
                       <span className="font-bold text-sm text-foreground">₹{calculateKnownMonthlyCost(property).toLocaleString()}</span>
                     </div>
                     <div className="text-right">
-                      <span className="text-[10px] text-text-secondary uppercase tracking-wide font-medium block mb-0.5">Source</span>
+                      <span className="text-[10px] text-text-secondary uppercase tracking-wide font-medium block mb-0.5">Landlord</span>
                       <span className="text-[10px] font-semibold text-foreground bg-surface-light px-1.5 py-0.5 rounded border border-border">
-                        {property.source}
+                        {property.landlordId ? LANDLORDS.find(l => l.id === property.landlordId)?.name : 'Not disclosed'}
                       </span>
                     </div>
                   </div>

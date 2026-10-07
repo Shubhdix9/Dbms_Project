@@ -49,9 +49,9 @@ export default function LandlordProperties() {
               </div>
               
               <div className="flex items-center gap-3 mt-6 pt-4 border-t border-border">
-                <button className="flex-1 py-2 bg-light-orange text-primary-orange font-bold text-xs uppercase tracking-wider rounded-lg border border-primary-orange/20 hover:bg-primary-orange hover:text-white transition-colors flex items-center justify-center">
+                <Link href={`/landlord/edit-property/${property.id}`} className="flex-1 py-2 bg-light-orange text-primary-orange font-bold text-xs uppercase tracking-wider rounded-lg border border-primary-orange/20 hover:bg-primary-orange hover:text-white transition-colors flex items-center justify-center">
                   <Edit size={14} className="mr-1.5" /> Edit
-                </button>
+                </Link>
                 <Link href={`/student/property/${property.id}`} className="flex-1 py-2 bg-white text-text-secondary font-bold text-xs uppercase tracking-wider rounded-lg border border-border hover:bg-surface-light transition-colors flex items-center justify-center">
                   <Eye size={14} className="mr-1.5" /> Preview
                 </Link>

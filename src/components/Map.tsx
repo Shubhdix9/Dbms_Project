@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 import L from 'leaflet';
 
-const JKLU_COORDS: [number, number] = [26.8379, 75.6495];
+const JKLU_COORDS: [number, number] = [26.8358, 75.6504];
 
 const jkluIcon = L.divIcon({
   className: 'custom-div-icon',
@@ -222,16 +222,7 @@ export default function Map({ properties, selectedProperty, onSelectProperty, ca
         >
           Satellite
         </button>
-        <button
-          onClick={() => setMapType('terrain')}
-          className={`px-4 py-2 text-xs font-bold transition-all border-l border-gray-200 ${
-            mapType === 'terrain'
-              ? 'bg-gray-900 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50'
-          }`}
-        >
-          3D Terrain
-        </button>
+
       </div>
     </div>
   );

@@ -11,26 +11,26 @@ export default function AdminDashboard() {
     <div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-8 pb-20">
       
       {/* Header Hero */}
-      <div className="bg-gray-900 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden shadow-2xl border border-gray-800">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
-        <div className="absolute bottom-0 left-20 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl -mb-10"></div>
+      <div className="bg-primary-blue rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-orange/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
+        <div className="absolute bottom-0 left-20 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl -mb-10"></div>
         
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest border border-red-500/30">
+              <div className="bg-light-orange text-primary-orange px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm">
                 Command Centre
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight">System Overview</h1>
-            <p className="text-gray-400 text-lg font-medium max-w-xl">Monitor platform activity, <strong className="text-red-400">verification workflows</strong>, and database integrity.</p>
+            <p className="text-white/70 text-lg font-medium max-w-xl">Monitor platform activity, <strong className="text-white">verification workflows</strong>, and database integrity.</p>
           </div>
           
-          <div className="flex items-center bg-black/40 border border-gray-800 rounded-2xl p-4 shrink-0">
+          <div className="flex items-center bg-white/10 border border-white/20 rounded-2xl p-4 shrink-0">
              <div className="flex items-center gap-3">
                <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.6)]"></div>
                <div>
-                  <div className="text-xs font-extrabold text-gray-500 uppercase tracking-widest">System Status</div>
+                  <div className="text-xs font-extrabold text-white/60 uppercase tracking-widest">System Status</div>
                   <div className="text-green-400 font-bold text-sm">All Services Online</div>
                </div>
              </div>
@@ -43,9 +43,9 @@ export default function AdminDashboard() {
         {[
           { label: 'Total Students', value: STUDENTS.length, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
           { label: 'Platform Properties', value: PROPERTIES.length, icon: Building, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-          { label: 'Pending Verifications', value: pendingProps.length, icon: ShieldAlert, color: 'text-red-500', bg: 'bg-red-500/10' },
-          { label: 'Active Leases', value: LEASES.length, icon: FileText, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-          { label: 'Total Matches', value: MATCHES.length, icon: IndianRupee, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+          { label: 'Pending Verifications', value: pendingProps.length, icon: ShieldAlert, color: 'text-primary-orange', bg: 'bg-light-orange' },
+          { label: 'Active Leases', value: LEASES.length, icon: FileText, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+          { label: 'Total Matches', value: MATCHES.length, icon: IndianRupee, color: 'text-primary-orange', bg: 'bg-light-orange' },
         ].map((stat, i) => (
           <div key={i} className="bg-white p-6 rounded-[2rem] border-2 border-border shadow-sm flex flex-col justify-between group hover:border-gray-300 transition-colors">
             <div className="flex items-center justify-between mb-6">

@@ -1,16 +1,44 @@
 'use client';
 
 import { PROPERTIES, STUDENTS } from '@/lib/data';
-import { MapPin, CheckCircle, IndianRupee, Home, Ruler, Calendar, Shield, Phone, MessageSquare, Bed, Bath, Wind, Car, Zap, Wifi, Users } from 'lucide-react';
+import { MapPin, CheckCircle, IndianRupee, Home, Ruler, Calendar, Shield, Phone, MessageSquare, Bed, Bath, Wind, Car, Zap, Wifi, Users, Camera, X, Star, Sparkles, TrendingUp, Minus, ThumbsUp, ChevronRight, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import SavingsCalculator from '@/components/SavingsCalculator';
 
-import { use } from 'react';
+import { useState, use } from 'react';
+
+const MOCK_REVIEWS = [
+  {
+    id: 1,
+    studentName: 'Homini',
+    avatar: 'H',
+    rating: 5,
+    title: 'Good Quality.',
+    date: 'Reviewed in India on 3 January 2026',
+    verified: true,
+    text: 'This is an excellent property with fully furnished rooms. It supports two students perfectly, and the landlord is very responsive. Very sturdy and great quality. Must rent.',
+    images: ['/room/Samanvay%20Aasra/rooms/4.jpg', '/room/Samanvay%20Aasra/rooms/5.jpg']
+  },
+  {
+    id: 2,
+    studentName: 'Sheetal Dhake',
+    avatar: 'S',
+    rating: 5,
+    title: 'Perfect and High Quality Property',
+    date: 'Reviewed in India on 20 April 2026',
+    verified: true,
+    text: 'I am living here for 2 Semesters. The flat is extremely sturdy and fit/finish is excellent. All rooms were maintained well including all beds, desks and ACs. Good property.',
+    images: []
+  }
+];
 
 export default function PropertyDetails({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const { id } = use(params);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+  const [activeFilter, setActiveFilter] = useState('All');
   const property = PROPERTIES.find(p => p.id === id);
   
   if (!property) {
@@ -21,6 +49,14 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
       </div>
     );
   }
+
+  const allImages: string[] = (property as any).images || (property.imageUrl ? [property.imageUrl] : []);
+  const filteredImages = allImages.filter((img) => {
+    if (activeFilter === 'All') return true;
+    if (activeFilter === 'Rooms') return img.toLowerCase().includes('rooms');
+    if (activeFilter === 'Exterior') return img.toLowerCase().includes('exterior');
+    return true;
+  });
 
   const cost = property.rent + (typeof property.maintenance === 'number' ? property.maintenance : 0);
 
@@ -46,11 +82,16 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
         )}
 
         <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="text-white">
-            <h1 className="text-3xl md:text-5xl font-extrabold mb-2 text-white">{property.title}</h1>
-            <p className="text-white/80 flex items-center text-sm md:text-base font-medium">
-              <MapPin size={16} className="mr-1.5" /> {property.location} • {property.distanceKm} km from JKLU
-            </p>
+          <div className="text-white flex flex-col gap-4">
+            <div>
+              <h1 className="text-3xl md:text-5xl font-extrabold mb-2 text-white">{property.title}</h1>
+              <p className="text-white/80 flex items-center text-sm md:text-base font-medium">
+                <MapPin size={16} className="mr-1.5" /> {property.location} • {property.distanceKm} km from JKLU
+              </p>
+            </div>
+            <button onClick={() => setIsGalleryOpen(true)} className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-white/30 transition-colors w-max flex items-center">
+              <Camera size={16} className="mr-2" /> View all photos
+            </button>
           </div>
           <div className="bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 shrink-0">
             <div>
@@ -124,6 +165,105 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
           
           {/* Rent Savings Calculator */}
           <SavingsCalculator monthlyCost={cost} />
+
+          {/* Reviews Section - Amazon Style */}
+          <div className="bg-white rounded-2xl p-6 md:p-8 border border-border shadow-sm mt-8">
+            <h2 className="text-xl font-extrabold text-foreground mb-2">Students say</h2>
+            <p className="text-sm text-text-secondary leading-relaxed font-medium">
+              Students find the property safe and of high quality, considering it an amazing value for the rent. 
+              The move-in process receives mixed feedback, with several students finding it easy to settle in.
+            </p>
+            <div className="flex items-center text-xs text-text-secondary mt-2 mb-4 font-medium">
+              <Sparkles size={12} className="mr-1 text-gray-500" /> Generated from the text of student reviews
+            </div>
+
+            <div className="mb-8">
+              <h3 className="text-sm font-bold text-foreground mb-3">Select to learn more</h3>
+              <div className="flex flex-wrap gap-2">
+                <button className="flex items-center gap-1.5 text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1.5 rounded-md border border-teal-100 hover:bg-teal-100 transition-colors">
+                  <TrendingUp size={14} /> Safety <span className="text-gray-500 font-normal">(12)</span>
+                </button>
+                <button className="flex items-center gap-1.5 text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1.5 rounded-md border border-teal-100 hover:bg-teal-100 transition-colors">
+                  <TrendingUp size={14} /> Cleanliness <span className="text-gray-500 font-normal">(9)</span>
+                </button>
+                <button className="flex items-center gap-1.5 text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1.5 rounded-md border border-teal-100 hover:bg-teal-100 transition-colors">
+                  <TrendingUp size={14} /> Value for money <span className="text-gray-500 font-normal">(9)</span>
+                </button>
+                <button className="flex items-center gap-1.5 text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-md border border-gray-200 hover:bg-gray-100 transition-colors">
+                  <Minus size={14} /> Move-in <span className="text-gray-500 font-normal">(5)</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-8 border-b border-border pb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-bold text-foreground">Student photos and videos</h3>
+                <button onClick={() => setIsGalleryOpen(true)} className="text-sm font-medium text-blue-600 hover:underline">See all ›</button>
+              </div>
+              <div className="flex gap-2 overflow-x-auto scrollbar-hide items-center">
+                <button className="min-w-8 h-10 border border-gray-300 rounded-md flex items-center justify-center hover:bg-gray-50 bg-white shadow-sm shrink-0">
+                  <ChevronLeft size={16} className="text-gray-600" />
+                </button>
+                {allImages.slice(0, 5).map((img, i) => (
+                  <div key={i} onClick={() => setSelectedPhotoIndex(i)} className="w-48 h-32 shrink-0 rounded-lg overflow-hidden relative border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity">
+                    <img src={img} className="w-full h-full object-cover" />
+                    <div className="absolute bottom-2 left-2 flex text-orange-500">
+                      {[...Array(5)].map((_, j) => <Star key={j} size={10} fill="currentColor" />)}
+                    </div>
+                  </div>
+                ))}
+                <button className="min-w-8 h-10 border border-gray-300 rounded-md flex items-center justify-center hover:bg-gray-50 bg-white shadow-sm shrink-0">
+                  <ChevronRight size={16} className="text-gray-600" />
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-bold text-foreground mb-6">Top reviews from India</h3>
+              <div className="space-y-8">
+                {MOCK_REVIEWS.map((review) => (
+                  <div key={review.id} className="border-b border-gray-100 pb-8 last:border-0 last:pb-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-sm">
+                        {review.avatar}
+                      </div>
+                      <span className="text-sm font-medium">{review.studentName}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="flex text-orange-500">
+                        {[...Array(review.rating)].map((_, i) => <Star key={i} size={14} fill="currentColor" className="text-orange-500" />)}
+                      </div>
+                      <span className="text-sm font-bold text-foreground">{review.title}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mb-1">{review.date}</p>
+                    <p className="text-xs text-gray-500 mb-3 flex items-center gap-2">
+                      Size: {property.configuration} <span className="font-bold text-orange-700">Verified Purchase</span>
+                    </p>
+                    <p className="text-sm text-foreground mb-4">{review.text}</p>
+                    
+                    {review.images && review.images.length > 0 && (
+                      <div className="flex gap-2 mb-4">
+                        {review.images.map((img, i) => (
+                          <div key={i} onClick={() => setSelectedPhotoIndex(allImages.indexOf(img) !== -1 ? allImages.indexOf(img) : 0)} className="w-36 h-24 rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity">
+                            <img src={img} className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    
+                    <p className="text-xs text-gray-500 mb-3">One person found this helpful</p>
+                    <div className="flex gap-3 items-center">
+                      <button className="text-xs font-medium border border-gray-300 rounded-full px-4 py-1.5 hover:bg-gray-50 transition-colors">
+                        Helpful
+                      </button>
+                      <span className="text-gray-300">|</span>
+                      <button className="text-xs text-gray-600 hover:underline">Report</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
         </div>
 
@@ -200,6 +340,114 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
           </div>
         </div>
       </div>
+
+      {/* Photo Gallery Modal */}
+      {isGalleryOpen && (
+        <div className="fixed inset-0 z-[9999] flex bg-black/60">
+          {/* Sidebar-style Modal Panel (Google Maps style) */}
+          <div className="w-full md:w-[450px] h-full bg-[#1e1f22] flex flex-col shadow-2xl relative animate-in slide-in-from-left duration-300">
+            {/* Header */}
+            <div className="p-4 sm:p-5 flex justify-between items-start shrink-0">
+              <div>
+                <h2 className="text-xl font-semibold text-white">Images</h2>
+                <p className="text-sm text-gray-400 mt-1">{property.title}</p>
+              </div>
+              <button 
+                onClick={() => setIsGalleryOpen(false)}
+                className="text-gray-400 hover:text-white p-1 rounded-full transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Filters */}
+            <div className="flex gap-2 overflow-x-auto px-4 sm:px-5 pb-4 scrollbar-hide shrink-0">
+              <button 
+                onClick={() => setActiveFilter('All')}
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${activeFilter === 'All' ? 'bg-[#8ab4f8]/20 border border-[#8ab4f8]/30 text-[#8ab4f8]' : 'bg-[#2d2e30] border border-gray-600 text-gray-300 hover:bg-[#3d3e40]'}`}
+              >
+                <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-600">
+                   {allImages[0] && <img src={allImages[0]} className="w-full h-full object-cover" />}
+                </div>
+                All
+              </button>
+              <button 
+                onClick={() => setActiveFilter('Rooms')}
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${activeFilter === 'Rooms' ? 'bg-[#8ab4f8]/20 border border-[#8ab4f8]/30 text-[#8ab4f8]' : 'bg-[#2d2e30] border border-gray-600 text-gray-300 hover:bg-[#3d3e40]'}`}
+              >
+                <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-600">
+                   {allImages.find((img) => img.toLowerCase().includes('rooms')) && <img src={allImages.find((img) => img.toLowerCase().includes('rooms'))} className="w-full h-full object-cover" />}
+                </div>
+                Rooms
+              </button>
+              <button 
+                onClick={() => setActiveFilter('Exterior')}
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${activeFilter === 'Exterior' ? 'bg-[#8ab4f8]/20 border border-[#8ab4f8]/30 text-[#8ab4f8]' : 'bg-[#2d2e30] border border-gray-600 text-gray-300 hover:bg-[#3d3e40]'}`}
+              >
+                <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-600">
+                   {allImages.find((img) => img.toLowerCase().includes('exterior')) && <img src={allImages.find((img) => img.toLowerCase().includes('exterior'))} className="w-full h-full object-cover" />}
+                </div>
+                Exterior
+              </button>
+            </div>
+
+            {/* Sub-header Add Photos */}
+            <div className="flex justify-between items-center px-4 sm:px-5 pb-4 shrink-0 border-b border-gray-800">
+              <h3 className="text-lg font-bold text-white">{activeFilter}</h3>
+              <button className="flex items-center gap-2 border border-gray-600 text-blue-300 hover:bg-gray-800 px-3 py-1.5 rounded-full text-sm font-medium transition-colors">
+                <Camera size={14} /> Add photos
+              </button>
+            </div>
+
+            {/* Masonry Grid */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+              {filteredImages.length > 0 ? (
+                <div className="columns-2 gap-3 space-y-3">
+                  {filteredImages.map((img: string, idx: number) => (
+                    <div 
+                      key={idx} 
+                      className="break-inside-avoid relative rounded-xl overflow-hidden bg-[#2d2e30] cursor-pointer"
+                      onClick={() => setSelectedPhotoIndex(allImages.indexOf(img))}
+                    >
+                      <img 
+                        src={img} 
+                        alt={`${property.title} photo ${idx + 1}`} 
+                        className="w-full h-auto object-cover hover:opacity-90 transition-opacity"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-gray-400 text-center mt-10">No photos available for this filter</div>
+              )}
+            </div>
+          </div>
+          
+          {/* Clickable backdrop to close */}
+          <div className="flex-1 cursor-pointer" onClick={() => setIsGalleryOpen(false)}></div>
+        </div>
+      )}
+
+      {/* Full-Screen Lightbox Modal */}
+      {selectedPhotoIndex !== null && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/95">
+          <button 
+            onClick={() => setSelectedPhotoIndex(null)}
+            className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 z-[10010] bg-black/50 rounded-full backdrop-blur-sm transition-colors"
+          >
+            <X size={32} />
+          </button>
+          
+          <div className="relative w-full h-full flex items-center justify-center p-4">
+            <img 
+              src={allImages[selectedPhotoIndex]} 
+              alt="Fullscreen view" 
+              className="max-w-full max-h-full object-contain" 
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
