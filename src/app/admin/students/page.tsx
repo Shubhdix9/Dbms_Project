@@ -74,8 +74,8 @@ export default function AdminStudentsPage() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-wrap gap-1">
-                       <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase">{student.preferences.diet}</span>
-                       <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase">{student.preferences.sleepSchedule}</span>
+                       <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase">{student.preferences.foodPreference}</span>
+                       <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase">{student.preferences.sleepTime} - {student.preferences.wakeTime}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
