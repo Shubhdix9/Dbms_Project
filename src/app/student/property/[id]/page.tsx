@@ -102,8 +102,18 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
               <span className="text-[10px] font-bold tracking-widest uppercase text-text-secondary block">Monthly Rent</span>
               <span className="text-2xl font-extrabold text-primary-blue flex items-center"><IndianRupee size={20} className="mr-0.5"/> {cost.toLocaleString()}</span>
             </div>
-            <button className="bg-primary-orange text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-orange-600 transition-colors shadow-sm ml-2">
-              Book Visit
+            <button 
+              onClick={() => {
+                if (!isVisitBooked) setShowBookingModal(true);
+              }}
+              disabled={isVisitBooked}
+              className={`px-6 py-3 rounded-xl text-sm font-bold transition-colors shadow-sm ml-2 ${
+                isVisitBooked 
+                  ? 'bg-green-100 text-green-700 cursor-not-allowed' 
+                  : 'bg-primary-orange text-white hover:bg-orange-600'
+              }`}
+            >
+              {isVisitBooked ? 'Visit Booked' : 'Book Visit'}
             </button>
           </div>
         </div>

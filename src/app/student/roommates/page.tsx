@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { STUDENTS, PROPERTIES } from '@/lib/data';
 import { CheckCircle, Clock, VolumeX, BookOpen, Wind, Heart, Briefcase } from 'lucide-react';
@@ -7,9 +7,17 @@ import Link from 'next/link';
 
 export default function RoommateMatch() {
   const [hasFilledPreferences, setHasFilledPreferences] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [locationQuery, setLocationQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const currentUser = STUDENTS.find(s => s.id === 's2');
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (localStorage.getItem('uninest_preferences_filled') === 'true') {
+      setHasFilledPreferences(true);
+    }
+  }, []);
   
   // Fake compute match for demo
   const recommendations = STUDENTS.filter(s => s.id !== 's2' && s.gender === currentUser?.gender).map((s, index) => {
@@ -33,6 +41,8 @@ export default function RoommateMatch() {
     overallScore: Math.round(r.match.housingScore * 0.6 + r.match.lifestyleScore * 0.4)
   })).sort((a, b) => b.overallScore - a.overallScore);
 
+  if (!isMounted) return null;
+
   if (!hasFilledPreferences) {
     return (
       <div className="max-w-[800px] mx-auto p-4 md:p-8 pb-20">
@@ -42,7 +52,11 @@ export default function RoommateMatch() {
             <p className="text-text-secondary text-lg">Tell us about your lifestyle to find your perfect match.</p>
           </div>
 
-          <form onSubmit={(e) => { e.preventDefault(); setHasFilledPreferences(true); }} className="space-y-8">
+          <form onSubmit={(e) => { 
+            e.preventDefault(); 
+            localStorage.setItem('uninest_preferences_filled', 'true');
+            setHasFilledPreferences(true); 
+          }} className="space-y-8">
             
             {/* Academic Information */}
             <div>
@@ -178,12 +192,19 @@ export default function RoommateMatch() {
   }
 
   return (
-    <div className="space-y-8 pb-12 max-w-[1400px] mx-auto mt-4 px-4 md:px-8">
+    <div className="space-y-8 pb-20 max-w-[1400px] mx-auto mt-4 px-4 md:px-8">
+      
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-primary-blue mb-2 tracking-tight">Find your perfect roommate.</h1>
-          <p className="text-text-secondary">UniNest demo match based on budget, lifestyle and housing preferences.</p>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-primary-blue mb-2 tracking-tight">Your perfect roommates.</h1>
+          <p className="text-text-secondary">Matches based on your academic schedule, lifestyle habits, and housing preferences.</p>
         </div>
+        <button onClick={() => {
+            localStorage.removeItem('uninest_preferences_filled');
+            setHasFilledPreferences(false);
+          }} className="text-sm font-bold text-primary-orange hover:underline">
+            Update Preferences
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -191,9 +212,9 @@ export default function RoommateMatch() {
           <div key={student.id} className="bg-white border-2 border-border rounded-[2rem] overflow-hidden hover:shadow-xl transition-all group flex flex-col">
             
             {/* Top Photo Section */}
-            <div className="relative h-64 w-full bg-gray-900">
-              <img src={student.imageUrl} alt={student.name} className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            <div className="relative h-72 w-full bg-[#0a1128] overflow-hidden">
+              <img src={student.imageUrl} alt={student.name} className="w-full h-full object-cover opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700 ease-in-out" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a1128] via-[#0a1128]/20 to-transparent opacity-90"></div>
               
               {i === 0 && (
                 <div className="absolute top-4 right-4 bg-primary-orange text-white text-[10px] font-bold px-4 py-1.5 rounded-full tracking-wider uppercase shadow-md">
