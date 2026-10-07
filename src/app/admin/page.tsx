@@ -61,7 +61,7 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-8">
         
         {/* Verification Queue */}
         <div className="bg-white p-8 rounded-[2rem] border-2 border-border shadow-sm">
@@ -93,36 +93,6 @@ export default function AdminDashboard() {
               </div>
             )}
           </div>
-        </div>
-        
-        {/* DBMS Logic Monitor */}
-        <div className="bg-gray-900 text-gray-300 p-8 rounded-[2rem] border-2 border-gray-800 shadow-xl relative overflow-hidden flex flex-col">
-           <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-             <Database size={160} />
-           </div>
-           
-           <div className="relative z-10 flex-1">
-             <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-blue-400 border border-gray-700">
-                  <Activity size={20} />
-                </div>
-                <h2 className="text-xl font-extrabold text-white">DBMS Logic Monitor</h2>
-             </div>
-             
-             <div className="space-y-4 font-mono text-xs bg-black/50 p-6 rounded-2xl border border-gray-800 shadow-inner overflow-x-auto">
-               <div>
-                 <p className="text-blue-400 font-bold mb-1">query_01 &gt;</p>
-                 <p className="text-gray-300">SELECT * FROM Properties WHERE verified = false;</p>
-                 <p className="text-emerald-400 mt-1">-- {pendingProps.length} rows returned in 12ms</p>
-               </div>
-               
-               <div className="pt-4 border-t border-gray-800/50">
-                 <p className="text-blue-400 font-bold mb-1">query_02 &gt;</p>
-                 <p className="text-gray-300">SELECT AVG(rent) FROM Properties;</p>
-                 <p className="text-emerald-400 mt-1">-- ₹ 18,340 returned in 8ms</p>
-               </div>
-             </div>
-           </div>
         </div>
 
       </div>
