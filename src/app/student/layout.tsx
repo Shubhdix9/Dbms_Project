@@ -160,11 +160,11 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                     className={`
                       px-4 py-3 rounded-2xl text-sm font-bold transition-all flex items-center
                       ${isActive 
-                        ? 'bg-primary-orange text-white shadow-sm' 
+                        ? 'bg-white text-primary-blue shadow-sm' 
                         : 'text-white/70 hover:bg-white/10 hover:text-white'}
                     `}
                   >
-                    <Icon size={18} className={`mr-4 ${isActive ? 'text-white' : 'text-white/70'}`} />
+                    <Icon size={18} className={`mr-4 ${isActive ? 'text-primary-blue' : 'text-white/70'}`} />
                     {item.name}
                   </Link>
                 );
@@ -174,7 +174,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             {/* Bottom Account Section */}
             <div className="p-6 border-t border-white/10 mt-auto bg-black/20 space-y-4">
               <div className="flex items-center bg-white/10 border border-white/20 p-3 rounded-2xl shadow-sm">
-                 <div className="w-6 h-6 rounded-full bg-primary-orange flex items-center justify-center mr-3 shrink-0">
+                 <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mr-3 shrink-0">
                     <CheckCircle size={14} className="text-white" />
                  </div>
                  <span className="text-xs font-extrabold text-white tracking-wide">JKLU Verified Student</span>

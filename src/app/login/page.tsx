@@ -37,19 +37,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="grid lg:grid-cols-[1fr_460px] xl:grid-cols-[1fr_500px] min-h-screen w-full overflow-hidden bg-white font-sans">
+    <div className="flex h-screen w-full overflow-hidden bg-white font-sans">
       
       {/* Left panel */}
-      <div className="hidden lg:flex min-w-0 min-h-screen overflow-hidden bg-[#E8F4FA]">
+      <div className="hidden lg:block flex-1 h-screen overflow-hidden">
         <img
-          src="/login/image.png"
+          src="/login/uninest-panel.jpg"
           alt="UniNest Login Illustration"
-          className="w-full h-full object-cover object-[center_center]"
+          className="w-full h-full object-cover object-center"
         />
       </div>
 
       {/* Right panel */}
-      <div className="flex flex-col items-center justify-center min-w-0 px-8 py-12 md:px-12 lg:px-16 bg-white w-full h-screen overflow-y-auto">
+      <div className="flex flex-col items-center justify-center shrink-0 w-full lg:w-[460px] xl:w-[500px] px-8 py-12 md:px-12 lg:px-16 bg-white h-screen overflow-y-auto">
         <div className="w-full max-w-[430px] my-auto">
           
           <div className="mb-8">
@@ -60,7 +60,7 @@ export default function LoginPage() {
               Don't have an account?{' '}
               <button
                 type="button"
-                onClick={() => router.push('/signup')}
+                onClick={() => router.push('/register')}
                 className="text-[#1670FF] hover:text-blue-700 font-medium transition-colors"
               >
                 Sign up

@@ -58,7 +58,7 @@ export default function ExploreRooms() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Mahapura, Ajmer Road..." 
-                  className="w-full pl-9 pr-4 py-2.5 bg-surface-light border border-border rounded-xl text-sm focus:outline-none focus:border-primary-green" 
+                  className="w-full pl-9 pr-4 py-2.5 bg-surface-light border border-border rounded-xl text-sm focus:outline-none focus:border-primary-blue transition-colors" 
                 />
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function ExploreRooms() {
                     value={maxBudget}
                     onChange={(e) => setMaxBudget(e.target.value)}
                     placeholder="25000" 
-                    className="w-full pl-8 pr-3 py-2.5 bg-surface-light border border-border rounded-xl text-sm focus:outline-none focus:border-primary-green" 
+                    className="w-full pl-8 pr-3 py-2.5 bg-surface-light border border-border rounded-xl text-sm focus:outline-none focus:border-primary-blue transition-colors" 
                   />
                 </div>
               </div>
@@ -81,7 +81,7 @@ export default function ExploreRooms() {
                 <select 
                   value={config}
                   onChange={(e) => setConfig(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-surface-light border border-border rounded-xl text-sm focus:outline-none focus:border-primary-green appearance-none"
+                  className="w-full px-3 py-2.5 bg-surface-light border border-border rounded-xl text-sm focus:outline-none focus:border-primary-blue appearance-none transition-colors"
                 >
                   <option>Any</option>
                   <option>1 BHK</option>
@@ -104,7 +104,7 @@ export default function ExploreRooms() {
             
             <div className="absolute top-4 left-4 flex gap-2 z-[400] pointer-events-none">
               <div className="bg-white px-3 py-1.5 rounded-lg shadow-md border border-gray-200 text-xs font-bold text-gray-700 flex items-center">
-                <Navigation2 size={14} className="mr-1.5 text-primary-green" />
+                <Navigation2 size={14} className="mr-1.5 text-primary-blue" />
                 REAL-TIME ROUTING
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function ExploreRooms() {
                   key={property.id} 
                   onClick={() => setSelectedProperty(property)}
                   className={`bg-white border rounded-2xl p-4 cursor-pointer transition-all duration-200
-                    ${isSelected ? 'border-primary-orange shadow-md ring-1 ring-primary-orange' : 'border-border hover:border-primary-orange hover:shadow-sm'}
+                    ${isSelected ? 'border-primary-blue shadow-md ring-1 ring-primary-blue' : 'border-border hover:border-primary-blue hover:shadow-sm'}
                   `}
                 >
                   <div className="flex gap-3 h-20 mb-3">
@@ -164,7 +164,7 @@ export default function ExploreRooms() {
                     
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
                       <div className="flex items-center gap-1.5 mb-1">
-                        <span className="text-[10px] font-bold text-primary-orange bg-light-orange px-2 py-0.5 rounded-full border border-primary-orange/20 mr-2">
+                        <span className="text-[10px] font-bold text-primary-blue bg-light-blue px-2 py-0.5 rounded-full border border-primary-blue/20 mr-2">
                           {String(idx + 1).padStart(2, '0')}
                         </span>
                         <h3 className="text-sm font-bold text-foreground truncate">{property.title}</h3>

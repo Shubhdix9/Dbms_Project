@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function SavingsCalculator({ monthlyCost }: { monthlyCost: number }) {
+export default function SavingsCalculator({ monthlyCost, maxOccupancy = 4 }: { monthlyCost: number, maxOccupancy?: number }) {
   const [roommates, setRoommates] = useState(2); // Default 2 (sharing with 1 other)
   const [months, setMonths] = useState(12); // Default 1 year
 
@@ -44,7 +44,7 @@ export default function SavingsCalculator({ monthlyCost }: { monthlyCost: number
             <input 
               type="range" 
               min="1" 
-              max="4" 
+              max={maxOccupancy} 
               step="1" 
               value={roommates} 
               onChange={(e) => setRoommates(parseInt(e.target.value))}
@@ -52,7 +52,7 @@ export default function SavingsCalculator({ monthlyCost }: { monthlyCost: number
             />
             <div className="flex justify-between text-[10px] font-bold text-text-secondary mt-1">
               <span>Just Me</span>
-              <span>4 Roommates</span>
+              <span>{maxOccupancy} Roommates</span>
             </div>
           </div>
 

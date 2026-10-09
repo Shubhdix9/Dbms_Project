@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
-  ArrowRight, ShieldCheck, Home as HomeIcon, Users, Building, 
-  Search, FileText, Menu, X, MapPin, BedDouble, CheckCircle2, HeartHandshake, ClipboardList, Settings, Lock
+  ArrowRight, ShieldCheck, Home as HomeIcon, Users, 
+  Menu, X, MapPin, BedDouble, CheckCircle2, HeartHandshake, ClipboardList, Lock
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
@@ -86,280 +86,284 @@ export default function LandingPage() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className="min-h-screen bg-[#F4F6F9] font-sans text-[#151C2E] overflow-x-hidden selection:bg-[#111629] selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans text-[#172338] selection:bg-[#0f172a] selection:text-white">
       
-      {/* 2. Navigation Bar */}
-      <nav className="fixed top-0 w-full z-50 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-[#E1E7EF]">
+      {/* 1. Navigation Bar */}
+      <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-[#DCE6F5]">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-[#111629] rounded-xl flex items-center justify-center font-black text-white text-xl shadow-sm">U</div>
-            <span className="font-bold text-2xl tracking-tight text-[#111629]">UNINEST</span>
-          </div>
+          <Link href="/" className="flex items-center gap-2">
+            <span className="font-extrabold text-[22px] tracking-tight text-[#0f172a]">UniNest</span>
+          </Link>
           
-          <div className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-[#1B2438]">
-            <Link href="#" className="hover:text-[#111629] transition-colors">Home</Link>
-            <Link href="#features" className="hover:text-[#111629] transition-colors">Features</Link>
-            <Link href="#how-it-works" className="hover:text-[#111629] transition-colors">How It Works</Link>
-            <Link href="#roommates" className="hover:text-[#111629] transition-colors">Roommate Finder</Link>
-            <Link href="#about" className="hover:text-[#111629] transition-colors">About Us</Link>
+          <div className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-[#64748B]">
+            <Link href="/" className="text-[#172338] transition-colors">Home</Link>
+            <Link href="#features" className="hover:text-[#172338] transition-colors">Features</Link>
+            <Link href="#how-it-works" className="hover:text-[#172338] transition-colors">How It Works</Link>
+            <Link href="#roommates" className="hover:text-[#172338] transition-colors">Roommate Finder</Link>
+            <Link href="#about" className="hover:text-[#172338] transition-colors">About Us</Link>
           </div>
           
           <div className="hidden lg:flex items-center gap-6">
-            <Link href="/login" className="text-[15px] font-bold text-[#1B2438] hover:text-[#111629] transition-colors">
+            <Link href="/login" className="text-[15px] font-semibold text-[#64748B] hover:text-[#172338] transition-colors">
               Log In
             </Link>
-            <Link href="/signup" className="text-[15px] font-bold bg-[#111629] text-white px-6 py-2.5 rounded-full hover:bg-[#1B2438] transition-colors shadow-sm">
+            <Link href="/register" className="text-[15px] font-semibold bg-[#0f172a] text-white px-6 py-2.5 rounded-xl hover:bg-[#1e293b] transition-colors shadow-sm">
               Get Started
             </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button className="lg:hidden text-[#111629]" onClick={toggleMenu}>
+          <button className="lg:hidden text-[#172338]" onClick={toggleMenu} aria-label="Toggle menu">
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden absolute top-20 left-0 w-full bg-white border-b border-[#E1E7EF] shadow-lg flex flex-col p-6 gap-4">
-            <Link href="#" onClick={toggleMenu} className="text-lg font-semibold text-[#1B2438]">Home</Link>
-            <Link href="#features" onClick={toggleMenu} className="text-lg font-semibold text-[#1B2438]">Features</Link>
-            <Link href="#how-it-works" onClick={toggleMenu} className="text-lg font-semibold text-[#1B2438]">How It Works</Link>
-            <Link href="#roommates" onClick={toggleMenu} className="text-lg font-semibold text-[#1B2438]">Roommate Finder</Link>
-            <hr className="border-[#E1E7EF] my-2" />
-            <Link href="/login" className="text-lg font-bold text-[#111629]">Log In</Link>
-            <Link href="/signup" className="text-lg font-bold text-[#111629]">Get Started</Link>
+          <div className="lg:hidden absolute top-20 left-0 w-full bg-white border-b border-[#DCE6F5] shadow-lg flex flex-col p-6 gap-4">
+            <Link href="/" onClick={toggleMenu} className="text-lg font-semibold text-[#172338]">Home</Link>
+            <Link href="#features" onClick={toggleMenu} className="text-lg font-semibold text-[#64748B]">Features</Link>
+            <Link href="#how-it-works" onClick={toggleMenu} className="text-lg font-semibold text-[#64748B]">How It Works</Link>
+            <Link href="#roommates" onClick={toggleMenu} className="text-lg font-semibold text-[#64748B]">Roommate Finder</Link>
+            <hr className="border-[#DCE6F5] my-2" />
+            <Link href="/login" className="text-lg font-semibold text-[#64748B]">Log In</Link>
+            <Link href="/register" className="text-lg font-semibold text-[#0f172a]">Get Started</Link>
           </div>
         )}
       </nav>
 
-      {/* 3. Hero Section */}
+      {/* 2. Hero Section */}
       <section className="pt-32 pb-16 lg:pt-40 lg:pb-24 px-6 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-16 items-center">
           
-          {/* Left Side: Main Message */}
-          <div className="flex flex-col items-start text-left order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#E1E7EF] shadow-sm text-[#111629] text-xs tracking-wide font-bold mb-8 uppercase">
-              <span className="w-2 h-2 rounded-full bg-[#FF6B00]"></span>
-              Smart University Housing Platform
+          {/* Left Side: Copy and Actions */}
+          <div className="flex flex-col items-start text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#eff6ff] text-[#0f172a] text-xs font-bold mb-6">
+              STUDENT HOUSING, MADE SIMPLE
             </div>
             
-            <h1 className="text-5xl lg:text-[4.5rem] font-black tracking-tight mb-6 leading-[1.05] text-[#111629]">
-              Find Your Place.<br/>Find <span className="text-[#FF6B00]">Your People.</span>
+            <h1 className="text-5xl lg:text-[60px] font-bold tracking-tight mb-6 leading-[1.1] text-[#172338]">
+              Find Your Place.<br/>Find <span className="text-[#0f172a]">Your People.</span>
             </h1>
             
-            <p className="text-[17px] text-[#667085] mb-10 leading-relaxed max-w-[500px]">
-              UniNest helps university students discover verified rental homes near campus, find compatible roommates, and manage housing applications — all in one place.
+            <p className="text-[17px] text-[#64748B] mb-8 leading-relaxed max-w-[500px]">
+              Discover verified student homes, connect with compatible roommates, and manage your housing journey—all in one place.
             </p>
             
-            <ul className="space-y-4 mb-12 text-[15px] font-semibold text-[#111629]">
-              <li className="flex items-center gap-3"><CheckCircle2 size={20} className="text-[#16A34A]" /> Verified rental listings near your university.</li>
-              <li className="flex items-center gap-3"><CheckCircle2 size={20} className="text-[#16A34A]" /> Intelligent roommate compatibility matching.</li>
-              <li className="flex items-center gap-3"><CheckCircle2 size={20} className="text-[#16A34A]" /> Simple property applications and lease management.</li>
+            <ul className="space-y-3 mb-10 text-[15px] font-medium text-[#172338]">
+              <li className="flex items-center gap-3"><CheckCircle2 size={18} className="text-[#0f172a]" /> Verified rental listings near your university.</li>
+              <li className="flex items-center gap-3"><CheckCircle2 size={18} className="text-[#0f172a]" /> Smarter roommate compatibility matching.</li>
+              <li className="flex items-center gap-3"><CheckCircle2 size={18} className="text-[#0f172a]" /> Simple applications and housing management.</li>
             </ul>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-              <Link href="/login?redirect=/student/explore" className="w-full sm:w-auto px-8 py-4 bg-[#FF6B00] text-white font-bold rounded-xl hover:bg-[#e66000] transition-colors shadow-sm shadow-[#FF6B00]/20 flex items-center justify-center gap-2">
-                Explore Housing <ArrowRight size={20} />
+              <Link href="/login?redirect=/student/explore" className="w-full sm:w-auto px-8 py-3.5 bg-[#0f172a] text-white font-semibold rounded-xl hover:bg-[#1e293b] transition-colors shadow-sm flex items-center justify-center gap-2">
+                Explore Housing <ArrowRight size={18} />
               </Link>
-              <Link href="/login?redirect=/student/roommates" className="w-full sm:w-auto px-8 py-4 bg-white text-[#111629] font-bold rounded-xl hover:bg-[#F4F6F9] transition-colors border border-[#E1E7EF] shadow-sm flex items-center justify-center">
+              <Link href="/login?redirect=/student/roommates" className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#0f172a] font-semibold rounded-xl hover:bg-[#F8FAFC] transition-colors border border-[#DCE6F5] flex items-center justify-center">
                 Find a Roommate
               </Link>
             </div>
           </div>
 
-          {/* Right Side: Reused Illustration with Floating Details */}
-          <div className="w-full order-1 lg:order-2 rounded-[2rem] overflow-hidden shadow-2xl shadow-[#16A34A]/5 border border-[#16A34A]/20 relative group">
+          {/* Right Side: Generated Illustration */}
+          <div className="w-full relative rounded-2xl overflow-hidden shadow-2xl border border-[#DCE6F5]">
             <img 
-              src="/hero-illustration.jpg" 
-              alt="UniNest Student Housing Illustration" 
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000"
+              src="/images/uninest-home-hero.jpg" 
+              alt="UniNest Campus Community" 
+              className="w-full h-auto object-cover"
             />
             
-            {/* Floating Badge 1 - Top Left */}
-            <div className="absolute top-8 left-6 md:top-12 md:left-8 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-[#16A34A]/10 flex items-center gap-3 animate-[pulse_4s_infinite]">
-              <div className="w-9 h-9 bg-[#16A34A]/15 rounded-full flex items-center justify-center">
-                <HomeIcon size={18} className="text-[#16A34A]" />
-              </div>
-              <div>
-                <p className="text-[13px] font-bold text-[#111629] leading-tight">Campus Housing</p>
-                <p className="text-[11px] font-medium text-[#16A34A]">Find properties near you</p>
-              </div>
+            {/* Small UI Overlay Badges */}
+            <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border border-[#DCE6F5] flex items-center gap-2">
+              <ShieldCheck size={16} className="text-[#0f172a]" />
+              <span className="text-[12px] font-semibold text-[#172338]">Verified Housing</span>
             </div>
-
-            {/* Floating Badge 2 - Bottom Right */}
-            <div className="absolute bottom-8 right-6 md:bottom-12 md:right-8 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-[#16A34A]/10 flex items-center gap-3 animate-[pulse_5s_infinite]">
-              <div className="w-9 h-9 bg-[#FF6B00]/15 rounded-full flex items-center justify-center">
-                <Users size={18} className="text-[#FF6B00]" />
-              </div>
-              <div>
-                <p className="text-[13px] font-bold text-[#111629] leading-tight">Intelligent Matching</p>
-                <p className="text-[11px] font-medium text-[#667085]">Connect with roommates</p>
-              </div>
+            <div className="absolute bottom-6 right-6 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border border-[#DCE6F5] flex items-center gap-2">
+              <Users size={16} className="text-[#1670FF]" />
+              <span className="text-[12px] font-semibold text-[#172338]">Find Your Roommate</span>
             </div>
-            
-            {/* Floating Badge 3 - Top Right */}
-            <div className="absolute top-1/2 right-0 transform translate-x-2 -translate-y-1/2 bg-[#16A34A] text-white px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-2 border-2 border-white">
-              <ShieldCheck size={16} />
-              <span className="text-[12px] font-bold tracking-wide">100% Verified</span>
-            </div>
-            
-            {/* Green gradient overlay for blending */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#16A34A]/10 via-transparent to-transparent pointer-events-none"></div>
           </div>
         </div>
       </section>
 
-      {/* 4. Quick Trust Indicators */}
-      <section className="bg-white py-6 border-y border-[#E1E7EF]">
-        <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-6 md:gap-16">
-          <div className="flex items-center gap-2.5">
-            <ShieldCheck size={20} className="text-[#16A34A]"/>
-            <span className="font-bold text-[#111629] text-sm md:text-[15px]">Verified Housing</span>
+      {/* 3. Feature and Trust Strip */}
+      <section className="bg-white border-y border-[#DCE6F5] py-5">
+        <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center sm:justify-between items-center gap-6">
+          <div className="flex items-center gap-2 text-[#172338] font-semibold text-[14px]">
+            <ShieldCheck size={18} className="text-[#0f172a]"/> Verified Housing
           </div>
-          <div className="flex items-center gap-2.5">
-            <Users size={20} className="text-[#FF6B00]"/>
-            <span className="font-bold text-[#111629] text-sm md:text-[15px]">Smart Roommate Matching</span>
+          <div className="flex items-center gap-2 text-[#172338] font-semibold text-[14px]">
+            <Users size={18} className="text-[#0f172a]"/> Smart Roommate Matching
           </div>
-          <div className="flex items-center gap-2.5">
-            <FileText size={20} className="text-[#111629]"/>
-            <span className="font-bold text-[#111629] text-sm md:text-[15px]">Easy Applications</span>
+          <div className="flex items-center gap-2 text-[#172338] font-semibold text-[14px]">
+            <ClipboardList size={18} className="text-[#0f172a]"/> Easy Applications
           </div>
-          <div className="flex items-center gap-2.5">
-            <Lock size={20} className="text-[#111629]"/>
-            <span className="font-bold text-[#111629] text-sm md:text-[15px]">Secure Account Access</span>
+          <div className="flex items-center gap-2 text-[#172338] font-semibold text-[14px]">
+            <Lock size={18} className="text-[#0f172a]"/> Secure Account Access
           </div>
         </div>
       </section>
 
-      {/* 5. What Is UniNest? */}
-      <section id="about" className="py-24 px-6 max-w-7xl mx-auto bg-[#F4F6F9]">
-        <div className="text-center mb-20 max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-[44px] font-black text-[#111629] mb-6 tracking-tight">What is UniNest?</h2>
-          <p className="text-[17px] md:text-[19px] text-[#667085] leading-relaxed">
-            Finding student accommodation off-campus is often fragmented and frustrating. UniNest solves this by bringing housing discovery, intelligent roommate matching, and seamless rental management together into one powerful, unified ecosystem.
+      {/* 4. What Is UniNest? */}
+      <section id="features" className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="text-center mb-16 max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-[44px] font-bold text-[#172338] mb-4 tracking-tight">A Better Way to Find Your Student Home</h2>
+          <p className="text-[17px] text-[#64748B] leading-relaxed">
+            Finding student accommodation should be simple. UniNest brings housing discovery, compatible roommates, and essential rental tasks together in one connected experience.
           </p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white p-10 rounded-[2rem] shadow-[0_4px_20px_rgba(17,22,41,0.04)] border border-[#E1E7EF] hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-[#FF6B00] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[#FF6B00] mb-8 bg-[#FF6B00]/10">
-              <HomeIcon size={28} />
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#DCE6F5] hover:shadow-md transition-shadow">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-[#0f172a] bg-[#eff6ff] mb-6">
+              <HomeIcon size={24} />
             </div>
-            <h3 className="text-[22px] font-bold mb-4 text-[#111629]">Find a Home</h3>
-            <p className="text-[#667085] leading-relaxed text-[16px] mb-8">
-              Skip the shady listings and endless scrolling. Discover 100% verified rental properties near your university. Compare transparent pricing, essential amenities, room types, and commute distances all in one place.
+            <h3 className="text-[20px] font-bold mb-3 text-[#172338]">Find a Home</h3>
+            <p className="text-[#64748B] text-[15px] mb-6 leading-relaxed">
+              Explore verified student listings near your university. View honest property details, check commute times, and find the perfect space for your lifestyle and budget.
             </p>
-            <ul className="space-y-3 mt-auto">
-              <li className="flex items-center gap-3 text-sm text-[#111629] font-semibold"><CheckCircle2 size={18} className="text-[#16A34A]"/> Verified Landlords</li>
-              <li className="flex items-center gap-3 text-sm text-[#111629] font-semibold"><CheckCircle2 size={18} className="text-[#16A34A]"/> Proximity to Campus</li>
-            </ul>
+            <div className="flex flex-wrap gap-2 mt-auto">
+              <span className="bg-[#F8FAFC] border border-[#DCE6F5] text-[#64748B] text-[12px] font-semibold px-2.5 py-1 rounded-md">Verified Listings</span>
+              <span className="bg-[#F8FAFC] border border-[#DCE6F5] text-[#64748B] text-[12px] font-semibold px-2.5 py-1 rounded-md">Near Campus</span>
+            </div>
           </div>
           
-          <div className="bg-white p-10 rounded-[2rem] shadow-[0_4px_20px_rgba(17,22,41,0.04)] border border-[#E1E7EF] hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-[#16A34A] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[#16A34A] mb-8 bg-[#16A34A]/10">
-              <HeartHandshake size={28} />
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#DCE6F5] hover:shadow-md transition-shadow">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-[#1670FF] bg-[#eff4ff] mb-6">
+              <HeartHandshake size={24} />
             </div>
-            <h3 className="text-[22px] font-bold mb-4 text-[#111629]">Find Your People</h3>
-            <p className="text-[#667085] leading-relaxed text-[16px] mb-8">
-              Your living experience is only as good as the people you share it with. Our intelligent matching engine connects you with compatible roommates based on actual lifestyle preferences, study habits, and sleep schedules.
+            <h3 className="text-[20px] font-bold mb-3 text-[#172338]">Find Your People</h3>
+            <p className="text-[#64748B] text-[15px] mb-6 leading-relaxed">
+              Connect with potential roommates based on compatible routines, cleanliness habits, and social preferences to ensure a harmonious living environment.
             </p>
-            <ul className="space-y-3 mt-auto">
-              <li className="flex items-center gap-3 text-sm text-[#111629] font-semibold"><CheckCircle2 size={18} className="text-[#16A34A]"/> Lifestyle Matching</li>
-              <li className="flex items-center gap-3 text-sm text-[#111629] font-semibold"><CheckCircle2 size={18} className="text-[#16A34A]"/> Safe Communication</li>
-            </ul>
+            <div className="flex flex-wrap gap-2 mt-auto">
+              <span className="bg-[#F8FAFC] border border-[#DCE6F5] text-[#64748B] text-[12px] font-semibold px-2.5 py-1 rounded-md">Smart Matching</span>
+              <span className="bg-[#F8FAFC] border border-[#DCE6F5] text-[#64748B] text-[12px] font-semibold px-2.5 py-1 rounded-md">Lifestyle Tags</span>
+            </div>
           </div>
           
-          <div className="bg-white p-10 rounded-[2rem] shadow-[0_4px_20px_rgba(17,22,41,0.04)] border border-[#E1E7EF] hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-[#111629] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[#111629] mb-8 bg-[#F4F6F9] border border-[#E1E7EF]">
-              <ClipboardList size={28} />
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#DCE6F5] hover:shadow-md transition-shadow">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-[#0f172a] bg-[#e2e8f0] mb-6">
+              <ClipboardList size={24} />
             </div>
-            <h3 className="text-[22px] font-bold mb-4 text-[#111629]">Manage Your Stay</h3>
-            <p className="text-[#667085] leading-relaxed text-[16px] mb-8">
-              Ditch the messy email chains and scattered paperwork. Track your property applications, handle secure bookings, communicate directly with landlords, and manage lease information safely in a single digital dashboard.
+            <h3 className="text-[20px] font-bold mb-3 text-[#172338]">Manage Your Stay</h3>
+            <p className="text-[#64748B] text-[15px] mb-6 leading-relaxed">
+              Track your rental applications, manage lease details, and stay organized throughout the entire booking process from a single digital dashboard.
             </p>
-            <ul className="space-y-3 mt-auto">
-              <li className="flex items-center gap-3 text-sm text-[#111629] font-semibold"><CheckCircle2 size={18} className="text-[#16A34A]"/> Digital Applications</li>
-              <li className="flex items-center gap-3 text-sm text-[#111629] font-semibold"><CheckCircle2 size={18} className="text-[#16A34A]"/> Secure Leasing</li>
-            </ul>
+            <div className="flex flex-wrap gap-2 mt-auto">
+              <span className="bg-[#F8FAFC] border border-[#DCE6F5] text-[#64748B] text-[12px] font-semibold px-2.5 py-1 rounded-md">Digital Apps</span>
+              <span className="bg-[#F8FAFC] border border-[#DCE6F5] text-[#64748B] text-[12px] font-semibold px-2.5 py-1 rounded-md">Organized</span>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* 5. How It Works */}
+      <section id="how-it-works" className="py-24 px-6 bg-[#eff6ff] border-y border-[#Dce9e5]">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl md:text-[40px] font-bold text-[#172338] mb-12 tracking-tight">How It Works</h2>
+          <div className="grid md:grid-cols-3 gap-8 relative">
+            {/* Connecting line (desktop only) */}
+            <div className="hidden md:block absolute top-6 left-[16%] right-[16%] h-[2px] bg-[#Dce9e5] z-0"></div>
+            
+            <div className="relative z-10 flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-white border-2 border-[#0f172a] text-[#0f172a] font-bold text-xl flex items-center justify-center mb-6 shadow-sm">1</div>
+              <h3 className="text-xl font-bold text-[#172338] mb-2">Explore Homes</h3>
+              <p className="text-[#64748B] text-[15px] max-w-[280px]">Browse verified housing options near your university campus.</p>
+            </div>
+            
+            <div className="relative z-10 flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-white border-2 border-[#0f172a] text-[#0f172a] font-bold text-xl flex items-center justify-center mb-6 shadow-sm">2</div>
+              <h3 className="text-xl font-bold text-[#172338] mb-2">Find Your Match</h3>
+              <p className="text-[#64748B] text-[15px] max-w-[280px]">Discover compatible roommates with shared lifestyles and routines.</p>
+            </div>
+            
+            <div className="relative z-10 flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-white border-2 border-[#0f172a] text-[#0f172a] font-bold text-xl flex items-center justify-center mb-6 shadow-sm">3</div>
+              <h3 className="text-xl font-bold text-[#172338] mb-2">Apply & Settle In</h3>
+              <p className="text-[#64748B] text-[15px] max-w-[280px]">Complete your application seamlessly and secure your new home.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-
-
-      {/* 8. Dedicated Roommate Matching Section */}
-      <section id="roommates" className="py-24 px-6 bg-[#111629] text-white">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-16 items-center">
+      {/* 6. Roommate Matching Section */}
+      <section id="roommates" className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-16 items-center bg-white p-8 md:p-12 rounded-3xl border border-[#DCE6F5] shadow-sm">
           <div>
-            <h2 className="text-4xl lg:text-[44px] font-black mb-6 leading-[1.1] tracking-tight">
+            <h2 className="text-4xl font-bold mb-4 leading-[1.1] text-[#172338] tracking-tight">
               Your Home Matters.<br/>
               Your Roommate Does Too.
             </h2>
-            <p className="text-[17px] text-slate-300 mb-10 leading-relaxed max-w-[500px]">
-              Find students whose everyday habits and living preferences fit yours.
+            <p className="text-[17px] text-[#64748B] mb-8 leading-relaxed">
+              Discover people whose daily routines, preferences, and lifestyles fit yours.
             </p>
             
-            <ul className="space-y-4 mb-10">
-              <li className="flex items-center gap-3 text-slate-200 font-medium">
-                <CheckCircle2 size={20} className="text-[#16A34A]"/>
-                Sleep and wake-up schedules
+            <ul className="space-y-3 mb-8">
+              <li className="flex items-center gap-3 text-[#172338] font-medium text-[15px]">
+                <CheckCircle2 size={18} className="text-[#0f172a]"/> Sleep and wake-up schedules
               </li>
-              <li className="flex items-center gap-3 text-slate-200 font-medium">
-                <CheckCircle2 size={20} className="text-[#16A34A]"/>
-                Cleanliness preferences
+              <li className="flex items-center gap-3 text-[#172338] font-medium text-[15px]">
+                <CheckCircle2 size={18} className="text-[#0f172a]"/> Cleanliness preferences
               </li>
-              <li className="flex items-center gap-3 text-slate-200 font-medium">
-                <CheckCircle2 size={20} className="text-[#16A34A]"/>
-                Study routines
+              <li className="flex items-center gap-3 text-[#172338] font-medium text-[15px]">
+                <CheckCircle2 size={18} className="text-[#0f172a]"/> Study routines
               </li>
-              <li className="flex items-center gap-3 text-slate-200 font-medium">
-                <CheckCircle2 size={20} className="text-[#16A34A]"/>
-                Lifestyle and social preferences
+              <li className="flex items-center gap-3 text-[#172338] font-medium text-[15px]">
+                <CheckCircle2 size={18} className="text-[#0f172a]"/> Lifestyle and social preferences
               </li>
             </ul>
             
-            <Link href="/login?redirect=/student/roommates" className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF6B00] text-white font-bold rounded-xl hover:bg-[#e66000] transition-colors shadow-sm">
-              Find Your Roommate <ArrowRight size={20} />
+            <Link href="/login?redirect=/student/roommates" className="inline-flex items-center gap-2 px-6 py-3 bg-[#0f172a] text-white font-semibold rounded-xl hover:bg-[#1e293b] transition-colors shadow-sm">
+              Find Your Roommate <ArrowRight size={18} />
             </Link>
           </div>
           
-          {/* Mockup Representation */}
-          <div className="bg-[#1B2438] p-10 rounded-[2rem] border border-white/10 shadow-2xl relative">
-            <div className="absolute top-6 right-6 bg-[#16A34A] text-white text-[13px] tracking-wide font-bold px-4 py-1.5 rounded-full shadow-sm">
-              95% Match
-            </div>
-            <div className="flex items-center gap-6 mb-10">
-              <div className="w-16 h-16 bg-[#3B82F6] rounded-full border-4 border-[#1B2438] shadow-sm"></div>
-              <div className="w-16 h-16 bg-[#A855F7] rounded-full border-4 border-[#1B2438] shadow-sm -ml-8"></div>
-              <div className="text-xl font-bold text-white tracking-tight">High Compatibility</div>
-            </div>
-            <div className="space-y-4">
-              <div className="h-2 w-full bg-[#111629] rounded-full overflow-hidden">
-                <div className="h-full bg-[#16A34A] w-[95%]"></div>
+          {/* Compatibility Preview UI (Mock) */}
+          <div className="bg-[#F8FAFC] p-8 rounded-2xl border border-[#DCE6F5] relative">
+            <div className="absolute top-4 right-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Example</div>
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <div className="flex -space-x-4">
+                  <div className="w-14 h-14 rounded-full bg-blue-100 border-2 border-white flex items-center justify-center text-blue-600 font-bold">A</div>
+                  <div className="w-14 h-14 rounded-full bg-teal-100 border-2 border-white flex items-center justify-center text-teal-600 font-bold">B</div>
+                </div>
+                <div>
+                  <div className="text-lg font-bold text-[#172338]">High Compatibility</div>
+                  <div className="text-sm text-[#64748B]">Based on 12 preferences</div>
+                </div>
               </div>
-              <div className="flex justify-between text-sm text-slate-400 font-medium">
-                <span>Early Birds</span>
-                <span>Tidy</span>
-                <span>Quiet Study</span>
+            </div>
+            
+            <div className="space-y-5">
+              <div>
+                <div className="flex justify-between text-[13px] font-bold text-[#172338] mb-1.5">
+                  <span>Match Score</span>
+                  <span className="text-[#0f172a]">95%</span>
+                </div>
+                <div className="h-2 w-full bg-[#DCE6F5] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#0f172a] w-[95%] rounded-full"></div>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 pt-2">
+                <span className="bg-white border border-[#DCE6F5] text-[#172338] text-[13px] font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#0f172a]"/> Early Birds</span>
+                <span className="bg-white border border-[#DCE6F5] text-[#172338] text-[13px] font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#0f172a]"/> Very Tidy</span>
+                <span className="bg-white border border-[#DCE6F5] text-[#172338] text-[13px] font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#0f172a]"/> Quiet Study</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 9. Property Discovery Preview */}
-      <section className="py-24 px-6 max-w-7xl mx-auto bg-white border-b border-[#E1E7EF]">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4">
+      {/* 7. Explore Homes Near Your Campus */}
+      <section className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
           <div>
-            <h2 className="text-4xl md:text-[40px] font-black text-[#111629] mb-4 tracking-tight">Explore Homes Near Your Campus</h2>
-            <p className="text-[17px] text-[#667085]">Discover available rental properties based on real-time data.</p>
+            <h2 className="text-4xl font-bold text-[#172338] mb-3 tracking-tight">Explore Homes Near Your Campus</h2>
+            <p className="text-[17px] text-[#64748B]">Find a place that fits your location, lifestyle, and budget.</p>
           </div>
-          <Link href="/login?redirect=/student/explore" className="inline-flex items-center gap-2 font-bold text-[#111629] hover:text-[#667085] transition-colors">
+          <Link href="/login?redirect=/student/explore" className="inline-flex items-center gap-2 font-semibold text-[#0f172a] hover:text-[#1e293b] transition-colors">
             View All Properties <ArrowRight size={18}/>
           </Link>
         </div>
@@ -367,38 +371,38 @@ export default function LandingPage() {
         {loadingProps ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map(i => (
-              <div key={i} className="bg-[#F4F6F9] rounded-2xl h-[400px] animate-pulse"></div>
+              <div key={i} className="bg-white rounded-2xl h-[400px] border border-[#DCE6F5] animate-pulse"></div>
             ))}
           </div>
         ) : properties.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {properties.map(prop => (
-              <div key={prop.id} className="bg-white rounded-2xl shadow-[0_2px_10px_rgba(17,22,41,0.03)] border border-[#E1E7EF] overflow-hidden hover:shadow-[0_8px_30px_rgba(17,22,41,0.06)] transition-all group">
-                <div className="h-56 bg-[#F4F6F9] relative overflow-hidden">
+              <div key={prop.id} className="bg-white rounded-2xl shadow-sm border border-[#DCE6F5] overflow-hidden hover:shadow-md transition-shadow group flex flex-col">
+                <div className="h-56 bg-[#F8FAFC] relative overflow-hidden shrink-0">
                   {prop.images?.[0] ? (
                     <img src={prop.images[0]} alt={prop.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[#667085]"><HomeIcon size={40} opacity={0.2}/></div>
+                    <div className="w-full h-full flex items-center justify-center text-[#DCE6F5] bg-[#F1F5F9]"><HomeIcon size={40} /></div>
                   )}
                   {prop.is_verified && (
-                    <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-[#16A34A] text-[13px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
+                    <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-[#0f172a] text-[12px] font-bold px-2.5 py-1.5 rounded-md flex items-center gap-1.5 shadow-sm">
                       <ShieldCheck size={14}/> Verified
                     </div>
                   )}
                 </div>
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-2 gap-4">
-                    <h3 className="text-lg font-bold text-[#111629] truncate">{prop.title}</h3>
-                    <div className="text-lg font-black text-[#111629]">₹{prop.rent_amount}</div>
+                    <h3 className="text-[18px] font-bold text-[#172338] line-clamp-1">{prop.title}</h3>
+                    <div className="text-[18px] font-bold text-[#172338]">₹{prop.rent_amount}</div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-sm text-[#667085] mb-5 font-medium">
+                  <div className="flex items-center gap-1.5 text-[14px] text-[#64748B] mb-5 font-medium">
                     <MapPin size={16}/> {prop.locality}
                   </div>
-                  <div className="flex items-center gap-4 text-sm font-semibold text-[#111629] mb-6 pt-5 border-t border-[#E1E7EF]">
-                    <span className="flex items-center gap-1.5"><BedDouble size={16} className="text-[#667085]"/> {prop.bedrooms} Bed</span>
-                    <span className="flex items-center gap-1.5 text-[#667085]">{prop.furnishing_status}</span>
+                  <div className="flex items-center gap-4 text-[14px] font-semibold text-[#172338] mb-6 pt-5 border-t border-[#DCE6F5] mt-auto">
+                    <span className="flex items-center gap-1.5"><BedDouble size={16} className="text-[#64748B]"/> {prop.bedrooms} Bed</span>
+                    <span className="flex items-center gap-1.5 text-[#64748B]">{prop.furnishing_status}</span>
                   </div>
-                  <Link href={`/properties/${prop.id}`} className="block w-full text-center py-3.5 rounded-xl border border-[#E1E7EF] text-[#111629] font-bold hover:bg-[#F4F6F9] transition-colors">
+                  <Link href={`/login?redirect=/properties/${prop.id}`} className="block w-full text-center py-3 rounded-xl border border-[#DCE6F5] text-[#172338] font-semibold hover:bg-[#F8FAFC] transition-colors">
                     View Details
                   </Link>
                 </div>
@@ -406,117 +410,119 @@ export default function LandingPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-[#F4F6F9] rounded-2xl border border-[#E1E7EF] p-16 text-center">
-            <HomeIcon size={48} className="mx-auto text-[#1B2438] mb-6 opacity-30" />
-            <h3 className="text-xl font-bold text-[#111629] mb-3">No properties available yet</h3>
-            <p className="text-[#667085] mb-8 max-w-md mx-auto">Be the first to list a property or check back soon.</p>
-            <Link href="/signup" className="inline-block px-8 py-3.5 bg-[#111629] text-white font-bold rounded-xl shadow-sm hover:bg-[#1B2438] transition-colors">
-              Add a Property
+          <div className="bg-white rounded-2xl border border-[#DCE6F5] p-16 text-center shadow-sm">
+            <HomeIcon size={48} className="mx-auto text-[#DCE6F5] mb-4" />
+            <h3 className="text-xl font-bold text-[#172338] mb-2">No properties available yet</h3>
+            <p className="text-[#64748B] mb-6 max-w-md mx-auto">Be the first to list a property or check back soon.</p>
+            <Link href="/register" className="inline-block px-6 py-3 bg-[#0f172a] text-white font-semibold rounded-xl hover:bg-[#1e293b] transition-colors">
+              Join as a Landlord
             </Link>
           </div>
         )}
       </section>
 
-      {/* 10. Dedicated Landlord Section */}
-      <section className="py-24 px-6 bg-[#F4F6F9]">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
-          <div className="rounded-[2rem] overflow-hidden border border-[#E1E7EF] shadow-[0_8px_30px_rgba(17,22,41,0.06)] h-full relative group min-h-[400px]">
+      {/* 8. Landlord Section */}
+      <section className="py-24 px-6 bg-[#EAF5FB] border-t border-[#DCE6F5]">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
+          <div className="rounded-2xl overflow-hidden shadow-xl border border-white h-full relative min-h-[350px] lg:min-h-[450px]">
+            {/* Kept existing landlord image if available, else standard object-cover layout */}
             <img 
               src="/landlord-illustration.jpg" 
               alt="UniNest Landlord Role" 
-              className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000"
+              className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback if landlord image doesn't exist
+                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1000';
+              }}
             />
           </div>
           <div>
-            <h2 className="text-4xl md:text-[40px] font-black text-[#111629] mb-6 tracking-tight">Have a Property?<br/>Reach the Right Students.</h2>
-            <p className="text-[17px] text-[#667085] mb-10 leading-relaxed">
-              Manage your rental listings, respond to interested students, review applications, and keep your property information organised from one dashboard.
+            <h2 className="text-4xl font-bold text-[#172338] mb-4 tracking-tight">Have a Property?<br/>Reach the Right Students.</h2>
+            <p className="text-[17px] text-[#64748B] mb-8 leading-relaxed">
+              Manage your rental listings and connect with students looking for their next home.
             </p>
-            <ul className="space-y-4 mb-10 text-[15px] font-semibold text-[#111629]">
-              <li className="flex items-center gap-3"><CheckCircle2 size={20} className="text-[#16A34A]" /> Create and update property listings.</li>
-              <li className="flex items-center gap-3"><CheckCircle2 size={20} className="text-[#16A34A]" /> Manage rental prices and availability.</li>
-              <li className="flex items-center gap-3"><CheckCircle2 size={20} className="text-[#16A34A]" /> Review student applications.</li>
-              <li className="flex items-center gap-3"><CheckCircle2 size={20} className="text-[#16A34A]" /> Organise viewing requests and tenant information.</li>
+            <ul className="space-y-3 mb-10 text-[15px] font-medium text-[#172338]">
+              <li className="flex items-center gap-3"><CheckCircle2 size={18} className="text-[#0f172a]" /> Create or update property listings.</li>
+              <li className="flex items-center gap-3"><CheckCircle2 size={18} className="text-[#0f172a]" /> Manage rental prices and availability.</li>
+              <li className="flex items-center gap-3"><CheckCircle2 size={18} className="text-[#0f172a]" /> Review applications.</li>
+              <li className="flex items-center gap-3"><CheckCircle2 size={18} className="text-[#0f172a]" /> Organize tenant information.</li>
             </ul>
-            <Link href="/signup" className="inline-flex items-center gap-2 px-8 py-4 bg-[#111629] text-white font-bold rounded-xl hover:bg-[#1B2438] transition-colors shadow-sm">
-              Join as a Landlord <ArrowRight size={20} />
+            <Link href="/register" className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#172338] text-white font-semibold rounded-xl hover:bg-black transition-colors shadow-sm">
+              Join as a Landlord <ArrowRight size={18} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 11. Final Call to Action */}
-      <section className="py-24 px-6 mx-4 max-w-7xl lg:mx-auto bg-[#111629] rounded-[2rem] lg:rounded-[3rem] my-20 shadow-2xl relative overflow-hidden">
-        {/* Subtle ambient lighting effects */}
-        <div className="absolute top-0 right-0 -mr-32 -mt-32 w-[600px] h-[600px] bg-[#16A34A] opacity-10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 -ml-32 -mb-32 w-[400px] h-[400px] bg-[#FF6B00] opacity-10 rounded-full blur-[100px] pointer-events-none"></div>
+      {/* 9. Final Call to Action */}
+      <section className="py-24 px-6 mx-4 max-w-7xl lg:mx-auto bg-[#172338] rounded-3xl my-16 shadow-xl relative overflow-hidden">
+        {/* Subtle background gradient within dark section */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a]/40 to-transparent pointer-events-none"></div>
 
-        <div className="relative text-center max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-[48px] font-black text-white mb-6 tracking-tight leading-tight">
-            Your Next Chapter Starts<br/>With the Right Home.
+        <div className="relative text-center max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-[44px] font-bold text-white mb-6 tracking-tight leading-tight">
+            Your Next Chapter Starts With the Right Home.
           </h2>
-          <p className="text-[17px] md:text-[19px] text-[#94A3B8] mb-12 leading-relaxed max-w-2xl mx-auto">
-            Make finding student housing simpler. Discover your next home and connect with people who fit your lifestyle.
+          <p className="text-[17px] text-slate-300 mb-10 leading-relaxed max-w-2xl mx-auto">
+            Make finding student housing easier. Discover your next home and connect with people who fit your lifestyle.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/login?redirect=/student/explore" className="w-full sm:w-auto px-10 py-4 bg-[#FF6B00] text-white font-bold rounded-xl hover:bg-[#e66000] transition-colors shadow-lg shadow-[#FF6B00]/25 text-[16px]">
-              Explore Housing
+            <Link href="/login?redirect=/student/explore" className="w-full sm:w-auto px-8 py-3.5 bg-[#0f172a] text-white font-semibold rounded-xl hover:bg-[#1e293b] transition-colors shadow-sm">
+              Explore Housing <ArrowRight size={18} className="inline-block ml-1" />
             </Link>
-            <Link href="/login?redirect=/student/roommates" className="w-full sm:w-auto px-10 py-4 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-colors border border-white/20 backdrop-blur-md text-[16px]">
+            <Link href="/login?redirect=/student/roommates" className="w-full sm:w-auto px-8 py-3.5 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-colors border border-white/20">
               Find a Roommate
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 12. Footer */}
-      <footer className="bg-[#F4F6F9] pt-16 pb-8 px-6 border-t border-[#E1E7EF]">
+      {/* 10. Footer */}
+      <footer className="bg-white pt-16 pb-8 px-6 border-t border-[#DCE6F5]">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 lg:col-span-2">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-[#111629] rounded-lg flex items-center justify-center font-black text-white text-sm">U</div>
-              <span className="font-bold tracking-tight text-[#111629] text-xl">UNINEST</span>
-            </div>
-            <p className="text-[#667085] text-sm leading-relaxed max-w-xs font-medium">
+            <Link href="/" className="inline-block mb-4">
+              <span className="font-extrabold text-[22px] tracking-tight text-[#0f172a]">UniNest</span>
+            </Link>
+            <p className="text-[#64748B] text-[14px] leading-relaxed max-w-[280px]">
               Intelligent student housing and roommate matching platform designed for modern university life.
             </p>
           </div>
           
           <div>
-            <h4 className="font-bold text-[#111629] mb-4 text-[15px]">Students</h4>
-            <ul className="space-y-3 text-sm text-[#667085] font-medium">
-              <li><Link href="/login?redirect=/student/explore" className="hover:text-[#111629] transition-colors">Find Housing</Link></li>
-              <li><Link href="/login?redirect=/student/roommates" className="hover:text-[#111629] transition-colors">Roommate Match</Link></li>
-              <li><Link href="/student" className="hover:text-[#111629] transition-colors">Student Dashboard</Link></li>
+            <h4 className="font-bold text-[#172338] mb-4 text-[14px]">Explore</h4>
+            <ul className="space-y-3 text-[14px] text-[#64748B] font-medium">
+              <li><Link href="/" className="hover:text-[#0f172a] transition-colors">Home</Link></li>
+              <li><Link href="#features" className="hover:text-[#0f172a] transition-colors">Features</Link></li>
+              <li><Link href="#how-it-works" className="hover:text-[#0f172a] transition-colors">How It Works</Link></li>
+              <li><Link href="#roommates" className="hover:text-[#0f172a] transition-colors">Roommate Finder</Link></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="font-bold text-[#111629] mb-4 text-[15px]">Landlords</h4>
-            <ul className="space-y-3 text-sm text-[#667085] font-medium">
-              <li><Link href="/signup" className="hover:text-[#111629] transition-colors">List a Property</Link></li>
-              <li><Link href="/landlord" className="hover:text-[#111629] transition-colors">Landlord Dashboard</Link></li>
-              <li><Link href="#" className="hover:text-[#111629] transition-colors">Landlord Guide</Link></li>
+            <h4 className="font-bold text-[#172338] mb-4 text-[14px]">Landlords</h4>
+            <ul className="space-y-3 text-[14px] text-[#64748B] font-medium">
+              <li><Link href="/register" className="hover:text-[#0f172a] transition-colors">List a Property</Link></li>
+              <li><Link href="/login?redirect=/landlord" className="hover:text-[#0f172a] transition-colors">Landlord Dashboard</Link></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="font-bold text-[#111629] mb-4 text-[15px]">Account</h4>
-            <ul className="space-y-3 text-sm text-[#667085] font-medium">
-              <li><Link href="/login" className="hover:text-[#111629] transition-colors">Log In</Link></li>
-              <li><Link href="/signup" className="hover:text-[#111629] transition-colors">Register</Link></li>
-              <li><Link href="#" className="hover:text-[#111629] transition-colors">Support</Link></li>
+            <h4 className="font-bold text-[#172338] mb-4 text-[14px]">Account</h4>
+            <ul className="space-y-3 text-[14px] text-[#64748B] font-medium">
+              <li><Link href="/login" className="hover:text-[#0f172a] transition-colors">Log In</Link></li>
+              <li><Link href="/register" className="hover:text-[#0f172a] transition-colors">Get Started</Link></li>
             </ul>
           </div>
         </div>
         
-        <div className="max-w-7xl mx-auto pt-8 border-t border-[#E1E7EF] flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[13px] font-semibold text-[#667085]">
+        <div className="max-w-7xl mx-auto pt-8 border-t border-[#DCE6F5] flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-[13px] font-medium text-[#64748B]">
             © {new Date().getFullYear()} UniNest. All rights reserved.
           </p>
-          <div className="flex gap-6 text-[13px] font-semibold text-[#667085]">
-            <Link href="#" className="hover:text-[#111629] transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-[#111629] transition-colors">Terms of Service</Link>
+          <div className="flex gap-6 text-[13px] font-medium text-[#64748B]">
+            <Link href="#" className="hover:text-[#0f172a] transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-[#0f172a] transition-colors">Terms of Service</Link>
           </div>
         </div>
       </footer>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MapPin, Upload, Tv, Wifi, Car, Shield, Wind, Bed, Home, DollarSign, Camera, Video, Navigation } from 'lucide-react';
+import { MapPin, Upload, Tv, Wifi, Car, Shield, Wind, Bed, Home, DollarSign, Camera, Video, Navigation, Users } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AddProperty() {
@@ -156,7 +156,15 @@ export default function AddProperty() {
         <div className="bg-white rounded-3xl border-2 border-border p-8 shadow-sm">
           <h2 className="text-xl font-extrabold text-primary-blue mb-6 border-b border-border pb-4">5. Pricing</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-bold text-text-secondary mb-2">Max Occupancy</label>
+              <div className="relative">
+                <Users size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-secondary" />
+                <input type="number" min="1" max="10" placeholder="e.g. 4" className="w-full pl-11 pr-4 py-3 bg-surface-light border-2 border-border rounded-xl focus:border-primary-orange outline-none transition-colors font-bold text-foreground" />
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-bold text-text-secondary mb-2">Monthly Rent (₹)</label>
               <div className="relative">

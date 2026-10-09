@@ -34,6 +34,7 @@ export const PROPERTIES = [
     project: 'Samanvay Aasra',
     location: 'Mahapura, Ajmer Road, Jaipur',
     configuration: '2 BHK',
+    maxOccupancy: 3,
     type: 'Apartment',
     areaSqFt: 850,
     floor: '5th of 10',
@@ -65,6 +66,7 @@ export const PROPERTIES = [
     project: 'Samanvay The New Door',
     location: 'Mahindra SEZ, Jaipur',
     configuration: '3 BHK',
+    maxOccupancy: 4,
     type: 'Apartment',
     areaSqFt: 1450,
     floor: '8th of 14',
@@ -95,6 +97,7 @@ export const PROPERTIES = [
     project: 'Ashiana Umang',
     location: 'Near JKLU, Mahapura, Jaipur',
     configuration: '2 BHK',
+    maxOccupancy: 3,
     type: 'Apartment',
     areaSqFt: 1100,
     floor: '1st of 5',
@@ -124,6 +127,7 @@ export const PROPERTIES = [
     project: 'Vardhman Empire Estate',
     location: 'Mahapura, Ajmer Road, Jaipur',
     configuration: '1 BHK',
+    maxOccupancy: 2,
     type: 'Apartment',
     areaSqFt: 446,
     floor: '2nd of 12',
@@ -156,6 +160,7 @@ export const PROPERTIES = [
     project: 'Ashiana Umang',
     location: 'Near Mahindra SEZ, Ajmer Road, Jaipur',
     configuration: '2 BHK',
+    maxOccupancy: 3,
     type: 'Apartment',
     areaSqFt: 1175,
     floor: '4th',
@@ -187,6 +192,7 @@ export const PROPERTIES = [
     project: 'Mahima Nirvana',
     location: 'Mahapura, Jaipur',
     configuration: '3 BHK',
+    maxOccupancy: 4,
     type: 'Apartment',
     areaSqFt: 1450,
     floor: '6th',
@@ -234,7 +240,8 @@ export const STUDENTS = [
       foodPreference: 'Either',
       smoking: 'Non-smoker',
       guestPreference: 'Occasional',
-      ac: true
+      ac: true,
+      preferredPropertyId: 'p7'
     }
   },
   {
@@ -259,10 +266,10 @@ export const STUDENTS = [
       ac: true
     }
   },
-  { id: 's3', name: 'Aarav Jain', course: 'BBA', year: 1, gender: 'Male', verified: true, preferences: { budgetMin: 6000, budgetMax: 9000, sleepTime: '1:00 AM', wakeTime: '9:00 AM', cleanliness: 'Medium', noiseTolerance: 'Medium', studyHabits: 'Casual', foodPreference: 'Veg', smoking: 'Non-smoker', guestPreference: 'Frequent', ac: false } },
-  { id: 's4', name: 'Riya Sharma', course: 'B.Des', year: 3, gender: 'Female', verified: true, preferences: { budgetMin: 9000, budgetMax: 15000, sleepTime: '10:30 PM', wakeTime: '6:30 AM', cleanliness: 'High', noiseTolerance: 'Low', studyHabits: 'Focused', foodPreference: 'Veg', smoking: 'Non-smoker', guestPreference: 'Rare', ac: true } },
-  { id: 's5', name: 'Dev Kapoor', course: 'B.Tech CSE', year: 4, gender: 'Male', verified: true, preferences: { budgetMin: 8000, budgetMax: 12000, sleepTime: '2:00 AM', wakeTime: '10:00 AM', cleanliness: 'Low', noiseTolerance: 'High', studyHabits: 'Casual', foodPreference: 'Non-veg', smoking: 'Smoker', guestPreference: 'Frequent', ac: true } },
-  { id: 's6', name: 'Kunal Saini', course: 'B.Tech ECE', year: 2, gender: 'Male', verified: true, preferences: { budgetMin: 7000, budgetMax: 10000, sleepTime: '11:00 PM', wakeTime: '7:00 AM', cleanliness: 'High', noiseTolerance: 'Medium', studyHabits: 'Focused', foodPreference: 'Veg', smoking: 'Non-smoker', guestPreference: 'Occasional', ac: true } }
+  { id: 's3', name: 'Aarav Jain', course: 'BBA', year: 1, gender: 'Male', verified: true, preferences: { budgetMin: 6000, budgetMax: 9000, sleepTime: '1:00 AM', wakeTime: '9:00 AM', cleanliness: 'Medium', noiseTolerance: 'Medium', studyHabits: 'Casual', foodPreference: 'Veg', smoking: 'Non-smoker', guestPreference: 'Frequent', ac: false, preferredPropertyId: 'p7' } },
+  { id: 's4', name: 'Riya Sharma', course: 'B.Des', year: 3, gender: 'Female', verified: true, preferences: { budgetMin: 9000, budgetMax: 15000, sleepTime: '10:30 PM', wakeTime: '6:30 AM', cleanliness: 'High', noiseTolerance: 'Low', studyHabits: 'Focused', foodPreference: 'Veg', smoking: 'Non-smoker', guestPreference: 'Rare', ac: true, preferredPropertyId: 'p8' } },
+  { id: 's5', name: 'Dev Kapoor', course: 'B.Tech CSE', year: 4, gender: 'Male', verified: true, preferences: { budgetMin: 8000, budgetMax: 12000, sleepTime: '2:00 AM', wakeTime: '10:00 AM', cleanliness: 'Low', noiseTolerance: 'High', studyHabits: 'Casual', foodPreference: 'Non-veg', smoking: 'Smoker', guestPreference: 'Frequent', ac: true, preferredPropertyId: 'p9' } },
+  { id: 's6', name: 'Kunal Saini', course: 'B.Tech ECE', year: 2, gender: 'Male', verified: true, preferences: { budgetMin: 7000, budgetMax: 10000, sleepTime: '11:00 PM', wakeTime: '7:00 AM', cleanliness: 'High', noiseTolerance: 'Medium', studyHabits: 'Focused', foodPreference: 'Veg', smoking: 'Non-smoker', guestPreference: 'Occasional', ac: true, preferredPropertyId: 'p6' } }
 ];
 
 export const MATCHES = [

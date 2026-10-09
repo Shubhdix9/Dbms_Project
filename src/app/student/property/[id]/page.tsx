@@ -1,12 +1,14 @@
 'use client';
 
 import { PROPERTIES, STUDENTS, LANDLORDS } from '@/lib/data';
-import { MapPin, CheckCircle, IndianRupee, Home, Ruler, Calendar, Shield, Phone, MessageSquare, Bed, Bath, Wind, Car, Zap, Wifi, Users, Camera, X, Star, Sparkles, TrendingUp, Minus, ThumbsUp, ChevronRight, ChevronLeft } from 'lucide-react';
+import { MapPin, CheckCircle, IndianRupee, Home, Ruler, Calendar, Shield, Phone, MessageSquare, Bed, Bath, Wind, Car, Zap, Wifi, Users, Camera, X, Star, Sparkles, TrendingUp, Minus, ThumbsUp, ChevronRight, ChevronLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import SavingsCalculator from '@/components/SavingsCalculator';
 
-import { useState, use } from 'react';
+import { useState, useEffect, use } from 'react';
+import { supabase } from '@/lib/supabase';
+import { getUserGroups, createOnePersonGroup } from '@/app/actions/collaboration';
 
 const MOCK_REVIEWS = [
   {
@@ -40,6 +42,23 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState('All');
   const [isAdded, setIsAdded] = useState(false);
+  const [showGroupSuccessModal, setShowGroupSuccessModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [propertyGroups, setPropertyGroups] = useState<any[]>([]);
+  const [dynamicStudents, setDynamicStudents] = useState<any[]>(STUDENTS);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (data?.user) {
+        setCurrentUser(data.user);
+        const groups = await getUserGroups(data.user.id);
+        const hasProperty = groups.some(g => g.propertyId === id);
+        setIsAdded(hasProperty);
+      }
+    });
+    // For demo, we are just fetching the user's groups. Real-world would fetch all groups for this property.
+  }, [id]);
+
   const [isVisitBooked, setIsVisitBooked] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showContact, setShowContact] = useState(false);
@@ -178,7 +197,7 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
           </div>
           
           {/* Rent Savings Calculator */}
-          <SavingsCalculator monthlyCost={cost} />
+          <SavingsCalculator monthlyCost={cost} maxOccupancy={(property as any).maxOccupancy} />
 
           {/* Reviews Section - Amazon Style */}
           <div className="bg-white rounded-2xl p-6 md:p-8 border border-border shadow-sm mt-8">
@@ -366,38 +385,67 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
               <h2 className="text-lg font-extrabold text-foreground flex items-center">
                 <Users size={18} className="mr-2 text-primary-orange" /> Looking for Roommates
               </h2>
-              <span className="bg-light-orange text-primary-orange text-[10px] font-extrabold px-2 py-1 rounded-full">2 Matches</span>
+              <span className="bg-light-orange text-primary-orange text-[10px] font-extrabold px-2 py-1 rounded-full">
+                {dynamicStudents.filter((s: any) => s.id !== 's2' && (s.preferences as any).preferredPropertyId === id).length} Matches
+              </span>
             </div>
             <p className="text-xs text-text-secondary mb-4">These verified JKLU students want to book this property and need a roommate to split rent.</p>
             
             <div className="space-y-3">
-              {[STUDENTS[0], STUDENTS[2]].map((student, i) => (
+              {dynamicStudents.filter((s: any) => s.id !== 's2' && (s.preferences as any).preferredPropertyId === id).length > 0 ? (
+                dynamicStudents.filter((s: any) => s.id !== 's2' && (s.preferences as any).preferredPropertyId === id).map((student: any, i: number) => (
                 <div key={i} className="flex items-center justify-between p-3 bg-surface-light rounded-xl border border-border">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary-blue text-white flex items-center justify-center font-bold shadow-sm">
                       {student.name.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="text-sm font-extrabold text-primary-blue line-clamp-1">{student.name}</h4>
+                      <h4 className="text-sm font-extrabold text-primary-blue line-clamp-1 flex items-center">
+                        {student.name}
+                        {currentUser && student.id === currentUser.id && (
+                          <span className="ml-2 bg-primary-blue text-white text-[9px] px-1.5 py-0.5 rounded-md uppercase tracking-wider">You</span>
+                        )}
+                      </h4>
                       <p className="text-[10px] font-bold text-text-secondary uppercase">{student.course} • Year {student.year}</p>
                     </div>
                   </div>
-                  <Link href={`/student/profile/${student.id}`} className="px-3 py-1.5 bg-white border border-border text-xs font-bold text-text-secondary hover:text-primary-blue hover:border-primary-blue rounded-lg transition-colors">
-                    View
-                  </Link>
+                  {(!currentUser || student.id !== currentUser.id) && (
+                    <Link href={`/student/profile/${student.id}`} className="px-3 py-1.5 bg-white border border-border text-xs font-bold text-text-secondary hover:text-primary-blue hover:border-primary-blue rounded-lg transition-colors">
+                      View
+                    </Link>
+                  )}
                 </div>
-              ))}
+                ))
+              ) : (
+                <div className="p-4 bg-surface-light rounded-xl border border-border text-center text-sm font-medium text-text-secondary">
+                  No one is looking for a roommate here yet. Be the first!
+                </div>
+              )}
             </div>
             
             <button 
-              onClick={() => setIsAdded(!isAdded)}
-              className={`w-full mt-4 font-extrabold py-2.5 text-xs uppercase tracking-wider rounded-xl border-2 transition-colors ${
-                isAdded 
-                  ? 'bg-green-50 text-green-600 border-green-200 hover:bg-green-100' 
-                  : 'bg-surface text-primary-blue border-border hover:bg-surface-light'
-              }`}
+              disabled={isAdded}
+              onClick={async () => {
+                if (!currentUser) return alert('Please login first');
+                const res = await createOnePersonGroup(id, currentUser);
+                if (res.success) {
+                  setIsAdded(true);
+                  setShowGroupSuccessModal(true);
+                } else {
+                  alert(res.error || 'Failed to create group');
+                }
+              }}
+              className={`w-full font-extrabold py-3.5 rounded-xl transition-all shadow-sm flex items-center justify-center text-sm
+                ${isAdded 
+                  ? 'bg-surface-light text-text-secondary border-2 border-border cursor-not-allowed' 
+                  : 'bg-primary-blue text-white hover:bg-blue-900 shadow-blue-900/20'
+                }`}
             >
-              {isAdded ? 'Added to List' : 'Add Myself to List'}
+              {isAdded ? (
+                <><CheckCircle size={16} className="mr-2"/> Group Created - See Dashboard</>
+              ) : (
+                'Add Myself to List'
+              )}
             </button>
           </div>
         </div>
@@ -561,6 +609,45 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
               alt="Fullscreen view" 
               className="max-w-full max-h-full object-contain" 
             />
+          </div>
+        </div>
+      )}
+
+      {/* Group Success Modal */}
+      {showGroupSuccessModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl relative border-2 border-border transform transition-all scale-100 opacity-100">
+            <button 
+              onClick={() => setShowGroupSuccessModal(false)}
+              className="absolute top-4 right-4 p-2 text-text-secondary hover:bg-surface-light rounded-full transition-colors"
+            >
+              <X size={20} />
+            </button>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Users size={40} className="text-green-600" />
+              </div>
+              <h3 className="text-2xl font-extrabold text-foreground mb-2">Group Created!</h3>
+              <p className="text-text-secondary text-sm mb-8 leading-relaxed">
+                You've successfully secured a spot for this property. Head over to the Roommate Dashboard to find and invite others to split the rent!
+              </p>
+              
+              <div className="space-y-3">
+                <Link 
+                  href="/student/roommates"
+                  className="w-full py-4 bg-primary-blue text-white rounded-xl text-sm font-bold shadow-md hover:bg-blue-900 transition-colors flex items-center justify-center"
+                >
+                  Go to Dashboard <ArrowRight size={16} className="ml-2" />
+                </Link>
+                <button 
+                  onClick={() => setShowGroupSuccessModal(false)}
+                  className="w-full py-4 bg-white border-2 border-border text-text-secondary rounded-xl text-sm font-bold hover:bg-surface-light transition-colors"
+                >
+                  Continue Browsing
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

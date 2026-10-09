@@ -1,17 +1,41 @@
 'use client';
 
 import { STUDENTS } from '@/lib/data';
-import { notFound } from 'next/navigation';
-import { use } from 'react';
+import { use, useState, useEffect } from 'react';
+import { getIntentsAction } from '@/app/actions/intents';
 import { User, Mail, BookOpen, Clock, VolumeX, Wind, Coffee, Home, CheckCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export default function StudentProfile({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const student = STUDENTS.find(s => s.id === id);
+  const [student, setStudent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let found = STUDENTS.find(s => s.id === id);
+    if (found) {
+      setStudent(found);
+      setLoading(false);
+    } else {
+      getIntentsAction().then(intents => {
+        found = intents.find((s: any) => s.id === id);
+        setStudent(found);
+        setLoading(false);
+      });
+    }
+  }, [id]);
+
+  if (loading) {
+    return <div className="p-20 text-center font-bold text-primary-blue">Loading Profile...</div>;
+  }
 
   if (!student) {
-    notFound();
+    return (
+      <div className="max-w-[1200px] mx-auto p-8 text-center mt-10">
+        <h1 className="text-2xl font-bold text-primary-blue mb-4">Profile Not Found</h1>
+        <Link href="/student/roommates" className="text-primary-orange hover:underline font-bold">Return to Roommates</Link>
+      </div>
+    );
   }
 
   // Generate a consistent dummy image for the user based on ID
@@ -21,7 +45,8 @@ export default function StudentProfile({ params }: { params: Promise<{ id: strin
     'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
   ];
-  const imageUrl = dummyImages[parseInt(id.replace('s', '')) % dummyImages.length] || dummyImages[0];
+  const imageIndex = parseInt(id.replace(/[^0-9]/g, '')) || 0;
+  const imageUrl = student.imageUrl || dummyImages[imageIndex % dummyImages.length] || dummyImages[0];
 
   return (
     <div className="max-w-[1200px] mx-auto p-4 md:p-8 space-y-8 pb-20">

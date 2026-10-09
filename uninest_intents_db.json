@@ -1,0 +1,42 @@
+[
+  {
+    "id": "ea365436-4ec7-494c-8351-b7b333e7f739",
+    "name": "shubh ",
+    "course": "Btech CSE",
+    "year": 1,
+    "gender": "MALE",
+    "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+    "verified": true,
+    "preferences": {
+      "budgetMin": 8000,
+      "budgetMax": 15000,
+      "sleepTime": "11:00 PM",
+      "wakeTime": "7:00 AM",
+      "cleanliness": "High",
+      "noiseTolerance": "Medium",
+      "studyHabits": "Focused",
+      "smoking": "Non-smoker",
+      "preferredPropertyId": "p5"
+    }
+  },
+  {
+    "id": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+    "name": "shivam kervel",
+    "course": "btechcse",
+    "year": 1,
+    "gender": "MALE",
+    "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+    "verified": true,
+    "preferences": {
+      "budgetMin": 8000,
+      "budgetMax": 15000,
+      "sleepTime": "11:00 PM",
+      "wakeTime": "7:00 AM",
+      "cleanliness": "High",
+      "noiseTolerance": "Medium",
+      "studyHabits": "Focused",
+      "smoking": "Non-smoker",
+      "preferredPropertyId": "p9"
+    }
+  }
+]

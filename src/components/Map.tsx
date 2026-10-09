@@ -27,10 +27,10 @@ const jkluIcon = L.divIcon({
 const propertyIcon = (isSelected: boolean, price: number) => L.divIcon({
   className: 'custom-div-icon',
   html: `<div style="display: flex; flex-direction: column; align-items: center; z-index: ${isSelected ? 1000 : 1}; position: relative;">
-          <div style="background-color: ${isSelected ? '#f97316' : 'white'}; color: ${isSelected ? 'white' : '#1f2937'}; border: 2px solid ${isSelected ? 'white' : '#e5e7eb'}; border-radius: 9999px; padding: 2px 8px; font-size: 11px; font-weight: 800; white-space: nowrap; margin-bottom: 4px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);">
+          <div style="background-color: ${isSelected ? '#0f172a' : 'white'}; color: ${isSelected ? 'white' : '#1f2937'}; border: 2px solid ${isSelected ? 'white' : '#e5e7eb'}; border-radius: 9999px; padding: 2px 8px; font-size: 11px; font-weight: 800; white-space: nowrap; margin-bottom: 4px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);">
             ₹${(price / 1000).toFixed(1)}k
           </div>
-          <div style="width: 14px; height: 14px; background-color: ${isSelected ? '#f97316' : '#cbd5e1'}; border: 2px solid white; border-radius: 50%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);"></div>
+          <div style="width: 14px; height: 14px; background-color: ${isSelected ? '#0f172a' : '#cbd5e1'}; border: 2px solid white; border-radius: 50%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);"></div>
          </div>`,
   iconSize: [60, 40],
   iconAnchor: [30, 40]
@@ -108,8 +108,8 @@ function RoutingLayer({ selectedProperty }: { selectedProperty: any }) {
 
   return (
     <>
-      <Polyline positions={routeCoords} pathOptions={{ color: '#ea580c', weight: 8, opacity: 0.3 }} />
-      <Polyline positions={routeCoords} pathOptions={{ color: '#f97316', weight: 5, opacity: 1 }} />
+      <Polyline positions={routeCoords} pathOptions={{ color: '#1e293b', weight: 8, opacity: 0.3 }} />
+      <Polyline positions={routeCoords} pathOptions={{ color: '#0f172a', weight: 5, opacity: 1 }} />
       <Marker position={midPoint} icon={distanceLabelIcon(distKm, routeInfo.duration)} interactive={false} />
     </>
   );

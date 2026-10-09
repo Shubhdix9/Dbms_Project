@@ -1,0 +1,171 @@
+{
+  "groups": [
+    {
+      "id": "413a56e0-3c4a-472d-9bd3-5d09eea8ecc7",
+      "propertyId": "p7",
+      "status": "paid",
+      "createdBy": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "createdAt": "2026-10-09T18:29:31.833Z"
+    },
+    {
+      "id": "65a0552c-5776-4358-876e-2518afe70c54",
+      "propertyId": "p9",
+      "status": "forming",
+      "createdBy": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "createdAt": "2026-10-09T18:37:26.592Z"
+    }
+  ],
+  "members": [
+    {
+      "id": "ec4bfc9f-2974-4932-b01f-294d97fd15b3",
+      "groupId": "413a56e0-3c4a-472d-9bd3-5d09eea8ecc7",
+      "userId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "name": "shubh ",
+      "course": "Btech CSE",
+      "year": 1,
+      "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+      "joinedAt": "2026-10-09T18:29:31.833Z"
+    },
+    {
+      "id": "8f2fd3ef-7b08-426b-8c03-ef026b597b7d",
+      "groupId": "413a56e0-3c4a-472d-9bd3-5d09eea8ecc7",
+      "userId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "name": "shivam kervel",
+      "course": "btechcse",
+      "year": 1,
+      "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+      "joinedAt": "2026-10-09T18:31:22.823Z"
+    },
+    {
+      "id": "6caf5f97-d888-4c40-8580-a236ef9a365f",
+      "groupId": "65a0552c-5776-4358-876e-2518afe70c54",
+      "userId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "name": "shubh ",
+      "course": "Btech CSE",
+      "year": 1,
+      "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+      "joinedAt": "2026-10-09T18:37:26.592Z"
+    }
+  ],
+  "invitations": [
+    {
+      "id": "353a604d-b724-4809-9c9c-4d47c228fd9f",
+      "groupId": "413a56e0-3c4a-472d-9bd3-5d09eea8ecc7",
+      "propertyId": "p7",
+      "senderId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "recipientId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "status": "accepted",
+      "createdAt": "2026-10-09T18:30:26.688Z"
+    },
+    {
+      "id": "2f0305aa-078d-47db-9375-a4f26bda35e3",
+      "groupId": "413a56e0-3c4a-472d-9bd3-5d09eea8ecc7",
+      "propertyId": "p7",
+      "senderId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "recipientId": "s6",
+      "status": "pending",
+      "createdAt": "2026-10-09T18:35:21.175Z"
+    }
+  ],
+  "proposals": [
+    {
+      "id": "30a06a0e-3134-4893-becc-149e5b8fe9c6",
+      "groupId": "495b5fff-c351-48c0-a6f4-dbcc7aea5f7c",
+      "proposedUserId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "proposedBy": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "status": "pending",
+      "createdAt": "2026-10-09T18:25:52.854Z"
+    },
+    {
+      "id": "c3426674-aa6a-425e-b1e5-5dbe0d763150",
+      "groupId": "9f0e4eeb-4bb9-4ed5-83f7-01a7d1884fc5",
+      "proposedUserId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "proposedBy": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "status": "pending",
+      "createdAt": "2026-10-09T18:28:18.185Z"
+    },
+    {
+      "id": "3b6dd4bd-97ff-4db0-925a-56cfac56d2a1",
+      "groupId": "1256eb2e-1ddc-483c-a5da-8c3ba427eea8",
+      "proposedUserId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "proposedBy": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "status": "pending",
+      "createdAt": "2026-10-09T18:28:45.564Z"
+    },
+    {
+      "id": "86366f02-1bc3-4c45-b1d4-89aa5d63812e",
+      "groupId": "413a56e0-3c4a-472d-9bd3-5d09eea8ecc7",
+      "proposedUserId": "s6",
+      "proposedBy": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "status": "unanimous",
+      "createdAt": "2026-10-09T18:35:05.497Z"
+    },
+    {
+      "id": "3b78020b-6bcc-4350-b937-6eae5b1f20df",
+      "groupId": "f1173fd9-9420-4447-89f0-bece87329af3",
+      "proposedUserId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "proposedBy": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "status": "pending",
+      "createdAt": "2026-10-09T18:38:22.154Z"
+    },
+    {
+      "id": "164346e0-f143-4eff-91f3-75698c5975ca",
+      "groupId": "63197cc1-884c-4fb2-8a81-a9bbbecbfedd",
+      "proposedUserId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "proposedBy": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "status": "pending",
+      "createdAt": "2026-10-09T18:39:25.193Z"
+    }
+  ],
+  "approvals": [
+    {
+      "id": "2d71e986-5210-4e32-9424-ab24f733caa0",
+      "proposalId": "30a06a0e-3134-4893-becc-149e5b8fe9c6",
+      "memberId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "decision": "approved",
+      "createdAt": "2026-10-09T18:25:52.854Z"
+    },
+    {
+      "id": "f65cbde6-0017-4503-be28-c0bca0daa2ef",
+      "proposalId": "c3426674-aa6a-425e-b1e5-5dbe0d763150",
+      "memberId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "decision": "approved",
+      "createdAt": "2026-10-09T18:28:18.185Z"
+    },
+    {
+      "id": "1dd893b8-f6f7-4c87-8b4d-ae0d1bb17bd7",
+      "proposalId": "3b6dd4bd-97ff-4db0-925a-56cfac56d2a1",
+      "memberId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "decision": "approved",
+      "createdAt": "2026-10-09T18:28:45.564Z"
+    },
+    {
+      "id": "a451b781-0cab-4fd0-918b-f53d2ef58db9",
+      "proposalId": "86366f02-1bc3-4c45-b1d4-89aa5d63812e",
+      "memberId": "ea365436-4ec7-494c-8351-b7b333e7f739",
+      "decision": "approved",
+      "createdAt": "2026-10-09T18:35:05.497Z"
+    },
+    {
+      "id": "b124c643-4888-43a1-be90-2534d53fe352",
+      "proposalId": "86366f02-1bc3-4c45-b1d4-89aa5d63812e",
+      "memberId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "decision": "approved",
+      "createdAt": "2026-10-09T18:35:21.175Z"
+    },
+    {
+      "id": "dea21901-a9a2-413d-b8ea-dae3e8ad87de",
+      "proposalId": "3b78020b-6bcc-4350-b937-6eae5b1f20df",
+      "memberId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "decision": "approved",
+      "createdAt": "2026-10-09T18:38:22.154Z"
+    },
+    {
+      "id": "93b56b61-7277-455a-a855-a37a4ba3e2bb",
+      "proposalId": "164346e0-f143-4eff-91f3-75698c5975ca",
+      "memberId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "decision": "approved",
+      "createdAt": "2026-10-09T18:39:25.193Z"
+    }
+  ]
+}

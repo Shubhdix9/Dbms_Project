@@ -43,6 +43,7 @@ export default function LandlordProperties() {
                 
                 <div className="flex flex-wrap gap-2 mt-4">
                   <span className="px-3 py-1 bg-surface-light border border-border rounded-lg text-xs font-bold text-text-secondary">{property.configuration}</span>
+                  <span className="px-3 py-1 bg-surface-light border border-border rounded-lg text-xs font-bold text-text-secondary">Max Capacity: {(property as any).maxOccupancy || 4}</span>
                   <span className="px-3 py-1 bg-surface-light border border-border rounded-lg text-xs font-bold text-text-secondary">{property.type}</span>
                   <span className="px-3 py-1 bg-surface-light border border-border rounded-lg text-xs font-bold text-text-secondary">{property.furnishing}</span>
                 </div>

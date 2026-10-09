@@ -27,21 +27,18 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex bg-white font-sans">
+    <div className="flex h-screen w-full overflow-hidden bg-white font-sans">
       {/* Left Panel - Image Section */}
-      <div className="hidden lg:block lg:flex-1 relative overflow-hidden bg-slate-50">
-        <div className="absolute inset-0">
-          <img
-            src="/login/image.png"
-            alt="Brand Asset"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        {/* We could add floating UI elements here to exactly match the screenshot, but the generated illustration should capture the vibe well. */}
+      <div className="hidden lg:block flex-1 h-screen overflow-hidden">
+        <img
+          src="/login/uninest-panel.jpg"
+          alt="Brand Asset"
+          className="w-full h-full object-cover object-center"
+        />
       </div>
 
       {/* Right Panel - Form Section */}
-      <div className="flex-1 flex flex-col justify-center bg-white px-8 md:px-16 lg:px-24">
+      <div className="flex-1 flex flex-col justify-center bg-white h-screen overflow-y-auto px-8 md:px-16 lg:px-24">
         <div className="w-full max-w-[440px] mx-auto">
           
           <div className="mb-8">
@@ -51,7 +48,7 @@ export function LoginPage() {
             <p className="text-slate-500 text-sm">
               Don't have an account?{' '}
               <button
-                onClick={() => router.push('/signup')}
+                onClick={() => router.push('/register')}
                 className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
               >
                 Sign up
