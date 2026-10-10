@@ -62,7 +62,55 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
   const [isVisitBooked, setIsVisitBooked] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showContact, setShowContact] = useState(false);
-  const property = PROPERTIES.find(p => p.id === id);
+  
+  const [dbProperty, setDbProperty] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const localProperty = PROPERTIES.find(p => p.id === id);
+
+  useEffect(() => {
+    if (localProperty) {
+      setIsLoading(false);
+      return;
+    }
+    
+    const fetchDbProperty = async () => {
+      const { data, error } = await supabase.from('property').select('*').eq('property_id', id).single();
+      if (data && !error) {
+        setDbProperty({
+          id: data.property_id.toString(),
+          title: data.title,
+          location: data.location,
+          configuration: data.property_type,
+          type: data.property_type,
+          furnishing: data.furnished_status,
+          rent: data.rent_per_person,
+          maintenance: data.maintenance_cost,
+          imageUrl: data.image_url || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
+          images: [data.image_url || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80'],
+          verifiedByUniNest: data.verification_status === 'VERIFIED',
+          distanceKm: data.distance_from_college?.toString() || '0',
+          coordinates: { lat: data.latitude || 26.8358, lng: data.longitude || 75.6504 },
+          landlordId: data.landlord_id,
+          amenities: ['Wi-Fi', 'AC', 'Security'] // Mock amenities for db properties
+        });
+      }
+      setIsLoading(false);
+    };
+
+    fetchDbProperty();
+  }, [id, localProperty]);
+
+  const property = localProperty || dbProperty;
+  
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh]">
+        <div className="w-8 h-8 border-4 border-primary-orange border-t-transparent rounded-full animate-spin mb-4"></div>
+        <h2 className="text-xl font-bold text-foreground">Loading Property...</h2>
+      </div>
+    );
+  }
   
   if (!property) {
     return (

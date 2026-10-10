@@ -183,6 +183,10 @@ export default function Map({ properties, selectedProperty, onSelectProperty, ca
         {/* Property Markers */}
         {properties.map((p: any) => {
           const isSelected = selectedProperty?.id === p.id;
+          const hasCoords = p.coordinates && typeof p.coordinates.lat === 'number' && typeof p.coordinates.lng === 'number';
+          
+          if (!hasCoords) return null;
+          
           return (
             <Marker
               key={p.id}

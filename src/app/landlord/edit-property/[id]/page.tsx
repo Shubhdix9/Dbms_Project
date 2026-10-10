@@ -1,11 +1,64 @@
 'use client';
 
 import { useState } from 'react';
-import { MapPin, Upload, Tv, Wifi, Car, Shield, Wind, Bed, Home, DollarSign, Camera, Video, Navigation } from 'lucide-react';
+import { MapPin, Upload, Tv, Wifi, Car, Shield, Wind, Bed, Home, DollarSign, Camera, Video, Navigation, X, FileVideo } from 'lucide-react';
 import Link from 'next/link';
 
 export default function EditProperty() {
   const [activeTab, setActiveTab] = useState('basic');
+  const [address, setAddress] = useState('Mahapura, Ajmer Road, Jaipur');
+  const [isLocating, setIsLocating] = useState(false);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [video, setVideo] = useState<File | null>(null);
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newPhotos = Array.from(e.target.files);
+      setPhotos(prev => [...prev, ...newPhotos].slice(0, 10));
+    }
+  };
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setVideo(e.target.files[0]);
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleUseCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+    
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`);
+          const data = await response.json();
+          if (data && data.display_name) {
+            setAddress(data.display_name);
+          } else {
+            setAddress(`${position.coords.latitude}, ${position.coords.longitude}`);
+          }
+        } catch (error) {
+          setAddress(`${position.coords.latitude}, ${position.coords.longitude}`);
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        alert('Unable to retrieve your location');
+        setIsLocating(false);
+      },
+      { timeout: 10000 }
+    );
+  };
 
   const amenitiesList = [
     { id: 'tv', name: 'Smart TV', icon: Tv },
@@ -89,7 +142,12 @@ export default function EditProperty() {
           <div className="space-y-6">
             <div>
               <label className="block text-sm font-bold text-text-secondary mb-2">Full Address</label>
-              <input type="text" defaultValue="Mahapura, Ajmer Road, Jaipur" className="w-full px-4 py-3 bg-surface-light border-2 border-border rounded-xl focus:border-primary-orange outline-none transition-colors font-bold text-foreground" />
+              <input 
+                type="text" 
+                className="w-full px-4 py-3 bg-surface-light border-2 border-border rounded-xl focus:border-primary-orange outline-none transition-colors font-bold text-foreground" 
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
             </div>
 
             <div className="bg-light-blue/30 border-2 border-blue-100 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
@@ -97,8 +155,14 @@ export default function EditProperty() {
                  <h3 className="font-extrabold text-primary-blue mb-1">Pin Location on Map</h3>
                  <p className="text-sm text-text-secondary">Help students find exact distances to campus.</p>
                </div>
-               <button type="button" className="w-full md:w-auto px-6 py-3 bg-primary-blue text-white font-bold rounded-xl shadow-md hover:bg-blue-900 transition-colors flex items-center justify-center text-sm">
-                 <Navigation size={16} className="mr-2 text-primary-orange" /> Use Current Location
+               <button 
+                 type="button" 
+                 onClick={handleUseCurrentLocation}
+                 disabled={isLocating}
+                 className={`w-full md:w-auto px-6 py-3 bg-primary-blue text-white font-bold rounded-xl shadow-md hover:bg-blue-900 transition-colors flex items-center justify-center text-sm ${isLocating ? 'opacity-70 cursor-not-allowed' : ''}`}
+               >
+                 <Navigation size={16} className={`mr-2 text-primary-orange ${isLocating ? 'animate-pulse' : ''}`} /> 
+                 {isLocating ? 'Locating...' : 'Use Current Location'}
                </button>
             </div>
           </div>
@@ -109,20 +173,47 @@ export default function EditProperty() {
           <h2 className="text-xl font-extrabold text-primary-blue mb-6 border-b border-border pb-4">3. Photos & Video</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border-2 border-dashed border-border rounded-2xl p-10 flex flex-col items-center justify-center text-center hover:border-primary-orange hover:bg-light-orange transition-colors cursor-pointer group">
-               <div className="w-16 h-16 bg-surface-light rounded-full flex items-center justify-center mb-4 group-hover:bg-white transition-colors shadow-sm">
-                 <Camera size={24} className="text-primary-orange" />
-               </div>
-               <h3 className="font-extrabold text-primary-blue mb-1">Upload Photos</h3>
-               <p className="text-xs font-bold text-text-secondary">Drag & drop or click to browse (Max 10)</p>
+            <div className="space-y-4">
+              <label className="border-2 border-dashed border-border rounded-2xl p-10 flex flex-col items-center justify-center text-center hover:border-primary-orange hover:bg-light-orange transition-colors cursor-pointer group h-full">
+                 <div className="w-16 h-16 bg-surface-light rounded-full flex items-center justify-center mb-4 group-hover:bg-white transition-colors shadow-sm">
+                   <Camera size={24} className="text-primary-orange" />
+                 </div>
+                 <h3 className="font-extrabold text-primary-blue mb-1">Upload Photos</h3>
+                 <p className="text-xs font-bold text-text-secondary">Drag & drop or click to browse (Max 10)</p>
+                 <input type="file" multiple accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+              </label>
+              {photos.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {photos.map((photo, idx) => (
+                    <div key={idx} className="relative w-16 h-16 rounded-lg overflow-hidden border border-border">
+                      <img src={URL.createObjectURL(photo)} alt="preview" className="w-full h-full object-cover" />
+                      <button type="button" onClick={() => removePhoto(idx)} className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full p-0.5 hover:bg-black">
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             
-            <div className="border-2 border-dashed border-border rounded-2xl p-10 flex flex-col items-center justify-center text-center hover:border-primary-orange hover:bg-light-orange transition-colors cursor-pointer group">
-               <div className="w-16 h-16 bg-surface-light rounded-full flex items-center justify-center mb-4 group-hover:bg-white transition-colors shadow-sm">
-                 <Video size={24} className="text-primary-orange" />
-               </div>
-               <h3 className="font-extrabold text-primary-blue mb-1">Upload Video Tour</h3>
-               <p className="text-xs font-bold text-text-secondary">Add a walkthrough video (Max 50MB)</p>
+            <div className="space-y-4">
+              <label className="border-2 border-dashed border-border rounded-2xl p-10 flex flex-col items-center justify-center text-center hover:border-primary-orange hover:bg-light-orange transition-colors cursor-pointer group h-full">
+                 <div className="w-16 h-16 bg-surface-light rounded-full flex items-center justify-center mb-4 group-hover:bg-white transition-colors shadow-sm">
+                   <Video size={24} className="text-primary-orange" />
+                 </div>
+                 <h3 className="font-extrabold text-primary-blue mb-1">Upload Video Tour</h3>
+                 <p className="text-xs font-bold text-text-secondary">Add a walkthrough video (Max 50MB)</p>
+                 <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />
+              </label>
+              {video && (
+                <div className="flex items-center gap-2 p-3 bg-surface-light rounded-xl border border-border mt-4">
+                  <FileVideo size={20} className="text-primary-orange" />
+                  <span className="text-sm font-bold text-foreground truncate flex-1">{video.name}</span>
+                  <button type="button" onClick={() => setVideo(null)} className="text-text-secondary hover:text-red-500">
+                    <X size={16} />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

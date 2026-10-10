@@ -38,5 +38,25 @@
       "smoking": "Non-smoker",
       "preferredPropertyId": "p9"
     }
+  },
+  {
+    "id": "a326a667-777c-4146-b465-8ae0ef63096b",
+    "name": "anayna ",
+    "course": "btech cse",
+    "year": 1,
+    "gender": "MALE",
+    "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+    "verified": true,
+    "preferences": {
+      "budgetMin": 8000,
+      "budgetMax": 15000,
+      "sleepTime": "11:00 PM",
+      "wakeTime": "7:00 AM",
+      "cleanliness": "High",
+      "noiseTolerance": "Medium",
+      "studyHabits": "Focused",
+      "smoking": "Non-smoker",
+      "preferredPropertyId": "p9"
+    }
   }
 ]

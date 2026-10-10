@@ -13,6 +13,34 @@
       "status": "forming",
       "createdBy": "ea365436-4ec7-494c-8351-b7b333e7f739",
       "createdAt": "2026-10-09T18:37:26.592Z"
+    },
+    {
+      "id": "a4376c9e-8cf5-44fa-827b-42f5c3f173ef",
+      "propertyId": "p9",
+      "status": "pending_landlord",
+      "createdBy": "a326a667-777c-4146-b465-8ae0ef63096b",
+      "createdAt": "2026-10-10T04:08:16.502Z"
+    },
+    {
+      "id": "bc2c2df7-70cc-4d23-a2b9-1994754ff7c8",
+      "propertyId": "p9",
+      "status": "forming",
+      "createdBy": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "createdAt": "2026-10-10T04:08:58.842Z"
+    },
+    {
+      "id": "5a268481-3e6e-4c47-9cf4-ddb2285da6d8",
+      "propertyId": "6",
+      "status": "forming",
+      "createdBy": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "createdAt": "2026-10-10T04:42:34.819Z"
+    },
+    {
+      "id": "506a4b22-22fc-4ecf-9d0d-8a37a48137c7",
+      "propertyId": "6",
+      "status": "forming",
+      "createdBy": "a326a667-777c-4146-b465-8ae0ef63096b",
+      "createdAt": "2026-10-10T04:43:13.019Z"
     }
   ],
   "members": [
@@ -45,6 +73,56 @@
       "year": 1,
       "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
       "joinedAt": "2026-10-09T18:37:26.592Z"
+    },
+    {
+      "id": "c76082fd-0d20-4920-8cf2-c8ad25e68c6a",
+      "groupId": "a4376c9e-8cf5-44fa-827b-42f5c3f173ef",
+      "userId": "a326a667-777c-4146-b465-8ae0ef63096b",
+      "name": "anayna ",
+      "course": "btech cse",
+      "year": 1,
+      "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+      "joinedAt": "2026-10-10T04:08:16.502Z"
+    },
+    {
+      "id": "3f8b37f3-1093-4dfd-b0d9-03fec97fa87c",
+      "groupId": "bc2c2df7-70cc-4d23-a2b9-1994754ff7c8",
+      "userId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "name": "shivam kervel",
+      "course": "btechcse",
+      "year": 1,
+      "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+      "joinedAt": "2026-10-10T04:08:58.842Z"
+    },
+    {
+      "id": "e72c26cd-1081-4c5d-a2f8-f2f81e4f6c0b",
+      "groupId": "a4376c9e-8cf5-44fa-827b-42f5c3f173ef",
+      "userId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "name": "shivam kervel",
+      "course": "btechcse",
+      "year": 1,
+      "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+      "joinedAt": "2026-10-10T04:09:24.723Z"
+    },
+    {
+      "id": "e9478624-e5af-4c07-bcfc-d90bb5094517",
+      "groupId": "5a268481-3e6e-4c47-9cf4-ddb2285da6d8",
+      "userId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "name": "shivam kervel",
+      "course": "btechcse",
+      "year": 1,
+      "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+      "joinedAt": "2026-10-10T04:42:34.819Z"
+    },
+    {
+      "id": "272fdb64-5639-491b-a6c3-f9f1cbc4ad30",
+      "groupId": "506a4b22-22fc-4ecf-9d0d-8a37a48137c7",
+      "userId": "a326a667-777c-4146-b465-8ae0ef63096b",
+      "name": "anayna ",
+      "course": "btech cse",
+      "year": 1,
+      "imageUrl": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80",
+      "joinedAt": "2026-10-10T04:43:13.019Z"
     }
   ],
   "invitations": [
@@ -65,6 +143,15 @@
       "recipientId": "s6",
       "status": "pending",
       "createdAt": "2026-10-09T18:35:21.175Z"
+    },
+    {
+      "id": "9de4feba-6d4f-4215-b792-f777590a125a",
+      "groupId": "a4376c9e-8cf5-44fa-827b-42f5c3f173ef",
+      "propertyId": "p9",
+      "senderId": "a326a667-777c-4146-b465-8ae0ef63096b",
+      "recipientId": "3a47fc6f-4aaf-4250-a530-2d817365eab7",
+      "status": "accepted",
+      "createdAt": "2026-10-10T04:09:12.156Z"
     }
   ],
   "proposals": [

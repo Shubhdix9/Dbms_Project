@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { PROPERTIES, calculateKnownMonthlyCost, LANDLORDS } from '@/lib/data';
 import { MapPin, Navigation2, Search, Filter, Home, CheckCircle, ExternalLink, IndianRupee } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -19,6 +20,47 @@ export default function ExploreRooms() {
   const [searchQuery, setSearchQuery] = useState('');
   const [maxBudget, setMaxBudget] = useState('');
   const [config, setConfig] = useState('Any');
+  const [customProps, setCustomProps] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      const { data, error } = await supabase.from('property').select('*');
+      if (data && !error) {
+        const formatted = data.map(dbProp => ({
+          id: dbProp.property_id,
+          title: dbProp.title,
+          location: dbProp.location,
+          configuration: dbProp.property_type,
+          type: dbProp.property_type,
+          furnishing: dbProp.furnished_status,
+          rent: dbProp.rent_per_person,
+          maintenance: dbProp.maintenance_cost,
+          imageUrl: dbProp.image_url || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
+          verifiedByUniNest: dbProp.verification_status === 'VERIFIED',
+          distanceKm: dbProp.distance_from_college?.toString() || '0',
+          coordinates: { lat: dbProp.latitude || 26.8358, lng: dbProp.longitude || 75.6504 },
+          landlordId: dbProp.landlord_id,
+          maxOccupancy: dbProp.total_capacity
+        }));
+        
+        setCustomProps(prev => {
+          if (JSON.stringify(prev) !== JSON.stringify(formatted)) {
+            return formatted;
+          }
+          return prev;
+        });
+      }
+    };
+    
+    fetchProperties();
+    
+    // Refresh properties when user returns to the tab
+    window.addEventListener('focus', fetchProperties);
+    
+    return () => {
+      window.removeEventListener('focus', fetchProperties);
+    };
+  }, []);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -27,7 +69,9 @@ export default function ExploreRooms() {
     else setGreeting('Good evening');
   }, []);
 
-  const filteredProperties = PROPERTIES.filter(p => {
+  const allProperties = [...customProps, ...PROPERTIES];
+
+  const filteredProperties = allProperties.filter(p => {
     const cost = calculateKnownMonthlyCost(p);
     const matchesSearch = p.location.toLowerCase().includes(searchQuery.toLowerCase()) || p.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesBudget = maxBudget ? cost <= parseInt(maxBudget) : true;
@@ -132,11 +176,15 @@ export default function ExploreRooms() {
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-background/50">
             {filteredProperties.sort((a, b) => parseFloat(a.distanceKm) - parseFloat(b.distanceKm)).map((property, idx) => {
               const isSelected = selectedProperty?.id === property.id;
+              const hasCoords = property.coordinates && property.coordinates.lat && property.coordinates.lng;
+              const safeDistanceKm = property.distanceKm && !isNaN(parseFloat(property.distanceKm)) ? parseFloat(property.distanceKm) : 0;
               
               return (
                 <div 
                   key={property.id} 
-                  onClick={() => setSelectedProperty(property)}
+                  onClick={() => {
+                    if (hasCoords) setSelectedProperty(property);
+                  }}
                   className={`bg-white border rounded-2xl p-4 cursor-pointer transition-all duration-200
                     ${isSelected ? 'border-primary-blue shadow-md ring-1 ring-primary-blue' : 'border-border hover:border-primary-blue hover:shadow-sm'}
                   `}
