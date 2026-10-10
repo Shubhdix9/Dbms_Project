@@ -43,6 +43,19 @@ export default function LandlordProperties() {
     fetchProperties();
   }, []);
 
+  const handleDeleteProperty = async (id: number) => {
+    if (!window.confirm("Are you sure you want to delete this property? This action cannot be undone.")) return;
+    
+    try {
+      const { error } = await supabase.from('property').delete().eq('property_id', id);
+      if (error) throw error;
+      setProperties(prev => prev.filter(p => p.id !== id));
+    } catch (err: any) {
+      console.error("Delete error:", err);
+      alert("Failed to delete property: " + err.message);
+    }
+  };
+
   return (
     <div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-8 pb-20">
       
@@ -92,7 +105,7 @@ export default function LandlordProperties() {
                   <Link href={`/student/property/${property.id}`} className="flex-1 py-2 bg-white text-text-secondary font-bold text-xs uppercase tracking-wider rounded-lg border border-border hover:bg-surface-light transition-colors flex items-center justify-center">
                     <Eye size={14} className="mr-1.5" /> Preview
                   </Link>
-                  <button className="p-2 text-danger hover:bg-danger/10 rounded-lg transition-colors border border-transparent hover:border-danger/20">
+                  <button onClick={() => handleDeleteProperty(property.id)} className="p-2 text-danger hover:bg-danger/10 rounded-lg transition-colors border border-transparent hover:border-danger/20">
                     <Trash2 size={18} />
                   </button>
                 </div>
