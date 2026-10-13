@@ -63,7 +63,7 @@ export default function StudentProfile({ params }: { params: Promise<{ id: strin
             <div className="absolute top-0 left-0 right-0 h-32 bg-primary-blue -z-10"></div>
             
             <div className="w-40 h-40 rounded-full border-4 border-white shadow-lg overflow-hidden mb-4 mt-8 bg-surface-light">
-              <img src={imageUrl} alt={student.name} className="w-full h-full object-cover" />
+              <img src={imageUrl} alt={student.name} className="w-full h-full object-cover object-top" />
             </div>
             
             <h1 className="text-3xl font-extrabold text-foreground flex items-center justify-center">

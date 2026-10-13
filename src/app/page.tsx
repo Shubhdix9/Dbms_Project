@@ -512,6 +512,7 @@ export default function LandingPage() {
             <ul className="space-y-3 text-[14px] text-[#64748B] font-medium">
               <li><Link href="/login" className="hover:text-[#0f172a] transition-colors">Log In</Link></li>
               <li><Link href="/register" className="hover:text-[#0f172a] transition-colors">Get Started</Link></li>
+              <li><Link href="/login?redirect=/admin" className="hover:text-primary-orange font-bold transition-colors">Admin Portal</Link></li>
             </ul>
           </div>
         </div>

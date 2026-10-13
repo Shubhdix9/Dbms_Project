@@ -9,6 +9,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
 const Map = dynamic(() => import('@/components/Map'), { ssr: false });
+import { fetchAllActiveProperties, PROPERTIES_UPDATED_EVENT } from '@/lib/propertiesStore';
 
 const JKLU_COORDS = { lat: 26.8358, lng: 75.6504 };
 const LAT_SCALE = 15000;
@@ -20,45 +21,26 @@ export default function ExploreRooms() {
   const [searchQuery, setSearchQuery] = useState('');
   const [maxBudget, setMaxBudget] = useState('');
   const [config, setConfig] = useState('Any');
-  const [customProps, setCustomProps] = useState<any[]>([]);
+  const [properties, setProperties] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchProperties = async () => {
-      const { data, error } = await supabase.from('property').select('*');
-      if (data && !error) {
-        const formatted = data.map(dbProp => ({
-          id: dbProp.property_id,
-          title: dbProp.title,
-          location: dbProp.location,
-          configuration: dbProp.property_type,
-          type: dbProp.property_type,
-          furnishing: dbProp.furnished_status,
-          rent: dbProp.rent_per_person,
-          maintenance: dbProp.maintenance_cost,
-          imageUrl: dbProp.image_url || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
-          verifiedByUniNest: dbProp.verification_status === 'VERIFIED',
-          distanceKm: dbProp.distance_from_college?.toString() || '0',
-          coordinates: { lat: dbProp.latitude || 26.8358, lng: dbProp.longitude || 75.6504 },
-          landlordId: dbProp.landlord_id,
-          maxOccupancy: dbProp.total_capacity
-        }));
-        
-        setCustomProps(prev => {
-          if (JSON.stringify(prev) !== JSON.stringify(formatted)) {
-            return formatted;
-          }
-          return prev;
-        });
-      }
+    const loadProperties = async () => {
+      const all = await fetchAllActiveProperties();
+      setProperties(all);
     };
-    
-    fetchProperties();
-    
-    // Refresh properties when user returns to the tab
-    window.addEventListener('focus', fetchProperties);
-    
+
+    loadProperties();
+
+    // Listen for tab focus, storage updates, or admin delete events
+    const handleUpdate = () => loadProperties();
+    window.addEventListener('focus', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    window.addEventListener(PROPERTIES_UPDATED_EVENT, handleUpdate);
+
     return () => {
-      window.removeEventListener('focus', fetchProperties);
+      window.removeEventListener('focus', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+      window.removeEventListener(PROPERTIES_UPDATED_EVENT, handleUpdate);
     };
   }, []);
 
@@ -69,9 +51,7 @@ export default function ExploreRooms() {
     else setGreeting('Good evening');
   }, []);
 
-  const allProperties = [...customProps, ...PROPERTIES];
-
-  const filteredProperties = allProperties.filter(p => {
+  const filteredProperties = properties.filter(p => {
     const cost = calculateKnownMonthlyCost(p);
     const matchesSearch = p.location.toLowerCase().includes(searchQuery.toLowerCase()) || p.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesBudget = maxBudget ? cost <= parseInt(maxBudget) : true;

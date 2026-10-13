@@ -5,9 +5,18 @@ import Link from 'next/link';
 
 export default function Reviews() {
   const reviews = [
-    { id: 1, propertyId: 'p1', propertyName: 'Vardhman Empire Estate', rating: 5, date: 'Oct 2, 2026', author: 'shivam k.', text: 'Amazing place, very close to campus. Landlord is highly responsive and the included amenities were exactly as described.' },
-    { id: 2, propertyId: 'p3', propertyName: 'Samanvay Aasra', rating: 4, date: 'Sep 15, 2026', author: 'Priya S.', text: 'Good amenities, but the internet can be a bit slow sometimes during peak hours. Otherwise a great community to live in.' },
-    { id: 3, propertyId: 'p5', propertyName: 'Ashiana Umang Phase II', rating: 5, date: 'Aug 22, 2026', author: 'shivam k.', text: 'Probably the best society around JKLU. Super secure, great gym, and completely peaceful environment for studying.' }
+    { 
+      id: 1, 
+      propertyId: 'p8', 
+      propertyName: 'Samanvay The New Door', 
+      rating: 5, 
+      date: 'Oct 8, 2026', 
+      author: 'Pratham', 
+      avatar: 'https://res.cloudinary.com/eprhemvt/image/upload/v1787060387/sabrang-2026/tech-team-credit/Pratham.png',
+      text: 'Lived in Samanvay The New Door at Mahindra Sez. The flat is extremely spacious, peaceful environment, and all fittings are top tier. Super easy commute to college and great society security.' 
+    },
+    { id: 2, propertyId: 'p1', propertyName: 'Vardhman Empire Estate', rating: 5, date: 'Oct 2, 2026', author: 'shivam k.', text: 'Amazing place, very close to campus. Landlord is highly responsive and the included amenities were exactly as described.' },
+    { id: 3, propertyId: 'p3', propertyName: 'Samanvay Aasra', rating: 4, date: 'Sep 15, 2026', author: 'Priya S.', text: 'Good amenities, but the internet can be a bit slow sometimes during peak hours. Otherwise a great community to live in.' }
   ];
 
   return (
@@ -53,8 +62,12 @@ export default function Reviews() {
              
              <div className="flex items-center justify-between border-t border-border pt-6 z-10">
                <div className="flex items-center gap-2">
-                 <div className="w-8 h-8 rounded-full bg-primary-blue text-white flex items-center justify-center font-bold text-[10px]">
-                   {review.author.split(' ')[0][0]}{review.author.split(' ')[1][0]}
+                 <div className="w-8 h-8 rounded-full bg-primary-blue text-white overflow-hidden flex items-center justify-center font-bold text-[10px] shrink-0 border border-border">
+                   {(review as any).avatar ? (
+                     <img src={(review as any).avatar} alt={review.author} className="w-full h-full object-cover" />
+                   ) : (
+                     <>{review.author.split(' ')[0][0]}{review.author.split(' ')[1] ? review.author.split(' ')[1][0] : ''}</>
+                   )}
                  </div>
                  <span className="text-sm font-bold text-foreground">{review.author}</span>
                </div>

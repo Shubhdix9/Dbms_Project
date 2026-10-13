@@ -14,6 +14,35 @@ export default function AdminSettings() {
   });
 
   const [saved, setSaved] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const handleUpdatePassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+
+    if (newPassword.length < 6) {
+      setPasswordError('Password must be at least 6 characters');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError('Passwords do not match');
+      return;
+    }
+
+    localStorage.setItem('uninest_admin_password', newPassword);
+    setPasswordSuccess('Admin password changed successfully!');
+    setTimeout(() => {
+      setShowPasswordModal(false);
+      setNewPassword('');
+      setConfirmPassword('');
+      setPasswordSuccess('');
+    }, 1500);
+  };
 
   const handleSave = () => {
     setSaved(true);
@@ -105,11 +134,19 @@ export default function AdminSettings() {
                <Key size={20} className="mr-3 text-primary-orange" /> Password & Authentication
             </h2>
             <div className="space-y-4">
-              <button className="w-full py-3 bg-surface-light border-2 border-border rounded-xl text-sm font-bold text-foreground hover:bg-gray-50 hover:border-gray-300 transition-colors flex justify-between items-center px-4">
+              <button 
+                onClick={() => setShowPasswordModal(true)}
+                className="w-full py-3 bg-surface-light border-2 border-border rounded-xl text-sm font-bold text-foreground hover:bg-gray-50 hover:border-gray-300 transition-colors flex justify-between items-center px-4"
+              >
                 Change Admin Password
                 <Lock size={16} className="text-text-secondary" />
               </button>
-              <button className="w-full py-3 bg-surface-light border-2 border-border rounded-xl text-sm font-bold text-foreground hover:bg-gray-50 hover:border-gray-300 transition-colors flex justify-between items-center px-4">
+              <button 
+                onClick={() => {
+                  alert('Default Admin Login: admin@uninest.com / admin123\nAPI Access: Active');
+                }}
+                className="w-full py-3 bg-surface-light border-2 border-border rounded-xl text-sm font-bold text-foreground hover:bg-gray-50 hover:border-gray-300 transition-colors flex justify-between items-center px-4"
+              >
                 Manage API Keys
                 <Key size={16} className="text-text-secondary" />
               </button>
@@ -177,6 +214,80 @@ export default function AdminSettings() {
           <Save size={20} className="mr-2" /> Save Settings
         </button>
       </div>
+
+      {/* Change Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border-2 border-border animate-in zoom-in-95 duration-200">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-primary-blue flex items-center justify-center mb-4">
+              <Key size={24} />
+            </div>
+
+            <h3 className="text-2xl font-black text-gray-900">Change Admin Password</h3>
+            <p className="text-sm font-medium text-gray-500 mt-1 mb-6">
+              Update the master credential used to access the UniNest Admin Command Centre.
+            </p>
+
+            {passwordError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs font-bold">
+                {passwordError}
+              </div>
+            )}
+
+            {passwordSuccess && (
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-xl text-xs font-bold">
+                {passwordSuccess}
+              </div>
+            )}
+
+            <form onSubmit={handleUpdatePassword} className="space-y-4">
+              <div>
+                <label className="text-xs font-extrabold uppercase tracking-widest text-text-secondary block mb-1.5">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="At least 6 characters"
+                  required
+                  className="w-full px-4 py-3 bg-surface-light border-2 border-border rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-extrabold uppercase tracking-widest text-text-secondary block mb-1.5">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Repeat new password"
+                  required
+                  className="w-full px-4 py-3 bg-surface-light border-2 border-border rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 bg-primary-blue hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-colors shadow-sm"
+                >
+                  Save Password
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -18,6 +18,18 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
+    const trimmedEmail = email.trim().toLowerCase();
+    const customPass = typeof window !== 'undefined' ? localStorage.getItem('uninest_admin_password') : null;
+    const adminPass = customPass || 'admin123';
+
+    // Check if logging in as Admin
+    if (trimmedEmail === 'admin@uninest.com' && password === adminPass) {
+      localStorage.setItem('uninest_admin_auth', 'true');
+      localStorage.setItem('uninest_admin_user', 'admin@uninest.com');
+      router.push('/admin');
+      return;
+    }
+
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,

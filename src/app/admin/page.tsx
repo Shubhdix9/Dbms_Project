@@ -1,11 +1,33 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Users, Building, ShieldAlert, FileText, IndianRupee, Database, Activity, ShieldCheck } from 'lucide-react';
 import { PROPERTIES, STUDENTS, MATCHES, LEASES } from '@/lib/data';
+import { fetchAllActiveProperties, PROPERTIES_UPDATED_EVENT } from '@/lib/propertiesStore';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-  const pendingProps = PROPERTIES.filter(p => !p.verifiedByUniNest);
+  const [properties, setProperties] = useState<any[]>(PROPERTIES);
+
+  useEffect(() => {
+    const loadProps = async () => {
+      const all = await fetchAllActiveProperties();
+      setProperties(all);
+    };
+    loadProps();
+
+    const handleUpdate = () => loadProps();
+    window.addEventListener('focus', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    window.addEventListener(PROPERTIES_UPDATED_EVENT, handleUpdate);
+    return () => {
+      window.removeEventListener('focus', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+      window.removeEventListener(PROPERTIES_UPDATED_EVENT, handleUpdate);
+    };
+  }, []);
+
+  const pendingProps = properties.filter(p => !p.verifiedByUniNest);
 
   return (
     <div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-8 pb-20">
@@ -42,7 +64,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { label: 'Total Students', value: STUDENTS.length, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-          { label: 'Platform Properties', value: PROPERTIES.length, icon: Building, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+          { label: 'Platform Properties', value: properties.length, icon: Building, color: 'text-purple-500', bg: 'bg-purple-500/10' },
           { label: 'Pending Verifications', value: pendingProps.length, icon: ShieldAlert, color: 'text-primary-orange', bg: 'bg-light-orange' },
           { label: 'Active Leases', value: LEASES.length, icon: FileText, color: 'text-emerald-500', bg: 'bg-emerald-50' },
           { label: 'Total Matches', value: MATCHES.length, icon: IndianRupee, color: 'text-primary-orange', bg: 'bg-light-orange' },

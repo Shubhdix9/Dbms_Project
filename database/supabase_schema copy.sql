@@ -385,7 +385,7 @@ INSERT INTO LANDLORD (name, phone, email, verification_status) VALUES
 
 INSERT INTO PROPERTY (landlord_id, title, property_type, location, distance_from_college, rent_per_person, deposit, electricity_estimate, internet_cost, maintenance_cost, total_capacity, available_slots, available_from, gender_preference, furnished_status, verification_status, rating) VALUES
 (1, 'Sunrise PG', 'PG', 'Bapu Nagar', 2.5, 6500, 13000, 500, 200, 300, 10, 5, '2023-08-01', 'MALE', 'Furnished', 'VERIFIED', 4.5),
-(2, 'Cozy Home', '1BHK', 'Mansarovar', 4.0, 12000, 24000, 800, 400, 500, 2, 2, '2023-08-15', 'ANY', 'Semi-furnished', 'VERIFIED', 4.2),
+(2, 'Samanvay The New Door', '3BHK', 'Mahindra Sez, Jaipur', 2.1, 22000, 44000, 800, 400, 2500, 4, 4, '2023-08-15', 'ANY', 'Fully Furnished', 'VERIFIED', 4.9),
 (1, 'Elite Girls PG', 'PG', 'Malviya Nagar', 1.5, 8000, 16000, 600, 200, 400, 15, 3, '2023-07-20', 'FEMALE', 'Furnished', 'VERIFIED', 4.8),
 (3, 'Students Inn', 'Shared Room', 'Ajmer Road', 1.0, 5000, 10000, 300, 150, 200, 20, 10, '2023-08-05', 'MALE', 'Furnished', 'PENDING', 3.5),
 (4, 'Luxury 2BHK', '2BHK', 'Vaishali Nagar', 5.5, 18000, 36000, 1000, 500, 800, 4, 4, '2023-09-01', 'ANY', 'Furnished', 'VERIFIED', 4.9);

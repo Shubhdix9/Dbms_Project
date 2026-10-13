@@ -167,7 +167,7 @@ export default function RoommateMatch() {
     ];
 
     return {
-      student: { ...s, imageUrl: images[index % images.length] },
+      student: { ...s, imageUrl: s.imageUrl || images[index % images.length] },
       match: {
         budgetScore: 90 + Math.floor(Math.random() * 10),
         lifestyleScore: 70 + Math.floor(Math.random() * 25),
@@ -317,8 +317,14 @@ export default function RoommateMatch() {
             <div key={student.id} className="bg-white border-2 border-border rounded-[2rem] overflow-hidden hover:shadow-xl transition-all group flex flex-col">
               
               <div className="relative h-72 w-full bg-[#0a1128] overflow-hidden">
-                <img src={student.imageUrl} alt={student.name} className="w-full h-full object-cover opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700 ease-in-out" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1128] via-[#0a1128]/20 to-transparent opacity-90"></div>
+                <img 
+                  src={student.imageUrl} 
+                  alt={student.name} 
+                  className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-700 ease-in-out ${
+                    student.id === 's3' ? 'object-top' : 'object-center'
+                  }`} 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                 
                 {i === 0 && (
                   <div className="absolute top-4 right-4 bg-primary-orange text-white text-[10px] font-bold px-4 py-1.5 rounded-full tracking-wider uppercase shadow-md">

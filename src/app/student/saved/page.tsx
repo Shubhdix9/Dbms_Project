@@ -1,12 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Heart, MapPin, Home, CheckCircle, Trash2, IndianRupee } from 'lucide-react';
 import { PROPERTIES, calculateKnownMonthlyCost } from '@/lib/data';
+import { isPropertyDeleted, PROPERTIES_UPDATED_EVENT } from '@/lib/propertiesStore';
 
 export default function SavedProperties() {
   const [savedIds, setSavedIds] = useState(['p1', 'p3', 'p7', 'p8']);
-  const savedProperties = PROPERTIES.filter(p => savedIds.includes(p.id));
+  const [, setTrigger] = useState(0);
+
+  useEffect(() => {
+    const handleUpdate = () => setTrigger(n => n + 1);
+    window.addEventListener('storage', handleUpdate);
+    window.addEventListener(PROPERTIES_UPDATED_EVENT, handleUpdate);
+    return () => {
+      window.removeEventListener('storage', handleUpdate);
+      window.removeEventListener(PROPERTIES_UPDATED_EVENT, handleUpdate);
+    };
+  }, []);
+
+  const savedProperties = PROPERTIES
+    .filter(p => !isPropertyDeleted(p.id))
+    .filter(p => savedIds.includes(p.id));
 
   return (
     <div className="space-y-8 pb-12">

@@ -16,13 +16,16 @@ import {
   X,
   ShieldCheck
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const navItems = [
   { name: '1. Command Centre', href: '/admin' },
   { name: '2. Students', href: '/admin/students' },
   { name: '3. Properties', href: '/admin/properties' },
   { name: '4. Verifications', href: '/admin/verification' },
+  { name: '5. Bookings', href: '/admin/bookings' },
+  { name: '6. Analytics', href: '/admin/analytics' },
 ];
 
 const drawerItems = [
@@ -38,7 +41,34 @@ const drawerItems = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const auth = localStorage.getItem('uninest_admin_auth');
+    if (auth === 'true') {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+      router.push('/login?redirect=/admin');
+    }
+  }, [pathname, router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('uninest_admin_auth');
+    localStorage.removeItem('uninest_admin_user');
+    router.push('/login');
+  };
+
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
+        <div className="w-8 h-8 border-4 border-primary-orange border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-sm font-bold text-slate-400">Verifying Admin Permissions...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
@@ -86,9 +116,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="text-white text-sm font-medium pr-1">System <span className="hidden lg:inline text-white">Admin</span></span>
           </Link>
           
-          <Link href="/" className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all hidden md:block" title="Logout">
+          <button onClick={handleLogout} className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all hidden md:block" title="Logout">
             <LogOut size={18} />
-          </Link>
+          </button>
 
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white p-2">
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -146,12 +176,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                  <span className="text-xs font-extrabold text-white tracking-wide">Root Access</span>
               </div>
               
-              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center px-2 py-2 text-white/70 hover:text-white transition-colors group">
+              <button onClick={() => { setMobileMenuOpen(false); handleLogout(); }} className="w-full flex items-center px-2 py-2 text-white/70 hover:text-white transition-colors group text-left">
                 <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mr-3 shrink-0 shadow-md group-hover:bg-white/20 transition-colors">
                    <LogOut size={14} className="text-white" />
                 </div>
                 <span className="text-sm font-bold">Log Out</span>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MapPin, Navigation2, Search, Filter, Home, CheckCircle } from 'lucide-react';
-import { PROPERTIES, calculateKnownMonthlyCost } from '@/lib/data';
+import { calculateKnownMonthlyCost } from '@/lib/data';
+import { fetchAllActiveProperties, PROPERTIES_UPDATED_EVENT } from '@/lib/propertiesStore';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
@@ -14,6 +15,25 @@ const RealMap = dynamic(() => import('@/components/Map'), {
 
 export default function MapExperience() {
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
+  const [properties, setProperties] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadProps = async () => {
+      const all = await fetchAllActiveProperties();
+      setProperties(all);
+    };
+    loadProps();
+
+    const handleUpdate = () => loadProps();
+    window.addEventListener('focus', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    window.addEventListener(PROPERTIES_UPDATED_EVENT, handleUpdate);
+    return () => {
+      window.removeEventListener('focus', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+      window.removeEventListener(PROPERTIES_UPDATED_EVENT, handleUpdate);
+    };
+  }, []);
 
   return (
     <div className="h-[calc(100vh-8rem)] flex flex-col md:flex-row gap-6 mt-2">
@@ -37,7 +57,7 @@ export default function MapExperience() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-surface-light/30">
-          {PROPERTIES.map(p => (
+          {properties.map(p => (
             <div 
               key={p.id} 
               className={`flex gap-3 p-3 border-2 rounded-2xl cursor-pointer transition-all ${selectedProperty?.id === p.id ? 'border-primary-orange bg-light-orange shadow-md scale-[1.02]' : 'border-border bg-white hover:border-text-secondary shadow-sm'}`}
@@ -77,7 +97,7 @@ export default function MapExperience() {
       {/* Map Area */}
       <div className="w-full h-full bg-[#f4f6f8] rounded-[2rem] border-4 border-white shadow-2xl relative overflow-hidden">
         <RealMap 
-          properties={PROPERTIES} 
+          properties={properties} 
           selectedProperty={selectedProperty} 
           onSelectProperty={setSelectedProperty} 
           calculateCost={calculateKnownMonthlyCost} 

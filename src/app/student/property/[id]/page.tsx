@@ -10,30 +10,54 @@ import { useState, useEffect, use } from 'react';
 import { supabase } from '@/lib/supabase';
 import { getUserGroups, createOnePersonGroup } from '@/app/actions/collaboration';
 
-const MOCK_REVIEWS = [
-  {
-    id: 1,
-    studentName: 'Homini',
-    avatar: 'H',
-    rating: 5,
-    title: 'Good Quality.',
-    date: 'Reviewed in India on 3 January 2026',
-    verified: true,
-    text: 'This is an excellent property with fully furnished rooms. It supports two students perfectly, and the landlord is very responsive. Very sturdy and great quality. Must rent.',
-    images: ['/room/Samanvay%20Aasra/rooms/4.jpg', '/room/Samanvay%20Aasra/rooms/5.jpg']
-  },
-  {
-    id: 2,
-    studentName: 'Sheetal Dhake',
-    avatar: 'S',
-    rating: 5,
-    title: 'Perfect and High Quality Property',
-    date: 'Reviewed in India on 20 April 2026',
-    verified: true,
-    text: 'I am living here for 2 Semesters. The flat is extremely sturdy and fit/finish is excellent. All rooms were maintained well including all beds, desks and ACs. Good property.',
-    images: []
-  }
-];
+const DEFAULT_REVIEWS: Record<string, any[]> = {
+  p8: [
+    {
+      id: 1,
+      studentName: 'Pratham',
+      avatar: 'https://res.cloudinary.com/eprhemvt/image/upload/v1787060387/sabrang-2026/tech-team-credit/Pratham.png',
+      rating: 5,
+      title: 'Fantastic flat with great space and amenities',
+      date: 'Reviewed in India on 8 October 2026',
+      verified: true,
+      text: 'Lived in Samanvay The New Door at Mahindra Sez. The 3BHK flat is extremely spacious, peaceful environment, and all fittings are top tier. Super easy commute to college and great society security.',
+      images: [
+        '/room/newo/WhatsApp Image 2026-10-09 at 16.56.57.jpeg',
+        '/room/newo/WhatsApp Image 2026-10-09 at 16.56.58.jpeg',
+        '/room/newo/2.jpeg'
+      ],
+      videos: [
+        '/room/newo/WhatsApp Video 2026-10-09 at 16.56.57.mp4'
+      ]
+    }
+  ],
+  default: [
+    {
+      id: 1,
+      studentName: 'Pratham',
+      avatar: 'https://res.cloudinary.com/eprhemvt/image/upload/v1787060387/sabrang-2026/tech-team-credit/Pratham.png',
+      rating: 5,
+      title: 'Highly Recommended Flat',
+      date: 'Reviewed in India on 8 October 2026',
+      verified: true,
+      text: 'Great flat and very clean setup. Responsive landlord and perfect for students near Mahindra Sez and JKLU.',
+      images: ['/room/newo/WhatsApp Image 2026-10-09 at 16.56.57.jpeg', '/room/newo/WhatsApp Image 2026-10-09 at 16.56.58.jpeg']
+    },
+    {
+      id: 2,
+      studentName: 'Sheetal Dhake',
+      avatar: 'S',
+      rating: 5,
+      title: 'Perfect and High Quality Property',
+      date: 'Reviewed in India on 20 April 2026',
+      verified: true,
+      text: 'I am living here for 2 Semesters. The flat is extremely sturdy and fit/finish is excellent. All rooms were maintained well including all beds, desks and ACs. Good property.',
+      images: []
+    }
+  ]
+};
+
+import { isPropertyDeleted } from '@/lib/propertiesStore';
 
 export default function PropertyDetails({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -66,9 +90,14 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
   const [dbProperty, setDbProperty] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const localProperty = PROPERTIES.find(p => p.id === id);
+  const localProperty = !isPropertyDeleted(id) ? PROPERTIES.find(p => p.id === id) : null;
 
   useEffect(() => {
+    if (isPropertyDeleted(id)) {
+      setIsLoading(false);
+      return;
+    }
+
     if (localProperty) {
       setIsLoading(false);
       return;
@@ -122,10 +151,12 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
   }
 
   const allImages: string[] = (property as any).images || (property.imageUrl ? [property.imageUrl] : []);
+  const allVideos: string[] = (property as any).videos || [];
   const filteredImages = allImages.filter((img) => {
     if (activeFilter === 'All') return true;
-    if (activeFilter === 'Rooms') return img.toLowerCase().includes('rooms');
+    if (activeFilter === 'Rooms') return img.toLowerCase().includes('rooms') || img.toLowerCase().includes('room');
     if (activeFilter === 'Exterior') return img.toLowerCase().includes('exterior');
+    if (activeFilter === 'Videos') return false;
     return true;
   });
 
@@ -302,13 +333,20 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
             <div>
               <h3 className="text-lg font-bold text-foreground mb-6">Top reviews from India</h3>
               <div className="space-y-8">
-                {MOCK_REVIEWS.map((review) => (
+                {(DEFAULT_REVIEWS[id] || DEFAULT_REVIEWS['default']).map((review: any) => (
                   <div key={review.id} className="border-b border-gray-100 pb-8 last:border-0 last:pb-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-sm">
-                        {review.avatar}
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center text-gray-600 font-bold text-sm shrink-0 border border-border">
+                        {review.avatar?.startsWith('http') ? (
+                          <img src={review.avatar} alt={review.studentName} className="w-full h-full object-cover" />
+                        ) : (
+                          review.avatar
+                        )}
                       </div>
-                      <span className="text-sm font-medium">{review.studentName}</span>
+                      <div>
+                        <span className="text-sm font-bold text-foreground block">{review.studentName}</span>
+                        {review.verified && <span className="text-[10px] text-green-600 font-semibold flex items-center"><CheckCircle size={10} className="mr-1 inline" /> Verified Resident</span>}
+                      </div>
                     </div>
                     <div className="flex items-center gap-2 mb-1">
                       <div className="flex text-orange-500">
@@ -320,17 +358,21 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
                     <p className="text-xs text-gray-500 mb-3 flex items-center gap-2">
                       Size: {property.configuration} <span className="font-bold text-orange-700">Verified Purchase</span>
                     </p>
-                    <p className="text-sm text-foreground mb-4">{review.text}</p>
+                    <p className="text-sm text-foreground mb-4 leading-relaxed">{review.text}</p>
                     
-                    {review.images && review.images.length > 0 && (
-                      <div className="flex gap-2 mb-4">
-                        {review.images.map((img, i) => (
-                          <div key={i} onClick={() => setSelectedPhotoIndex(allImages.indexOf(img) !== -1 ? allImages.indexOf(img) : 0)} className="w-36 h-24 rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity">
-                            <img src={img} className="w-full h-full object-cover" />
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    {/* Media from review (Photos & Videos) */}
+                    <div className="flex flex-wrap gap-3 mb-4">
+                      {review.images && review.images.length > 0 && review.images.map((img: string, i: number) => (
+                        <div key={`img-${i}`} onClick={() => setSelectedPhotoIndex(allImages.indexOf(img) !== -1 ? allImages.indexOf(img) : 0)} className="w-36 h-24 rounded-xl overflow-hidden border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity shadow-sm">
+                          <img src={img} className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                      {review.videos && review.videos.length > 0 && review.videos.map((vid: string, i: number) => (
+                        <div key={`vid-${i}`} className="w-48 h-28 rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-black">
+                          <video src={vid} controls className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
                     
                     <p className="text-xs text-gray-500 mb-3">One person found this helpful</p>
                     <div className="flex gap-3 items-center">
@@ -601,6 +643,14 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
                 </div>
                 Exterior
               </button>
+              {((property as any).videos && (property as any).videos.length > 0) && (
+                <button 
+                  onClick={() => setActiveFilter('Videos')}
+                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${activeFilter === 'Videos' ? 'bg-[#8ab4f8]/20 border border-[#8ab4f8]/30 text-[#8ab4f8]' : 'bg-[#2d2e30] border border-gray-600 text-gray-300 hover:bg-[#3d3e40]'}`}
+                >
+                  Videos
+                </button>
+              )}
             </div>
 
             {/* Sub-header Add Photos */}
@@ -613,7 +663,18 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
 
             {/* Masonry Grid */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-5">
-              {filteredImages.length > 0 ? (
+              {activeFilter === 'Videos' ? (
+                <div className="space-y-4">
+                  {allVideos.map((vid: string, idx: number) => (
+                    <div key={idx} className="rounded-xl overflow-hidden bg-black border border-gray-800 shadow-md">
+                      <video src={vid} controls className="w-full max-h-60 object-cover" />
+                    </div>
+                  ))}
+                  {allVideos.length === 0 && (
+                    <div className="text-gray-400 text-center mt-10">No videos available</div>
+                  )}
+                </div>
+              ) : filteredImages.length > 0 ? (
                 <div className="columns-2 gap-3 space-y-3">
                   {filteredImages.map((img: string, idx: number) => (
                     <div 
