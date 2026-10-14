@@ -18,6 +18,9 @@ export const PROPERTIES = [
     id: 'p7',
     imageUrl: '/room/image.png',
     images: [
+      '/room/Aasra/image.png',
+      '/room/Aasra/image%20copy.png',
+      '/room/Aasra/image%20copy%202.png',
       '/room/Samanvay%20Aasra/Exterior/unnamed.jpg',
       '/room/Samanvay%20Aasra/Exterior/4.jpg',
       '/room/Samanvay%20Aasra/Exterior/5.jpg',
@@ -232,29 +235,6 @@ export const PROPERTIES = [
 
 export const STUDENTS = [
   {
-    id: 's1',
-    name: 'Rahul Mehta',
-    email: 'rahul.m@jklu.edu.in',
-    course: 'B.Tech CSE',
-    year: 2,
-    gender: 'Male',
-    verified: true,
-    preferences: {
-      budgetMin: 7000,
-      budgetMax: 10000,
-      sleepTime: '11:30 PM',
-      wakeTime: '7:30 AM',
-      cleanliness: 'High',
-      noiseTolerance: 'Low',
-      studyHabits: 'Focused',
-      foodPreference: 'Either',
-      smoking: 'Non-smoker',
-      guestPreference: 'Occasional',
-      ac: true,
-      preferredPropertyId: 'p7'
-    }
-  },
-  {
     id: 's2',
     name: 'Current User',
     email: 'demo.student@jklu.edu.in',
@@ -274,6 +254,30 @@ export const STUDENTS = [
       smoking: 'Non-smoker',
       guestPreference: 'Occasional',
       ac: true
+    }
+  },
+  {
+    id: 's7',
+    name: 'Priyanshu Singh Shekhawat',
+    email: 'priyanshu.s@jklu.edu.in',
+    course: 'B.Tech CSE (Semester 3, Section A)',
+    year: 2,
+    gender: 'Male',
+    verified: true,
+    imageUrl: '/images/image.png',
+    preferences: {
+      budgetMin: 8000,
+      budgetMax: 13000,
+      sleepTime: '11:30 PM',
+      wakeTime: '7:30 AM',
+      cleanliness: 'High',
+      noiseTolerance: 'Low',
+      studyHabits: 'Focused',
+      foodPreference: 'Either',
+      smoking: 'Non-smoker',
+      guestPreference: 'Occasional',
+      ac: true,
+      preferredPropertyId: 'p8'
     }
   },
   {
@@ -298,6 +302,29 @@ export const STUDENTS = [
       guestPreference: 'Occasional',
       ac: true,
       preferredPropertyId: 'p8'
+    }
+  },
+  {
+    id: 's1',
+    name: 'Rahul Mehta',
+    email: 'rahul.m@jklu.edu.in',
+    course: 'B.Tech CSE',
+    year: 2,
+    gender: 'Male',
+    verified: true,
+    preferences: {
+      budgetMin: 7000,
+      budgetMax: 10000,
+      sleepTime: '11:30 PM',
+      wakeTime: '7:30 AM',
+      cleanliness: 'High',
+      noiseTolerance: 'Low',
+      studyHabits: 'Focused',
+      foodPreference: 'Either',
+      smoking: 'Non-smoker',
+      guestPreference: 'Occasional',
+      ac: true,
+      preferredPropertyId: 'p7'
     }
   },
   { id: 's4', name: 'Riya Sharma', course: 'B.Des', year: 3, gender: 'Female', verified: true, imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80', preferences: { budgetMin: 9000, budgetMax: 15000, sleepTime: '10:30 PM', wakeTime: '6:30 AM', cleanliness: 'High', noiseTolerance: 'Low', studyHabits: 'Focused', foodPreference: 'Veg', smoking: 'Non-smoker', guestPreference: 'Rare', ac: true, preferredPropertyId: 'p8' } },

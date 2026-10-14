@@ -7,6 +7,21 @@ export default function Reviews() {
   const reviews = [
     { 
       id: 1, 
+      propertyId: 'p7', 
+      propertyName: 'Aasra Apartment (Samanvay Aasra)', 
+      rating: 5, 
+      date: 'Oct 13, 2026', 
+      author: 'Saransh Jkluuu', 
+      avatar: '/images/image%20copy.png',
+      text: 'Aasra apartment is really good and spacious. Super convenient commute to campus, peaceful surroundings for study, 24/7 security, and prompt maintenance response. Perfect place for students.',
+      images: [
+        '/room/Aasra/image.png',
+        '/room/Aasra/image%20copy.png',
+        '/room/Aasra/image%20copy%202.png'
+      ]
+    },
+    { 
+      id: 2, 
       propertyId: 'p8', 
       propertyName: 'Samanvay The New Door', 
       rating: 5, 
@@ -15,8 +30,8 @@ export default function Reviews() {
       avatar: 'https://res.cloudinary.com/eprhemvt/image/upload/v1787060387/sabrang-2026/tech-team-credit/Pratham.png',
       text: 'Lived in Samanvay The New Door at Mahindra Sez. The flat is extremely spacious, peaceful environment, and all fittings are top tier. Super easy commute to college and great society security.' 
     },
-    { id: 2, propertyId: 'p1', propertyName: 'Vardhman Empire Estate', rating: 5, date: 'Oct 2, 2026', author: 'shivam k.', text: 'Amazing place, very close to campus. Landlord is highly responsive and the included amenities were exactly as described.' },
-    { id: 3, propertyId: 'p3', propertyName: 'Samanvay Aasra', rating: 4, date: 'Sep 15, 2026', author: 'Priya S.', text: 'Good amenities, but the internet can be a bit slow sometimes during peak hours. Otherwise a great community to live in.' }
+    { id: 3, propertyId: 'p1', propertyName: 'Vardhman Empire Estate', rating: 5, date: 'Oct 2, 2026', author: 'shivam k.', text: 'Amazing place, very close to campus. Landlord is highly responsive and the included amenities were exactly as described.' },
+    { id: 4, propertyId: 'p7', propertyName: 'Samanvay Aasra', rating: 4, date: 'Sep 15, 2026', author: 'Priya S.', text: 'Good amenities, but the internet can be a bit slow sometimes during peak hours. Otherwise a great community to live in.' }
   ];
 
   return (
@@ -58,7 +73,18 @@ export default function Reviews() {
                </button>
              </div>
              
-             <p className="text-text-secondary leading-relaxed font-medium mb-8 z-10 flex-1">"{review.text}"</p>
+             <p className="text-text-secondary leading-relaxed font-medium mb-4 z-10 flex-1">"{review.text}"</p>
+             
+             {/* Review Photos by Student */}
+             {(review as any).images && (review as any).images.length > 0 && (
+               <div className="flex gap-2.5 mb-6 overflow-x-auto pb-1 z-10">
+                 {(review as any).images.map((img: string, idx: number) => (
+                   <div key={idx} className="w-24 h-20 rounded-xl overflow-hidden border border-border shrink-0 shadow-xs group/img">
+                     <img src={img} alt="review photo" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-300" />
+                   </div>
+                 ))}
+               </div>
+             )}
              
              <div className="flex items-center justify-between border-t border-border pt-6 z-10">
                <div className="flex items-center gap-2">

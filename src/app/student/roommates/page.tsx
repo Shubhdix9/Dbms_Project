@@ -2,17 +2,61 @@
 import { useState, useEffect } from 'react';
 
 import { STUDENTS, PROPERTIES } from '@/lib/data';
-import { CheckCircle, Clock, VolumeX, BookOpen, Wind, Heart, Briefcase, Users, UserPlus, Inbox, Check, X } from 'lucide-react';
+import { 
+  CheckCircle, Clock, VolumeX, BookOpen, Wind, Heart, Briefcase, 
+  Users, UserPlus, Inbox, Check, X, Sparkles, Building2, Moon, 
+  Sun, Utensils, Cigarette, Sliders, DollarSign, BedDouble, 
+  ShieldCheck, MapPin, Calendar, Coffee, Filter, Home
+} from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { getIntentsAction, saveIntentAction } from '@/app/actions/intents';
 import { getUserGroups, getUserInvitations, inviteRoommate, acceptInvitation, rejectInvitation, leaveGroup, getPendingProposals, approveProposal, rejectProposal, submitGroupToLandlord, mockLandlordApprove, processCashfreePayment } from '@/app/actions/collaboration';
 
+interface RoommatePreferencesState {
+  preferredPropertyId: string;
+  locationQuery: string;
+  budgetMin: number;
+  budgetMax: number;
+  sharingType: string;
+  moveInTimeline: string;
+  duration: string;
+  sleepSchedule: string;
+  wakeSchedule: string;
+  studyHabits: string;
+  cleanliness: string;
+  noiseTolerance: string;
+  acPreference: string;
+  foodPreference: string;
+  smoking: string;
+  guestPreference: string;
+}
+
+const DEFAULT_PREFERENCES: RoommatePreferencesState = {
+  preferredPropertyId: 'p8',
+  locationQuery: 'Samanvay Aasra',
+  budgetMin: 8000,
+  budgetMax: 14000,
+  sharingType: 'Double Sharing',
+  moveInTimeline: 'Immediate',
+  duration: '1 Year (Academic Year)',
+  sleepSchedule: 'Moderate (11:00 PM - 12:30 AM)',
+  wakeSchedule: 'Normal (7:30 AM - 9:00 AM)',
+  studyHabits: 'Focused',
+  cleanliness: 'High',
+  noiseTolerance: 'Low',
+  acPreference: 'Moderate (24-26°C)',
+  foodPreference: 'Either',
+  smoking: 'Non-smoker',
+  guestPreference: 'Occasional',
+};
+
 export default function RoommateMatch() {
   const [hasFilledPreferences, setHasFilledPreferences] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [locationQuery, setLocationQuery] = useState('');
-  const [preferredPropertyId, setPreferredPropertyId] = useState<string | null>(null);
+  const [preferences, setPreferences] = useState<RoommatePreferencesState>(DEFAULT_PREFERENCES);
+  const [locationQuery, setLocationQuery] = useState(DEFAULT_PREFERENCES.locationQuery);
+  const [preferredPropertyId, setPreferredPropertyId] = useState<string | null>(DEFAULT_PREFERENCES.preferredPropertyId);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [dynamicStudents, setDynamicStudents] = useState<any[]>(STUDENTS);
@@ -43,12 +87,28 @@ export default function RoommateMatch() {
     if (localStorage.getItem('uninest_preferences_filled') === 'true') {
       setHasFilledPreferences(true);
     }
-    const savedPropertyId = localStorage.getItem('preferred_property_id');
-    const savedPropertyName = localStorage.getItem('preferred_property_name');
-    if (savedPropertyId) {
-      setPreferredPropertyId(savedPropertyId);
+    
+    // Load persisted preferences if any
+    const savedPrefsStr = localStorage.getItem('uninest_roommate_prefs');
+    if (savedPrefsStr) {
+      try {
+        const parsed = JSON.parse(savedPrefsStr);
+        setPreferences(prev => ({ ...prev, ...parsed }));
+        if (parsed.preferredPropertyId) setPreferredPropertyId(parsed.preferredPropertyId);
+        if (parsed.locationQuery) setLocationQuery(parsed.locationQuery);
+      } catch (e) {
+        console.error('Error loading stored roommate prefs:', e);
+      }
+    } else {
+      const savedPropertyId = localStorage.getItem('preferred_property_id');
+      const savedPropertyName = localStorage.getItem('preferred_property_name');
+      if (savedPropertyId) {
+        setPreferredPropertyId(savedPropertyId);
+        setPreferences(prev => ({ ...prev, preferredPropertyId: savedPropertyId }));
+      }
       if (savedPropertyName) {
         setLocationQuery(savedPropertyName);
+        setPreferences(prev => ({ ...prev, locationQuery: savedPropertyName }));
       }
     }
     
@@ -157,7 +217,7 @@ export default function RoommateMatch() {
     }, 1500);
   };
 
-  // Fake compute match for demo
+  // Authentic Compatibility Calculation Engine
   const recommendations = dynamicStudents.filter(s => s.id !== 's2' && s.id !== currentUser?.id).map((s, index) => {
     const images = [
       'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80',
@@ -166,18 +226,102 @@ export default function RoommateMatch() {
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
     ];
 
+    const sp = (s.preferences as any) || {};
+
+    // 1. Housing Compatibility (Location & Property)
+    let housingScore = 70;
+    const sameProp = (preferredPropertyId && sp.preferredPropertyId === preferredPropertyId);
+    if (sameProp) {
+      housingScore = 100;
+    } else if (!preferredPropertyId || !sp.preferredPropertyId) {
+      housingScore = 80;
+    } else {
+      housingScore = 72;
+    }
+
+    // 2. Budget Compatibility
+    let budgetScore = 80;
+    const sMin = sp.budgetMin || 7000;
+    const sMax = sp.budgetMax || 13000;
+    const uMin = preferences.budgetMin || 8000;
+    const uMax = preferences.budgetMax || 14000;
+    const overlapMin = Math.max(uMin, sMin);
+    const overlapMax = Math.min(uMax, sMax);
+    if (overlapMax >= overlapMin) {
+      const overlapRange = overlapMax - overlapMin;
+      const userRange = Math.max(1000, uMax - uMin);
+      const ratio = Math.min(1, overlapRange / userRange);
+      budgetScore = Math.min(100, Math.round(85 + ratio * 15));
+    } else {
+      const gap = overlapMin - overlapMax;
+      budgetScore = Math.max(40, Math.round(75 - gap / 150));
+    }
+
+    // 3. Lifestyle Compatibility
+    let lifestyleScore = 0;
+    // Sleep time match
+    const sSleep = sp.sleepTime || '';
+    if (preferences.sleepSchedule.includes('Early') && (sSleep.includes('10:') || sSleep.includes('11:00'))) lifestyleScore += 22;
+    else if (preferences.sleepSchedule.includes('Moderate') && (sSleep.includes('11:') || sSleep.includes('12:'))) lifestyleScore += 22;
+    else if (preferences.sleepSchedule.includes('Night Owl') && (sSleep.includes('1:') || sSleep.includes('2:'))) lifestyleScore += 22;
+    else lifestyleScore += 12;
+
+    // Wake time match
+    const sWake = sp.wakeTime || '';
+    if (preferences.wakeSchedule.includes('Early') && (sWake.includes('6:') || sWake.includes('7:00'))) lifestyleScore += 16;
+    else if (preferences.wakeSchedule.includes('Normal') && (sWake.includes('7:30') || sWake.includes('8:'))) lifestyleScore += 16;
+    else if (preferences.wakeSchedule.includes('Late') && (sWake.includes('9:') || sWake.includes('10:'))) lifestyleScore += 16;
+    else lifestyleScore += 10;
+
+    // Cleanliness
+    const sClean = (sp.cleanliness || 'High').toLowerCase();
+    const uClean = (preferences.cleanliness || 'High').toLowerCase();
+    if (uClean.includes(sClean) || sClean.includes(uClean)) lifestyleScore += 16;
+    else lifestyleScore += 8;
+
+    // Noise tolerance
+    const sNoise = (sp.noiseTolerance || 'Low').toLowerCase();
+    const uNoise = (preferences.noiseTolerance || 'Low').toLowerCase();
+    if (uNoise.includes(sNoise) || sNoise.includes(uNoise)) lifestyleScore += 16;
+    else lifestyleScore += 9;
+
+    // Study habits
+    const sStudy = (sp.studyHabits || 'Focused').toLowerCase();
+    const uStudy = (preferences.studyHabits || 'Focused').toLowerCase();
+    if (uStudy.includes(sStudy) || sStudy.includes(uStudy)) lifestyleScore += 12;
+    else lifestyleScore += 7;
+
+    // Food Preference
+    const sFood = (sp.foodPreference || 'Either').toLowerCase();
+    const uFood = (preferences.foodPreference || 'Either').toLowerCase();
+    if (uFood.includes('either') || sFood === 'either' || uFood === sFood) lifestyleScore += 10;
+    else lifestyleScore += 5;
+
+    // Smoking
+    const sSmoke = (sp.smoking || 'Non-smoker').toLowerCase();
+    const uSmoke = (preferences.smoking || 'Non-smoker').toLowerCase();
+    if (uSmoke.includes('non') && sSmoke.includes('non')) lifestyleScore += 8;
+    else if (uSmoke === sSmoke) lifestyleScore += 8;
+    else lifestyleScore += 2;
+
+    lifestyleScore = Math.min(100, Math.max(40, lifestyleScore));
+
+    // Weighted Overall Score: 50% Housing + 30% Lifestyle + 20% Budget
+    const overallScore = Math.min(99, Math.round(
+      housingScore * 0.50 + lifestyleScore * 0.30 + budgetScore * 0.20
+    ));
+
     return {
       student: { ...s, imageUrl: s.imageUrl || images[index % images.length] },
       match: {
-        budgetScore: 90 + Math.floor(Math.random() * 10),
-        lifestyleScore: 70 + Math.floor(Math.random() * 25),
-        housingScore: (s.preferences as any).preferredPropertyId === preferredPropertyId && preferredPropertyId ? 100 : 80 + Math.floor(Math.random() * 15),
-      }
+        budgetScore,
+        lifestyleScore,
+        housingScore
+      },
+      overallScore
     };
-  }).map(r => ({
-    ...r,
-    overallScore: Math.round(r.match.housingScore * 0.6 + r.match.lifestyleScore * 0.4)
-  })).sort((a, b) => {
+  }).sort((a, b) => {
+    // Priority: students preferring same property first, then overall score
     const aPrefersSame = (a.student.preferences as any).preferredPropertyId === preferredPropertyId && preferredPropertyId;
     const bPrefersSame = (b.student.preferences as any).preferredPropertyId === preferredPropertyId && preferredPropertyId;
     if (aPrefersSame && !bPrefersSame) return -1;
@@ -189,16 +333,22 @@ export default function RoommateMatch() {
 
   if (!hasFilledPreferences) {
     return (
-      <div className="max-w-[800px] mx-auto p-4 md:p-8 pb-20">
-        <div className="bg-white rounded-[2rem] p-8 md:p-12 border-2 border-border shadow-xl">
+      <div className="max-w-[880px] mx-auto p-4 md:p-8 pb-24">
+        <div className="bg-white rounded-[2.5rem] p-6 md:p-12 border-2 border-border shadow-xl">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary-blue mb-3 tracking-tight">Roommate Preferences</h2>
-            <p className="text-text-secondary text-lg">Tell us about your lifestyle to find your perfect match.</p>
+            <div className="inline-flex items-center gap-2 bg-primary-blue/10 text-primary-blue px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-3">
+              <Sparkles size={14} /> AI Compatibility Matcher
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black text-primary-blue mb-3 tracking-tight">Roommate Preferences</h2>
+            <p className="text-text-secondary text-base md:text-lg max-w-xl mx-auto">
+              Tell us about your lifestyle to find your perfect match.
+            </p>
           </div>
 
           <form onSubmit={(e) => { 
             e.preventDefault(); 
             localStorage.setItem('uninest_preferences_filled', 'true');
+            localStorage.setItem('uninest_roommate_prefs', JSON.stringify(preferences));
             
             if (preferredPropertyId) {
               localStorage.setItem('preferred_property_id', preferredPropertyId);
@@ -213,7 +363,18 @@ export default function RoommateMatch() {
                   gender: currentUser.user_metadata?.gender || 'MALE',
                   imageUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=800&q=80',
                   verified: true,
-                  preferences: { budgetMin: 8000, budgetMax: 15000, sleepTime: '11:00 PM', wakeTime: '7:00 AM', cleanliness: 'High', noiseTolerance: 'Medium', studyHabits: 'Focused', smoking: 'Non-smoker', preferredPropertyId: preferredPropertyId }
+                  preferences: { 
+                    budgetMin: preferences.budgetMin, 
+                    budgetMax: preferences.budgetMax, 
+                    sleepTime: preferences.sleepSchedule.includes('Early') ? '10:30 PM' : preferences.sleepSchedule.includes('Moderate') ? '11:30 PM' : '2:00 AM', 
+                    wakeTime: preferences.wakeSchedule.includes('Early') ? '6:30 AM' : preferences.wakeSchedule.includes('Normal') ? '7:30 AM' : '10:00 AM', 
+                    cleanliness: preferences.cleanliness, 
+                    noiseTolerance: preferences.noiseTolerance, 
+                    studyHabits: preferences.studyHabits, 
+                    smoking: preferences.smoking, 
+                    foodPreference: preferences.foodPreference,
+                    preferredPropertyId: preferredPropertyId 
+                  }
                 };
                 saveIntentAction(newIntent).then(intents => {
                   setDynamicStudents([...STUDENTS, ...intents]);
@@ -225,51 +386,368 @@ export default function RoommateMatch() {
             }
             
             setHasFilledPreferences(true); 
-          }} className="space-y-8">
+          }} className="space-y-10">
             
-            {/* Housing Preferences */}
-            <div>
-              <h3 className="text-sm font-extrabold text-foreground mb-4 uppercase tracking-wider border-b border-border pb-2">Housing Preferences</h3>
-              <div className="relative">
-                <label className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-2 block">Preferred Location / Society</label>
-                <input 
-                  type="text" 
-                  value={locationQuery}
-                  onChange={(e) => {
-                    setLocationQuery(e.target.value);
-                    setShowSuggestions(true);
-                  }}
-                  onFocus={() => setShowSuggestions(true)}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                  placeholder="e.g. Samanvay Aasra, Mahapura" 
-                  className="w-full bg-surface-light border border-border px-4 py-3.5 rounded-xl text-sm font-medium focus:outline-none focus:border-primary-blue" 
-                />
-                
-                {showSuggestions && locationQuery.length > 0 && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-border rounded-xl shadow-lg max-h-60 overflow-y-auto">
-                    {PROPERTIES.filter(p => p.title.toLowerCase().includes(locationQuery.toLowerCase()) || (p.project && p.project.toLowerCase().includes(locationQuery.toLowerCase())))
-                      .map(p => (
-                        <div 
-                          key={p.id}
-                          className="px-4 py-3 hover:bg-surface-light cursor-pointer border-b border-border last:border-0"
-                          onClick={() => {
-                            setLocationQuery(p.title);
-                            setPreferredPropertyId(p.id);
-                            setShowSuggestions(false);
-                          }}
-                        >
-                          <p className="text-sm font-bold text-foreground">{p.title}</p>
-                          <p className="text-xs text-text-secondary">{p.location}</p>
-                        </div>
-                      ))}
+            {/* 1. Housing Preferences */}
+            <div className="bg-surface-light/60 p-6 md:p-8 rounded-3xl border border-border">
+              <div className="flex items-center gap-3 mb-6 border-b border-border pb-3">
+                <div className="w-9 h-9 rounded-xl bg-primary-blue text-white flex items-center justify-center font-bold text-sm">1</div>
+                <div>
+                  <h3 className="text-base font-black text-primary-blue uppercase tracking-wider">Housing Preferences</h3>
+                  <p className="text-xs text-text-secondary font-medium">Society, rent budget, and sharing format</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {/* Preferred Location / Society */}
+                <div className="relative">
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <Building2 size={14} className="text-primary-orange" /> Preferred Location / Society
+                  </label>
+                  <input 
+                    type="text" 
+                    value={locationQuery}
+                    onChange={(e) => {
+                      setLocationQuery(e.target.value);
+                      setPreferences(prev => ({ ...prev, locationQuery: e.target.value }));
+                      setShowSuggestions(true);
+                    }}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                    placeholder="e.g. Samanvay Aasra, Mahapura, Vatika Infotech" 
+                    className="w-full bg-white border border-border px-4 py-3.5 rounded-xl text-sm font-semibold focus:outline-none focus:border-primary-blue shadow-sm" 
+                  />
+                  
+                  {showSuggestions && locationQuery.length > 0 && (
+                    <div className="absolute z-20 w-full mt-1 bg-white border border-border rounded-xl shadow-xl max-h-60 overflow-y-auto">
+                      {PROPERTIES.filter(p => p.title.toLowerCase().includes(locationQuery.toLowerCase()) || (p.project && p.project.toLowerCase().includes(locationQuery.toLowerCase())))
+                        .map(p => (
+                          <div 
+                            key={p.id}
+                            className="px-4 py-3 hover:bg-surface-light cursor-pointer border-b border-border last:border-0 flex items-center justify-between"
+                            onClick={() => {
+                              setLocationQuery(p.title);
+                              setPreferredPropertyId(p.id);
+                              setPreferences(prev => ({ ...prev, preferredPropertyId: p.id, locationQuery: p.title }));
+                              setShowSuggestions(false);
+                            }}
+                          >
+                            <div>
+                              <p className="text-sm font-bold text-foreground">{p.title}</p>
+                              <p className="text-xs text-text-secondary">{p.location}</p>
+                            </div>
+                            <span className="text-xs font-extrabold text-primary-blue">₹{p.rent?.toLocaleString()}/mo</span>
+                          </div>
+                        ))}
+                    </div>
+                  )}
+
+                  {/* Popular Society Tags */}
+                  <div className="flex gap-2 mt-2.5 flex-wrap">
+                    <span className="text-[11px] font-bold text-text-secondary self-center">Popular:</span>
+                    {[
+                      { name: 'Samanvay Aasra', id: 'p8' },
+                      { name: 'Mahapura Enclave', id: 'p7' },
+                      { name: 'Vatika Infotech City', id: 'p6' },
+                      { name: 'Royal Greens', id: 'p9' }
+                    ].map(soc => (
+                      <button
+                        key={soc.id}
+                        type="button"
+                        onClick={() => {
+                          setLocationQuery(soc.name);
+                          setPreferredPropertyId(soc.id);
+                          setPreferences(prev => ({ ...prev, preferredPropertyId: soc.id, locationQuery: soc.name }));
+                        }}
+                        className={`text-xs px-3 py-1 rounded-lg border font-bold transition-all ${
+                          preferredPropertyId === soc.id 
+                            ? 'bg-primary-blue text-white border-primary-blue shadow-sm'
+                            : 'bg-white text-text-secondary border-border hover:border-primary-blue'
+                        }`}
+                      >
+                        {soc.name}
+                      </button>
+                    ))}
                   </div>
-                )}
+                </div>
+
+                {/* Monthly Budget Range */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-black text-text-secondary uppercase tracking-widest flex items-center gap-1.5">
+                      <DollarSign size={14} className="text-primary-orange" /> Monthly Rent Budget Range (₹)
+                    </label>
+                    <span className="text-xs font-black text-primary-blue bg-primary-blue/10 px-2.5 py-0.5 rounded-full">
+                      ₹{preferences.budgetMin.toLocaleString()} – ₹{preferences.budgetMax.toLocaleString()}/mo
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <span className="text-[11px] text-text-secondary font-bold block mb-1">Minimum Budget</span>
+                      <input 
+                        type="number"
+                        step="500"
+                        value={preferences.budgetMin}
+                        onChange={(e) => setPreferences(prev => ({ ...prev, budgetMin: Number(e.target.value) }))}
+                        className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-[11px] text-text-secondary font-bold block mb-1">Maximum Budget</span>
+                      <input 
+                        type="number"
+                        step="500"
+                        value={preferences.budgetMax}
+                        onChange={(e) => setPreferences(prev => ({ ...prev, budgetMax: Number(e.target.value) }))}
+                        className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Budget Presets */}
+                  <div className="flex gap-2 mt-2.5 flex-wrap">
+                    {[
+                      { label: '₹6k – ₹9k (Economy)', min: 6000, max: 9000 },
+                      { label: '₹8k – ₹14k (Most Common)', min: 8000, max: 14000 },
+                      { label: '₹14k – ₹20k (Premium / 1 BHK)', min: 14000, max: 20000 }
+                    ].map(preset => (
+                      <button
+                        key={preset.label}
+                        type="button"
+                        onClick={() => setPreferences(prev => ({ ...prev, budgetMin: preset.min, budgetMax: preset.max }))}
+                        className="text-xs px-2.5 py-1 bg-white border border-border text-text-secondary rounded-lg font-bold hover:border-primary-orange transition-all"
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sharing Type & Move-in */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                      <BedDouble size={14} className="text-primary-orange" /> Room Sharing Format
+                    </label>
+                    <select
+                      value={preferences.sharingType}
+                      onChange={(e) => setPreferences(prev => ({ ...prev, sharingType: e.target.value }))}
+                      className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                    >
+                      <option value="Single Room">Private / Single Room</option>
+                      <option value="Double Sharing">Double Sharing (2 Beds)</option>
+                      <option value="Triple Sharing">Triple Sharing (3 Beds)</option>
+                      <option value="Any Sharing">Any / Flexible</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                      <Calendar size={14} className="text-primary-orange" /> Move-in Timeline
+                    </label>
+                    <select
+                      value={preferences.moveInTimeline}
+                      onChange={(e) => setPreferences(prev => ({ ...prev, moveInTimeline: e.target.value }))}
+                      className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                    >
+                      <option value="Immediate">Immediate (Within 7 Days)</option>
+                      <option value="Within 15 Days">Within Next 15 Days</option>
+                      <option value="Next Month">Next Month</option>
+                      <option value="Next Semester">Next Semester Start</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <button type="submit" className="w-full py-4 bg-primary-orange text-white font-extrabold rounded-xl shadow-lg hover:bg-orange-600 transition-colors mt-8">
-              Find My Perfect Roommate
-            </button>
+            {/* 2. Daily Lifestyle & Schedule */}
+            <div className="bg-surface-light/60 p-6 md:p-8 rounded-3xl border border-border">
+              <div className="flex items-center gap-3 mb-6 border-b border-border pb-3">
+                <div className="w-9 h-9 rounded-xl bg-primary-blue text-white flex items-center justify-center font-bold text-sm">2</div>
+                <div>
+                  <h3 className="text-base font-black text-primary-blue uppercase tracking-wider">Daily Lifestyle & Schedule</h3>
+                  <p className="text-xs text-text-secondary font-medium">Sleep routines, wake habits, and study preferences</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <Moon size={14} className="text-primary-orange" /> Sleep Schedule
+                  </label>
+                  <select
+                    value={preferences.sleepSchedule}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, sleepSchedule: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="Early Bird (before 11 PM)">Early Bird (Before 11:00 PM)</option>
+                    <option value="Moderate (11:00 PM - 12:30 AM)">Moderate (11:00 PM – 12:30 AM)</option>
+                    <option value="Night Owl (after 1 AM)">Night Owl (After 1:00 AM)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <Sun size={14} className="text-primary-orange" /> Wake-Up Routine
+                  </label>
+                  <select
+                    value={preferences.wakeSchedule}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, wakeSchedule: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="Early (6:00 - 7:30 AM)">Early Riser (6:00 – 7:30 AM)</option>
+                    <option value="Normal (7:30 AM - 9:00 AM)">Normal (7:30 – 9:00 AM)</option>
+                    <option value="Late (after 9:00 AM)">Late Riser (After 9:00 AM)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <BookOpen size={14} className="text-primary-orange" /> Study Habits
+                  </label>
+                  <select
+                    value={preferences.studyHabits}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, studyHabits: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="Focused">Focused (Quiet study in room)</option>
+                    <option value="Collaborative">Collaborative (Group study)</option>
+                    <option value="Library">Library / Campus Study</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Living Habits & Co-Living */}
+            <div className="bg-surface-light/60 p-6 md:p-8 rounded-3xl border border-border">
+              <div className="flex items-center gap-3 mb-6 border-b border-border pb-3">
+                <div className="w-9 h-9 rounded-xl bg-primary-blue text-white flex items-center justify-center font-bold text-sm">3</div>
+                <div>
+                  <h3 className="text-base font-black text-primary-blue uppercase tracking-wider">Living Habits & Cleanliness</h3>
+                  <p className="text-xs text-text-secondary font-medium">Room maintenance, noise level, and AC temperature</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-primary-orange" /> Cleanliness Standard
+                  </label>
+                  <select
+                    value={preferences.cleanliness}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, cleanliness: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="High">High (Strictly neat & organized)</option>
+                    <option value="Medium">Medium (Balanced & tidy)</option>
+                    <option value="Relaxed">Relaxed (Casual & laid back)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <VolumeX size={14} className="text-primary-orange" /> Noise Tolerance
+                  </label>
+                  <select
+                    value={preferences.noiseTolerance}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, noiseTolerance: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="Low">Low (Prefers quiet atmosphere)</option>
+                    <option value="Medium">Medium (Moderate sounds ok)</option>
+                    <option value="High">High (Music, gaming & calls ok)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <Wind size={14} className="text-primary-orange" /> AC & Climate
+                  </label>
+                  <select
+                    value={preferences.acPreference}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, acPreference: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="Chilled (20-22°C)">Chilled (20°C–22°C continuous)</option>
+                    <option value="Moderate (24-26°C)">Moderate (24°C–26°C / Sleep only)</option>
+                    <option value="Natural / Fan">Natural / Fan Preferred</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Social & Dietary Compatibility */}
+            <div className="bg-surface-light/60 p-6 md:p-8 rounded-3xl border border-border">
+              <div className="flex items-center gap-3 mb-6 border-b border-border pb-3">
+                <div className="w-9 h-9 rounded-xl bg-primary-blue text-white flex items-center justify-center font-bold text-sm">4</div>
+                <div>
+                  <h3 className="text-base font-black text-primary-blue uppercase tracking-wider">Social & Dietary Preferences</h3>
+                  <p className="text-xs text-text-secondary font-medium">Diet, smoking policy, and guest rules</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <Utensils size={14} className="text-primary-orange" /> Dietary Preference
+                  </label>
+                  <select
+                    value={preferences.foodPreference}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, foodPreference: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="Veg">Pure Vegetarian Only</option>
+                    <option value="Non-veg">Non-Vegetarian</option>
+                    <option value="Either">Either / Flexible</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <Cigarette size={14} className="text-primary-orange" /> Smoking Policy
+                  </label>
+                  <select
+                    value={preferences.smoking}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, smoking: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="Non-smoker">Strictly Non-Smoker</option>
+                    <option value="Smoker">Smoker</option>
+                    <option value="Flexible">Outside / Balcony Only</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-text-secondary uppercase tracking-widest mb-2 block flex items-center gap-1.5">
+                    <Users size={14} className="text-primary-orange" /> Overnight Guests
+                  </label>
+                  <select
+                    value={preferences.guestPreference}
+                    onChange={(e) => setPreferences(prev => ({ ...prev, guestPreference: e.target.value }))}
+                    className="w-full bg-white border border-border px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:border-primary-blue"
+                  >
+                    <option value="Rare">Rare / Strictly No Overnight</option>
+                    <option value="Occasional">Occasional (Weekend Friends)</option>
+                    <option value="Frequent">Frequent (Social & Open Vibe)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="pt-2">
+              <button 
+                type="submit" 
+                className="w-full py-4.5 bg-gradient-to-r from-primary-orange to-orange-600 text-white font-extrabold text-base rounded-2xl shadow-xl hover:shadow-orange-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Sparkles size={18} />
+                Find My Perfect Roommate
+              </button>
+              <p className="text-center text-xs text-text-secondary font-medium mt-3">
+                ✨ Compatibility is calculated across Housing (50%), Lifestyle (30%), and Budget (20%).
+              </p>
+            </div>
           </form>
         </div>
       </div>
@@ -357,6 +835,22 @@ export default function RoommateMatch() {
                   </div>
                   <div className="w-full bg-white rounded-full h-2 mb-4 border border-border overflow-hidden">
                     <div className="bg-primary-orange h-full rounded-full" style={{ width: `${overallScore}%` }}></div>
+                  </div>
+
+                  {/* Real Compatibility Breakdown */}
+                  <div className="grid grid-cols-3 gap-2 pt-3 border-t border-border/80 text-center">
+                    <div className="bg-white/80 rounded-xl py-2 px-1 border border-border/50">
+                      <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">Housing</p>
+                      <p className="text-sm font-black text-primary-blue mt-0.5">{match.housingScore}%</p>
+                    </div>
+                    <div className="bg-white/80 rounded-xl py-2 px-1 border border-border/50">
+                      <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">Lifestyle</p>
+                      <p className="text-sm font-black text-primary-blue mt-0.5">{match.lifestyleScore}%</p>
+                    </div>
+                    <div className="bg-white/80 rounded-xl py-2 px-1 border border-border/50">
+                      <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">Budget</p>
+                      <p className="text-sm font-black text-primary-blue mt-0.5">{match.budgetScore}%</p>
+                    </div>
                   </div>
                 </div>
 

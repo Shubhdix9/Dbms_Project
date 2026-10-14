@@ -11,6 +11,40 @@ import { supabase } from '@/lib/supabase';
 import { getUserGroups, createOnePersonGroup } from '@/app/actions/collaboration';
 
 const DEFAULT_REVIEWS: Record<string, any[]> = {
+  p7: [
+    {
+      id: 1,
+      studentName: 'Saransh Jkluuu',
+      avatar: '/images/image%20copy.png',
+      rating: 5,
+      title: 'Fantastic Flat & Great Living Experience at Aasra Apartment',
+      date: 'Reviewed in India on 13 October 2026',
+      verified: true,
+      text: 'Living at Aasra Apartment has been an exceptional experience. The flat is spacious, well-maintained, and has great natural lighting and cross ventilation. Highly convenient commute to JKLU and nearby campuses, peaceful environment for late-night exam prep, and 24/7 security. Definitely recommend!',
+      images: [
+        '/room/Aasra/image.png',
+        '/room/Aasra/image%20copy.png',
+        '/room/Aasra/image%20copy%202.png'
+      ]
+    }
+  ],
+  p3: [
+    {
+      id: 1,
+      studentName: 'Saransh Jkluuu',
+      avatar: '/images/image%20copy.png',
+      rating: 5,
+      title: 'Fantastic Flat & Great Living Experience at Aasra Apartment',
+      date: 'Reviewed in India on 13 October 2026',
+      verified: true,
+      text: 'Living at Aasra Apartment has been an exceptional experience. The flat is spacious, well-maintained, and has great natural lighting and cross ventilation. Highly convenient commute to JKLU and nearby campuses, peaceful environment for late-night exam prep, and 24/7 security. Definitely recommend!',
+      images: [
+        '/room/Aasra/image.png',
+        '/room/Aasra/image%20copy.png',
+        '/room/Aasra/image%20copy%202.png'
+      ]
+    }
+  ],
   p8: [
     {
       id: 1,
@@ -337,7 +371,7 @@ export default function PropertyDetails({ params }: { params: Promise<{ id: stri
                   <div key={review.id} className="border-b border-gray-100 pb-8 last:border-0 last:pb-0">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center text-gray-600 font-bold text-sm shrink-0 border border-border">
-                        {review.avatar?.startsWith('http') ? (
+                        {review.avatar?.startsWith('http') || review.avatar?.startsWith('/') ? (
                           <img src={review.avatar} alt={review.studentName} className="w-full h-full object-cover" />
                         ) : (
                           review.avatar

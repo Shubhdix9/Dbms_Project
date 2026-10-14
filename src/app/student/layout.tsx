@@ -31,6 +31,7 @@ const navItems = [
 ];
 
 const drawerItems = [
+  { name: 'My Profile', href: '/student/profile', icon: User },
   { name: 'Rooms', href: '/student/explore', icon: Search },
   { name: 'Roommates', href: '/student/roommates', icon: Users },
   { name: 'Overview', href: '/student/overview', icon: Home },
@@ -50,20 +51,31 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
+      
+      // Public pages that students/guests can browse without login
+      const publicPaths = ['/student/explore', '/student/roommates', '/student/property', '/student/overview'];
+      const isPublic = publicPaths.some(p => pathname?.startsWith(p));
+
       if (!session) {
-        router.push('/');
+        if (isPublic) {
+          setUserName('Guest');
+          setLoadingAuth(false);
+          return;
+        }
+        router.push(`/login?redirect=${encodeURIComponent(pathname || '/student/explore')}`);
         return;
       }
+
       const role = session.user.user_metadata?.role;
-      if (role !== 'student') {
-        router.push(`/${role || ''}`);
+      if (role && role !== 'student') {
+        router.push(`/${role}`);
         return;
       }
       setUserName(session.user.user_metadata?.name || 'Student');
       setLoadingAuth(false);
     };
     checkAuth();
-  }, [router]);
+  }, [router, pathname]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -113,16 +125,27 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
         {/* Right: Profile & Mobile Menu */}
         <div className="flex items-center gap-4">
-          <Link href="/student/profile" className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-all px-3 py-1.5 rounded-full border border-white/20 backdrop-blur-sm cursor-pointer">
-            <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white text-[10px] font-bold">
-              RM
-            </div>
-            <span className="text-white text-sm font-medium pr-1">{userName}</span>
-          </Link>
-          
-          <button onClick={handleLogout} className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all hidden md:block" title="Logout">
-            <LogOut size={18} />
-          </button>
+          {userName === 'Guest' ? (
+            <Link 
+              href={`/login?redirect=${encodeURIComponent(pathname || '/student/explore')}`} 
+              className="bg-white text-primary-blue hover:bg-slate-100 font-bold px-4 py-1.5 rounded-xl text-xs transition-colors shadow-xs"
+            >
+              Log In
+            </Link>
+          ) : (
+            <>
+              <Link href="/student/profile" className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-all px-3 py-1.5 rounded-full border border-white/20 backdrop-blur-sm cursor-pointer">
+                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white text-[10px] font-bold">
+                  {userName[0]?.toUpperCase() || 'S'}
+                </div>
+                <span className="text-white text-sm font-medium pr-1">{userName}</span>
+              </Link>
+              
+              <button onClick={handleLogout} className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all hidden md:block" title="Logout">
+                <LogOut size={18} />
+              </button>
+            </>
+          )}
 
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white p-2">
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
